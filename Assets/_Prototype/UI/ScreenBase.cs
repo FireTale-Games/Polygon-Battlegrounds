@@ -6,8 +6,8 @@ namespace FTS.UI.Screens
 {
     public abstract class ScreenBase : MonoBehaviour, IScreen
     {
-        public Action OnRequestToClose { get; }
-        public Action<IScreen> OnRequestToOpen { get; }
+        public Action OnRequestToClose { get; set; }
+        public Action<IScreen> OnRequestToOpen { get; set; }
         
         public bool IsOpen { get; protected set; }
 

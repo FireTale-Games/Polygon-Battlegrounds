@@ -548,8 +548,6 @@ GameObject:
   - component: {fileID: 449568686}
   - component: {fileID: 449568688}
   - component: {fileID: 449568687}
-  - component: {fileID: 449568690}
-  - component: {fileID: 449568691}
   - component: {fileID: 449568692}
   m_Layer: 5
   m_Name: MenuScreen
@@ -619,30 +617,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449568685}
   m_CullTransparentMesh: 1
---- !u!225 &449568690
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 449568685}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
---- !u!114 &449568691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 449568685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 600b65118105c9d40ae43af178d819b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &449568692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1309,7 +1283,6 @@ MonoBehaviour:
   _defaultColor: {r: 0, g: 0, b: 0, a: 1}
   _hoveredColor: {r: 0.67058825, g: 0.8117647, b: 0.76862746, a: 1}
   _selectedColor: {r: 1, g: 0.77254903, b: 0, a: 1}
-  _startingScreen: {fileID: 449568691}
 --- !u!1 &1283268387
 GameObject:
   m_ObjectHideFlags: 0
