@@ -1,4 +1,5 @@
 using FTS.UI.Screens;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,6 +7,7 @@ namespace FTS.UI
 {
     public class MenuButtonUi : MonoBehaviour, IMenuButtonUi, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
+        [SerializeReference] private TextMeshProUGUI _text; 
         [field: SerializeField] public ScreenBase Screen { get; private set; }
 
         private IButtonHandler<IMenuButtonUi> ButtonHandler => _buttonHandler ??= GetComponentInParent<IButtonHandler<IMenuButtonUi>>();
@@ -20,7 +22,13 @@ namespace FTS.UI
         public void OnPointerDown(PointerEventData eventData) =>
             ButtonHandler?.OnClick(this);
 
-        public IScreen OnInteract() => 
-            Screen.GetComponent<IScreen>();
+        public IScreen OnInteract(Color color)
+        {
+            SetTextColor(color);
+            return Screen.GetComponent<IScreen>();
+        }
+
+        public void SetTextColor(Color color) => 
+            _text.color = color;
     }
 }
