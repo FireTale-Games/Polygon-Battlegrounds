@@ -7,6 +7,7 @@ namespace FTS.UI
 {
     public class MainMenuUiController : MonoBehaviour, IButtonHandler<IMenuButtonUi>
     {
+        [SerializeField] private float _menuDisplaySpeed = 0.35f;
         [SerializeField] private Color _defaultColor;
         [SerializeField] private Color _hoveredColor;
         [SerializeField] private Color _selectedColor;
@@ -56,7 +57,7 @@ namespace FTS.UI
             };
             screen.OnRequestToClose += _closeRequestAction;
             screen.OnRequestToOpen += _openRequestAction;
-            screen.Show();
+            screen.Show(_menuDisplaySpeed);
             _currentScreen = screen;
         }
         
@@ -65,7 +66,7 @@ namespace FTS.UI
             screen.OnRequestToClose -= _closeRequestAction;
             screen.OnRequestToOpen -= _openRequestAction;
             _closeRequestAction = null;
-            screen.Hide();
+            screen.Hide(_menuDisplaySpeed);
             _currentScreen = null;
         }
     }

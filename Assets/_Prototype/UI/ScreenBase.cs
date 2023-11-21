@@ -6,7 +6,7 @@ namespace FTS.UI.Screens
 {
     public abstract class ScreenBase : MonoBehaviour, IScreen
     {
-        protected float _duration = 0.1f;
+        protected const float _duration = 0.1f;
 
         public Action OnRequestToClose { get; set; }
         public Action<IScreen> OnRequestToOpen { get; set; }
@@ -26,16 +26,16 @@ namespace FTS.UI.Screens
                 Canvas.sortingOrder = 1;
         }
 
-        public virtual void Show()
+        public virtual void Show(float? speed = null)
         {
-            CanvasGroup.Null()?.ShowCanvasGroup(_duration);
+            CanvasGroup.Null()?.ShowCanvasGroup(speed ?? _duration);
             if (Canvas != null)
                 Canvas.sortingOrder = SortOrderOnOpen;
         }
 
-        public virtual void Hide()
+        public virtual void Hide(float? speed = null)
         {
-            CanvasGroup.Null()?.HideCanvasGroup(_duration);
+            CanvasGroup.Null()?.HideCanvasGroup(speed ?? _duration);
             if (Canvas != null)
                 Canvas.sortingOrder = 1;
         }

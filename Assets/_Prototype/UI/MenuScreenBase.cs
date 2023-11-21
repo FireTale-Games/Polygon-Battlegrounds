@@ -14,23 +14,22 @@ namespace FTS.UI.Screens
         protected override void Awake()
         {
             base.Awake();
-
-            _duration = 0.35f;
+            
             _rectTransform = GetComponent<RectTransform>(); 
             _originalPosition = _rectTransform.position;
             _originalDimension = _rectTransform.rect.size;
         }
 
-        public override void Show()
+        public override void Show(float? speed = null)
         {
-            base.Show();
+            base.Show(speed ?? _duration);
             _rectTransform.DOLocalMove(Vector2.zero, _duration).Play();
             _rectTransform.DOSizeDelta(_openedDimension, _duration).Play();
         }
 
-        public override void Hide()
+        public override void Hide(float? speed = null)
         {
-            base.Hide();
+            base.Hide(speed ?? _duration);
             _rectTransform.DOMove(_originalPosition, _duration).Play();
             _rectTransform.DOSizeDelta(_originalDimension, _duration).Play();
         }
