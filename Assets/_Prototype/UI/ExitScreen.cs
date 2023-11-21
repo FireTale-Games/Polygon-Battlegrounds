@@ -1,6 +1,6 @@
 namespace FTS.UI.Screens
 {
-    public class ExitScreen : ScreenBase
+    public class ExitScreen : MenuScreenBase
     {
         
     }

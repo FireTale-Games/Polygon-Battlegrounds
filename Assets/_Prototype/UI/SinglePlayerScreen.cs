@@ -1,6 +1,6 @@
 namespace FTS.UI.Screens
 {
-    public class SinglePlayerScreen : ScreenBase
+    public class SinglePlayerScreen : MenuScreenBase
     {
         
     }
