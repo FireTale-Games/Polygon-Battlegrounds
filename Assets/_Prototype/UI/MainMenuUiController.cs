@@ -1,3 +1,4 @@
+using FTS.UI.Screens;
 using UnityEngine.EventSystems;
 
 namespace FTS.UI
@@ -22,7 +23,7 @@ namespace FTS.UI
         public override void OnClick(IMenuButtonUi button)
         {
             _currentButton?.SetTextColor(button == _currentButton ? _hoveredColor : _defaultColor);
-            _currentButton = button == _currentButton ? null : button;
+            _currentButton = button == _currentButton ? null : button.ButtonScreen == _currentScreen ? null : button;
 
             if (_currentScreen != null)
                 HideScreen(_currentScreen);
@@ -30,7 +31,9 @@ namespace FTS.UI
             if (_currentButton == null)
                 return;
 
-            ShowScreen(_currentButton.OnInteract(_selectedColor));
+            IScreen screen = _currentButton.OnInteract(_selectedColor);
+            _eventSystem.SetSelectedGameObject((screen as MenuScreenBase)?.GetComponentInChildren<MenuButtonUi>()?.gameObject);
+            ShowScreen(screen);
         }
     }
 }

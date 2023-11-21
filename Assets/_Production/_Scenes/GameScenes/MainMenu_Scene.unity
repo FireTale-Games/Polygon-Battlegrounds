@@ -749,11 +749,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3922093201352498371, guid: bdae66e561141eb488f9046c5bf042cd,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.5476825
+      objectReference: {fileID: 0}
     - target: {fileID: 4340710200153353269, guid: bdae66e561141eb488f9046c5bf042cd,
         type: 3}
       propertyPath: m_Name
       value: MainMenu_GUI_Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 4954180808595670216, guid: bdae66e561141eb488f9046c5bf042cd,
+        type: 3}
+      propertyPath: m_Name
+      value: ExitConfirmation_Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 5153043464731968706, guid: bdae66e561141eb488f9046c5bf042cd,
+        type: 3}
+      propertyPath: m_Name
+      value: Text
+      objectReference: {fileID: 0}
     - target: {fileID: 5185662138641920145, guid: bdae66e561141eb488f9046c5bf042cd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -784,6 +799,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5782050312073330909, guid: bdae66e561141eb488f9046c5bf042cd,
+        type: 3}
+      propertyPath: m_Name
+      value: Text
+      objectReference: {fileID: 0}
     - target: {fileID: 5840425452074817277, guid: bdae66e561141eb488f9046c5bf042cd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -814,11 +834,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6583356830731246487, guid: bdae66e561141eb488f9046c5bf042cd,
-        type: 3}
-      propertyPath: _menuDisplaySpeed
-      value: 0.35
-      objectReference: {fileID: 0}
     - target: {fileID: 7461787355700236382, guid: bdae66e561141eb488f9046c5bf042cd,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -848,39 +863,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8548749491444442560, guid: bdae66e561141eb488f9046c5bf042cd,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8548749491444442560, guid: bdae66e561141eb488f9046c5bf042cd,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8548749491444442560, guid: bdae66e561141eb488f9046c5bf042cd,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8548749491444442560, guid: bdae66e561141eb488f9046c5bf042cd,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8548749491444442560, guid: bdae66e561141eb488f9046c5bf042cd,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8548749491444442560, guid: bdae66e561141eb488f9046c5bf042cd,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4954180808595670216, guid: bdae66e561141eb488f9046c5bf042cd, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdae66e561141eb488f9046c5bf042cd, type: 3}

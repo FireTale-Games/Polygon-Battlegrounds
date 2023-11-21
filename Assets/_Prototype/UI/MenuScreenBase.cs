@@ -1,4 +1,5 @@
 using DG.Tweening;
+using FTS.Tools.ExtentionMethods;
 using UnityEngine;
 
 namespace FTS.UI.Screens
@@ -26,29 +27,35 @@ namespace FTS.UI.Screens
             float realSpeed = speed ?? _duration;
             base.Show(realSpeed);
             
-            if (_mySequence != null || _mySequence.IsActive())
-                _mySequence.Kill();
-            
+            _mySequence?.Kill();
             _mySequence = DOTween.Sequence();
             _mySequence.Append(_rectTransform.DOLocalMove(Vector2.zero, realSpeed));
             _mySequence.Append(_rectTransform.DOSizeDelta(_openedDimension, realSpeed));
-            _mySequence.Play().OnComplete(OnCompletePlay);
+            _mySequence.Play().OnComplete(() => OnCompletePlay(realSpeed));
         }
 
         public override void Hide(float? speed = null)
         {
             float realSpeed = speed ?? _duration;
             base.Hide(realSpeed);
+            for (int i = 0; i < transform.childCount; i++)
+                transform.GetChild(i).GetComponent<CanvasGroup>().HideCanvasGroup(0);
             
-            if (_mySequence != null || _mySequence.IsActive())
-                _mySequence.Kill();
-            
+            _mySequence?.Kill();
             _mySequence = DOTween.Sequence();
             _mySequence.Append(_rectTransform.DOSizeDelta(_originalDimension, realSpeed));
             _mySequence.Append(_rectTransform.DOMove(_originalPosition, realSpeed));
             _mySequence.Play();
         }
 
-        protected virtual void OnCompletePlay() { }
+        private void OnCompletePlay(float speed)
+        {
+            float partialDuration = speed / transform.childCount / 2.0f;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                int index = i;
+                DOVirtual.DelayedCall(i * partialDuration, () => transform.GetChild(index).GetComponent<CanvasGroup>().ShowCanvasGroup(partialDuration));
+            }
+        }
     }
 }

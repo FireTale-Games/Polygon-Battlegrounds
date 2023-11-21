@@ -10,7 +10,8 @@ namespace FTS.UI
     {
         [SerializeReference] private TextMeshProUGUI _text; 
         [field: SerializeField] public ScreenBase Screen { get; private set; }
-
+        public IScreen ButtonScreen => Screen;
+        
         private IButtonHandler<IMenuButtonUi> ButtonHandler => _buttonHandler ??= GetComponentInParent<IButtonHandler<IMenuButtonUi>>();
         private IButtonHandler<IMenuButtonUi> _buttonHandler;
 

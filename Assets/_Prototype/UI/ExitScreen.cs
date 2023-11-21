@@ -1,3 +1,5 @@
+using DG.Tweening;
+using FTS.Tools.ExtentionMethods;
 using UnityEngine;
 
 namespace FTS.UI.Screens
@@ -5,10 +7,5 @@ namespace FTS.UI.Screens
     public class ExitScreen : MenuScreenBase
     {
         
-        
-        protected override void OnCompletePlay()
-        {
-            Debug.Log("Hello");    
-        }
     }
 }
