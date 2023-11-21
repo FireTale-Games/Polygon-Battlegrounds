@@ -1,12 +1,9 @@
-using TMPro;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace FTS.UI
 {
     public class MainMenuUiController : UiMainController
     {
-        [SerializeField] private TextMeshProUGUI _screenName;
         private IMenuButtonUi _currentButton;
         private EventSystem _eventSystem;
         

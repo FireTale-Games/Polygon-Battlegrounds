@@ -32,7 +32,7 @@ namespace FTS.UI.Screens
             _mySequence = DOTween.Sequence();
             _mySequence.Append(_rectTransform.DOLocalMove(Vector2.zero, realSpeed));
             _mySequence.Append(_rectTransform.DOSizeDelta(_openedDimension, realSpeed));
-            _mySequence.Play();
+            _mySequence.Play().OnComplete(OnCompletePlay);
         }
 
         public override void Hide(float? speed = null)
@@ -46,7 +46,7 @@ namespace FTS.UI.Screens
             _mySequence = DOTween.Sequence();
             _mySequence.Append(_rectTransform.DOSizeDelta(_originalDimension, realSpeed));
             _mySequence.Append(_rectTransform.DOMove(_originalPosition, realSpeed));
-            _mySequence.Play().OnComplete(OnCompletePlay);
+            _mySequence.Play();
         }
 
         protected virtual void OnCompletePlay() { }
