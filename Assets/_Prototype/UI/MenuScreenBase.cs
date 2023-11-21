@@ -10,6 +10,7 @@ namespace FTS.UI.Screens
         private Vector2 _originalPosition;
         private Vector2 _originalDimension;
         private RectTransform _rectTransform;
+        private Sequence _mySequence;
 
         protected override void Awake()
         {
@@ -22,16 +23,32 @@ namespace FTS.UI.Screens
 
         public override void Show(float? speed = null)
         {
-            base.Show(speed ?? _duration);
-            _rectTransform.DOLocalMove(Vector2.zero, _duration).Play();
-            _rectTransform.DOSizeDelta(_openedDimension, _duration).Play();
+            float realSpeed = speed ?? _duration;
+            base.Show(realSpeed);
+            
+            if (_mySequence != null || _mySequence.IsActive())
+                _mySequence.Kill();
+            
+            _mySequence = DOTween.Sequence();
+            _mySequence.Append(_rectTransform.DOLocalMove(Vector2.zero, realSpeed));
+            _mySequence.Append(_rectTransform.DOSizeDelta(_openedDimension, realSpeed));
+            _mySequence.Play();
         }
 
         public override void Hide(float? speed = null)
         {
-            base.Hide(speed ?? _duration);
-            _rectTransform.DOMove(_originalPosition, _duration).Play();
-            _rectTransform.DOSizeDelta(_originalDimension, _duration).Play();
+            float realSpeed = speed ?? _duration;
+            base.Hide(realSpeed);
+            
+            if (_mySequence != null || _mySequence.IsActive())
+                _mySequence.Kill();
+            
+            _mySequence = DOTween.Sequence();
+            _mySequence.Append(_rectTransform.DOSizeDelta(_originalDimension, realSpeed));
+            _mySequence.Append(_rectTransform.DOMove(_originalPosition, realSpeed));
+            _mySequence.Play().OnComplete(OnCompletePlay);
         }
+
+        protected virtual void OnCompletePlay() { }
     }
 }

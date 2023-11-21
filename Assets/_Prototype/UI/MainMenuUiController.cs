@@ -1,9 +1,12 @@
+using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace FTS.UI
 {
     public class MainMenuUiController : UiMainController
     {
+        [SerializeField] private TextMeshProUGUI _screenName;
         private IMenuButtonUi _currentButton;
         private EventSystem _eventSystem;
         
@@ -16,10 +19,8 @@ namespace FTS.UI
             button.SetTextColor(_currentButton == button ? _selectedColor : _hoveredColor);
         }
 
-        public override void OnExit(IMenuButtonUi button)
-        {
+        public override void OnExit(IMenuButtonUi button) => 
             button.SetTextColor(_currentButton == button ? _selectedColor : _defaultColor);
-        }
 
         public override void OnClick(IMenuButtonUi button)
         {
