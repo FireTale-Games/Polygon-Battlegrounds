@@ -1,6 +1,7 @@
 using System;
 using FTS.UI.Screens;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace FTS.UI
 {
@@ -12,15 +13,24 @@ namespace FTS.UI
         
         private IMenuButtonUi _currentButton;
         private IScreen _currentScreen;
+        private EventSystem _eventSystem;
         
         private Action _closeRequestAction;
         private Action<IScreen> _openRequestAction;
 
-        public void OnEnter(IMenuButtonUi button) =>
-            button.SetTextColor(_hoveredColor);
+        private void Awake() => 
+            _eventSystem = EventSystem.current;
 
-        public void OnExit(IMenuButtonUi button) => 
+        public void OnEnter(IMenuButtonUi button)
+        {
+            _eventSystem.SetSelectedGameObject((button as MenuButtonUi)?.gameObject);
+            button.SetTextColor(_currentButton == button ? _selectedColor : _hoveredColor);
+        }
+
+        public void OnExit(IMenuButtonUi button)
+        {
             button.SetTextColor(_currentButton == button ? _selectedColor : _defaultColor);
+        }
 
         public void OnClick(IMenuButtonUi button)
         {
@@ -33,7 +43,7 @@ namespace FTS.UI
             if (_currentButton == null)
                 return;
             
-            ShowScreen(_currentButton.OnInteract(_hoveredColor));
+            ShowScreen(_currentButton.OnInteract(_selectedColor));
         }
         
         private void ShowScreen(IScreen screen)

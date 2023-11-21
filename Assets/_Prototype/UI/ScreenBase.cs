@@ -8,16 +8,14 @@ namespace FTS.UI.Screens
     {
         public Action OnRequestToClose { get; set; }
         public Action<IScreen> OnRequestToOpen { get; set; }
-        
-        public bool IsOpen { get; protected set; }
 
-        protected CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
+        private CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
         private CanvasGroup _canvasGroup;
 
-        protected Canvas Canvas => _canvas ??= GetComponent<Canvas>();
+        private Canvas Canvas => _canvas ??= GetComponent<Canvas>();
         private Canvas _canvas;
 
-        protected virtual int SortOrderOnOpen => 4;
+        private int SortOrderOnOpen => 4;
 
         protected virtual void Awake()
         {
@@ -28,7 +26,6 @@ namespace FTS.UI.Screens
 
         public virtual void Show()
         {
-            IsOpen = true;
             CanvasGroup.Null()?.ShowCanvasGroup(0.1f);
             if (Canvas != null)
                 Canvas.sortingOrder = SortOrderOnOpen;
@@ -36,7 +33,6 @@ namespace FTS.UI.Screens
 
         public virtual void Hide()
         {
-            IsOpen = false;
             CanvasGroup.Null()?.HideCanvasGroup(0.1f);
             if (Canvas != null)
                 Canvas.sortingOrder = 1;
