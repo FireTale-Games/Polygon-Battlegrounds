@@ -3,9 +3,9 @@ using DG.Tweening;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FTS.Tools.ExtentionMethods
+namespace FTS.Tools.ExtensionMethods
 {
-    public static class ExtentionMethods
+    public static class ExtensionMethods
     {
         public static T Null<T>(this T self) where T : Object => self ? self : null;
         

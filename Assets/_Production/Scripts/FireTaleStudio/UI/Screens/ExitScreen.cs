@@ -1,5 +1,5 @@
 using DG.Tweening;
-using FTS.Tools.ExtentionMethods;
+using FTS.Tools.ExtensionMethods;
 using UnityEngine;
 
 namespace FTS.UI.Screens
