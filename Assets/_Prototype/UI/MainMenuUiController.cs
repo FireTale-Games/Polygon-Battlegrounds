@@ -1,4 +1,5 @@
 using FTS.UI.Screens;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace FTS.UI
@@ -6,6 +7,7 @@ namespace FTS.UI
     public class MainMenuUiController : UiMainController
     {
         private IMenuButtonUi _currentButton;
+        private IMenuButtonUi _previousButton;
         private EventSystem _eventSystem;
         
         private void Awake() =>
@@ -26,12 +28,17 @@ namespace FTS.UI
             _currentButton = button == _currentButton ? null : button.ButtonScreen == _currentScreen ? null : button;
 
             if (_currentScreen != null)
+            {
+                _eventSystem.SetSelectedGameObject((_previousButton as MenuButtonUi)?.gameObject);
+                _previousButton = null;
                 HideScreen(_currentScreen);
+            }
 
             if (_currentButton == null)
                 return;
 
             IScreen screen = _currentButton.OnInteract(_selectedColor);
+            _previousButton = _currentButton;
             _eventSystem.SetSelectedGameObject((screen as MenuScreenBase)?.GetComponentInChildren<MenuButtonUi>()?.gameObject);
             ShowScreen(screen);
         }
