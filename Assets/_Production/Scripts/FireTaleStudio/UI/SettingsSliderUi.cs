@@ -12,7 +12,7 @@ namespace FTS.UI
         [SerializeField] private TextMeshProUGUI _valueText;
 
         public string Name => _slider.name;
-        public byte Value => (byte)_slider.value;
+        public object Value => (byte)_slider.value;
 
         public void Initialize(Action<string, object> onValueChange, object sliderValue)
         {
