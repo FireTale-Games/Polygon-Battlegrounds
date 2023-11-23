@@ -1,5 +1,4 @@
 using FTS.UI.Screens;
-using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace FTS.UI

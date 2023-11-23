@@ -1,49 +1,40 @@
 using System;
 using FTS.Save;
-using UnityEngine;
 
 namespace FTS.UI.Screens
 {
     public class SettingsScreen : MenuScreenBase
     {
-        private Action<string, byte> OnSliderValueChanged;
+        private Action<string, object> OnSettingValueChange;
         
         protected override void Awake()
         {
             base.Awake();
-            InitializeSliders();
+            InitializeSettings();
         }
 
         private void OnDestroy() =>
-            DeinitializeActions();
+            OnSettingValueChange -= SettingValueChange;
         
-        private void SliderValueChange(string sliderName, byte value)
-        {
-            Debug.Log($"Name of the slider is: {sliderName} and value is: {value}");
+        private void SettingValueChange(string sliderName, object value) => 
             SaveManager.SaveGameSetting(new Save.Save(sliderName, value));
-        }
-        
-        private void InitializeSliders()
+
+        private void InitializeSettings()
         {
-            OnSliderValueChanged += SliderValueChange;
+            OnSettingValueChange += SettingValueChange;
             
-            ISettingsSlider[] _settingsSliders = GetComponentsInChildren<ISettingsSlider>();
-            foreach (ISettingsSlider _settingsSlider in _settingsSliders)
-                _settingsSlider.InitializeSlider(OnSliderValueChanged, GetSavedSliderValue(_settingsSlider.Name, _settingsSlider.Value));
+            ISetting[] _settingsSliders = GetComponentsInChildren<ISetting>();
+            foreach (ISetting _settingsSlider in _settingsSliders)
+                _settingsSlider.Initialize(OnSettingValueChange, GetSavedSliderValue(_settingsSlider.Name, _settingsSlider.Value));
         }
 
-        private byte GetSavedSliderValue(string sliderName, byte sliderValue)
+        private object GetSavedSliderValue(string sliderName, object sliderValue)
         {
             object savedValue = SaveManager.GetGameSetting(sliderName);
             if (savedValue == null)
                 SaveManager.SaveGameSetting(new Save.Save(sliderName, sliderValue));
             
-            return savedValue as byte? ?? sliderValue;
-        }
-        
-        private void DeinitializeActions()
-        {
-            OnSliderValueChanged -= SliderValueChange;
+            return savedValue ?? sliderValue;
         }
     }
 }
