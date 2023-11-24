@@ -12,17 +12,22 @@ namespace FTS.UI
         private void Awake() =>
             _eventSystem = EventSystem.current;
         
-        public override void OnEnter(IMenuButtonUi button)
+        public override void Enter(IMenuButtonUi button)
         {
+            base.Enter(button);
             _eventSystem.SetSelectedGameObject((button as MenuButtonUi)?.gameObject);
             button.SetTextColor(_currentButton == button ? _selectedColor : _hoveredColor);
         }
 
-        public override void OnExit(IMenuButtonUi button) => 
-            button.SetTextColor(_currentButton == button ? _selectedColor : _defaultColor);
-
-        public override void OnClick(IMenuButtonUi button)
+        public override void Exit(IMenuButtonUi button)
         {
+            base.Exit(button);
+            button.SetTextColor(_currentButton == button ? _selectedColor : _defaultColor);
+        }
+
+        public override void Press(IMenuButtonUi button)
+        {
+            base.Press(button);
             _currentButton?.SetTextColor(button == _currentButton ? _hoveredColor : _defaultColor);
             _currentButton = button == _currentButton ? null : button.ButtonScreen == _currentScreen ? null : button;
 

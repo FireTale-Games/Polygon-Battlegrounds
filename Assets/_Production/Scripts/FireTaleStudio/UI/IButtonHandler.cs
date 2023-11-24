@@ -2,8 +2,8 @@ namespace FTS.UI
 {
     public interface IButtonHandler<in T>
     {
-        public void OnEnter(T t);
-        public void OnExit(T t);
-        public void OnClick(T t);
+        public void Enter(T t);
+        public void Exit(T t);
+        public void Press(T t);
     }
 }

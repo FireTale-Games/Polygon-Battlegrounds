@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FTS.UI
 {
-    public abstract class UiMainController : MonoBehaviour, IButtonHandler<IMenuButtonUi>
+    public abstract class UiMainController : MonoBehaviour, IButtonHandler<IMenuButtonUi>, IMenuController<IMenuButtonUi>
     {
         [SerializeField] protected float _menuDisplaySpeed = 0.35f;
         [SerializeField] protected Color _defaultColor;
@@ -16,9 +16,16 @@ namespace FTS.UI
         private Action _closeRequestAction;
         private Action<IScreen> _openRequestAction;
 
-        public abstract void OnEnter(IMenuButtonUi t);
-        public abstract void OnExit(IMenuButtonUi t);
-        public abstract void OnClick(IMenuButtonUi t);
+        public Action<IMenuButtonUi> OnEnter { get; set; }
+        public Action<IMenuButtonUi> OnExit { get; set; }
+        public Action<IMenuButtonUi> OnPress { get; set; }
+        
+        public virtual void Enter(IMenuButtonUi menuButton) =>
+            OnEnter?.Invoke(menuButton);
+        public virtual void Exit(IMenuButtonUi menuButton) =>
+            OnExit?.Invoke(menuButton);
+        public virtual void Press(IMenuButtonUi menuButton) =>
+            OnPress?.Invoke(menuButton);
         
         protected void ShowScreen(IScreen screen)
         {

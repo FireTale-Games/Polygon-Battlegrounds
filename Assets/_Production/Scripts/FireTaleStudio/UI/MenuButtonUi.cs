@@ -16,11 +16,11 @@ namespace FTS.UI
         private IButtonHandler<IMenuButtonUi> _buttonHandler;
 
         private void Awake() => 
-            GetComponent<Button>().onClick.AddListener(() => ButtonHandler?.OnClick(this));
+            GetComponent<Button>().onClick.AddListener(() => ButtonHandler?.Press(this));
         public void OnPointerEnter(PointerEventData eventData) =>
-            ButtonHandler?.OnEnter(this);
+            ButtonHandler?.Enter(this);
         public void OnPointerExit(PointerEventData eventData) =>
-            ButtonHandler?.OnExit(this);
+            ButtonHandler?.Exit(this);
 
         public IScreen OnInteract(Color color)
         {
