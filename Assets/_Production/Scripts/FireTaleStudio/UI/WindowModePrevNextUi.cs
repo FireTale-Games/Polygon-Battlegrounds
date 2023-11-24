@@ -1,31 +1,40 @@
 using System;
 using UnityEngine;
 
-namespace FTS.UI
+namespace FTS.UI.Settings
 {
     public class WindowModePrevNextUi : SettingsPrevNextUi
     {
-        public override object Value => string.IsNullOrEmpty(_valueText.text) ? FullScreenMode.ExclusiveFullScreen : _valueText.text;
-
+        [SerializeField] private string[] fullScreenDisplay;
+        public override object Value => _value ?? 0;
+        
         protected override void InitializeButtons(Action<string, object> onValueChange)
         {
-            FullScreenMode screenType = (FullScreenMode)Enum.Parse(typeof(FullScreenMode), _valueText.text);
-            int index = Array.IndexOf(Enum.GetValues(typeof(FullScreenMode)), screenType);
+            int value = Convert.ToInt32(Value);
+            int enumLength = Enum.GetValues(typeof(FullScreenMode)).Length;
 
             _previousButton.onClick.AddListener(() => UpdateValue(false));
             _nextButton.onClick.AddListener(() => UpdateValue(true));
             return;
-
+            
             void UpdateValue(bool isIncrement)
             {
-                int enumLength = Enum.GetValues(typeof(FullScreenMode)).Length;
+                do value = isIncrement ? (value + 1) % enumLength : (value - 1 + enumLength) % enumLength;
+                while (value == 2);
 
-                do index = isIncrement ? (index + 1) % enumLength : (index - 1 + enumLength) % enumLength;
-                while ((FullScreenMode)index == FullScreenMode.MaximizedWindow);
-
-                _valueText.text = ((FullScreenMode)index).ToString();
-                onValueChange?.Invoke(_valueText.name, _valueText.text);
+                _value = value;
+                _valueText.text = fullScreenDisplay[value];
+                onValueChange?.Invoke(_valueText.name, Value);
             }
+        }
+
+        protected override void InitializeValue(Action<string, object> onValueChange, object prevNextValue)
+        {
+            _value = prevNextValue ?? 0;
+            if (prevNextValue == null)
+                onValueChange?.Invoke(Name, Value);
+            
+            _valueText.text = fullScreenDisplay[Convert.ToByte(Value)];
         }
     }
 }

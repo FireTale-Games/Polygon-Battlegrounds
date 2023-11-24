@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FTS.UI
+namespace FTS.UI.Settings
 {
     public abstract class SettingsPrevNextUi : MonoBehaviour, ISetting
     {
@@ -12,14 +12,16 @@ namespace FTS.UI
         [SerializeField] protected Button _nextButton;
         
         public string Name => _valueText.name;
-        public virtual object Value => _valueText.text;
+        public virtual object Value => _value; 
+        protected object _value;
         
-        public void Initialize(Action<string, object> onValueChange, object sliderValue)
+        public void Initialize(Action<string, object> onValueChange, object prevNextValue)
         {
-            _valueText.text = sliderValue.ToString();
+            InitializeValue(onValueChange, prevNextValue);
             InitializeButtons(onValueChange);
         }
 
         protected abstract void InitializeButtons(Action<string, object> onValueChange);
+        protected abstract void InitializeValue(Action<string, object> onValueChange, object prevNextValue);
     }
 }
