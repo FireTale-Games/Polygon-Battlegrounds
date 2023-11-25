@@ -22,12 +22,6 @@ namespace FTS.UI
         public void OnPointerExit(PointerEventData eventData) =>
             ButtonHandler?.Exit(this);
 
-        public IScreen OnInteract(Color color)
-        {
-            SetTextColor(color);
-            return Screen.GetComponent<IScreen>();
-        }
-
         public void SetTextColor(Color color) => 
             _text.color = color;
     }

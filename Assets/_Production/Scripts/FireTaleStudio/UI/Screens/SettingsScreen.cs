@@ -3,7 +3,7 @@ using FTS.Save;
 
 namespace FTS.UI.Screens
 {
-    public class SettingsScreen : MenuScreenBase
+    internal sealed class SettingsScreen : MenuScreenBase
     {
         private Action<string, object> OnSettingValueChange;
         

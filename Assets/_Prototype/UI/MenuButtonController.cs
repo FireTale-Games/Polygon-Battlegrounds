@@ -1,29 +1,24 @@
-using System;
-using FTS.Tools.ScriptableEvents;
 using UnityEngine;
 
 namespace FTS.UI
 {
     [RequireComponent(typeof(MainMenuUiController)), DisallowMultipleComponent]
-    internal sealed class MenuAudioController : MonoBehaviour
+    internal sealed class MenuButtonController : MonoBehaviour
     {
-        [SerializeField] private AudioClip _hoverClip;
-        [SerializeField] private AudioClip _pressClip;
-        [SerializeField] private AudioClip _musicClip;
-        [SerializeField] private EventInvoker<AudioClip> _invokeSound;
-        [SerializeField] private EventInvoker<AudioClip> _invokeMusic;
+        [SerializeField] private Color _defaultColor;
+        [SerializeField] private Color _hoveredColor;
+        [SerializeField] private Color _selectedColor;
+     
+        private IMenuButtonUi _currentButton;
         
-        private void Start() => 
-            _invokeMusic.Raise(_musicClip);
-
         private void OnEnter(IMenuButtonUi menuButton) => 
-            _invokeSound.Raise(_hoverClip);
+            menuButton.SetTextColor(_currentButton == menuButton ? _selectedColor : _hoveredColor);
 
         private void OnExit(IMenuButtonUi menuButton) => 
-            _invokeSound.Raise(_hoverClip);
-
+            menuButton.SetTextColor(_currentButton == menuButton ? _selectedColor : _defaultColor);
+        
         private void OnPress(IMenuButtonUi menuButton) => 
-            _invokeSound.Raise(_pressClip);
+            menuButton.SetTextColor(_currentButton == menuButton ? _hoveredColor : _defaultColor);
         
         private void OnEnable()
         {
@@ -32,7 +27,7 @@ namespace FTS.UI
             _controller.OnExit += OnExit;
             _controller.OnPress += OnPress;
         }
-
+        
         private void OnDisable()
         {
             IMenuController<IMenuButtonUi> _controller = GetComponent<IMenuController<IMenuButtonUi>>();

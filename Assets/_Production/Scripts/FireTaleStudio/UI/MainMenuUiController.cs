@@ -1,50 +1,19 @@
-using FTS.UI.Screens;
-using UnityEngine.EventSystems;
+using System;
+using UnityEngine;
 
 namespace FTS.UI
 {
-    public class MainMenuUiController : UiMainController
+    internal sealed class MainMenuUiController : MonoBehaviour, IButtonHandler<IMenuButtonUi>, IMenuController<IMenuButtonUi>
     {
-        private IMenuButtonUi _currentButton;
-        private IMenuButtonUi _previousButton;
-        private EventSystem _eventSystem;
+        public Action<IMenuButtonUi> OnEnter { get; set; }
+        public Action<IMenuButtonUi> OnExit { get; set; }
+        public Action<IMenuButtonUi> OnPress { get; set; }
         
-        private void Awake() =>
-            _eventSystem = EventSystem.current;
-        
-        public override void Enter(IMenuButtonUi button)
-        {
-            base.Enter(button);
-            _eventSystem.SetSelectedGameObject((button as MenuButtonUi)?.gameObject);
-            button.SetTextColor(_currentButton == button ? _selectedColor : _hoveredColor);
-        }
-
-        public override void Exit(IMenuButtonUi button)
-        {
-            base.Exit(button);
-            button.SetTextColor(_currentButton == button ? _selectedColor : _defaultColor);
-        }
-
-        public override void Press(IMenuButtonUi button)
-        {
-            base.Press(button);
-            _currentButton?.SetTextColor(button == _currentButton ? _hoveredColor : _defaultColor);
-            _currentButton = button == _currentButton ? null : button.ButtonScreen == _currentScreen ? null : button;
-
-            if (_currentScreen != null)
-            {
-                _eventSystem.SetSelectedGameObject((_previousButton as MenuButtonUi)?.gameObject);
-                _previousButton = null;
-                HideScreen(_currentScreen);
-            }
-
-            if (_currentButton == null)
-                return;
-
-            IScreen screen = _currentButton.OnInteract(_selectedColor);
-            _previousButton = _currentButton;
-            _eventSystem.SetSelectedGameObject((screen as MenuScreenBase)?.GetComponentInChildren<MenuButtonUi>()?.gameObject);
-            ShowScreen(screen);
-        }
+        public void Enter(IMenuButtonUi menuButton) =>
+            OnEnter?.Invoke(menuButton);
+        public void Exit(IMenuButtonUi menuButton) =>
+            OnExit?.Invoke(menuButton);
+        public void Press(IMenuButtonUi menuButton) =>
+            OnPress?.Invoke(menuButton);
     }
 }

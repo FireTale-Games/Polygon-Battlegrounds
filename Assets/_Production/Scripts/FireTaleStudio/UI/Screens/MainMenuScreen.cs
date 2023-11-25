@@ -1,6 +1,6 @@
 namespace FTS.UI.Screens
 {
-    public class MainMenuScreen : ScreenBase
+    internal sealed class MainMenuScreen : ScreenBase
     {
         protected override void Awake() { }
     }

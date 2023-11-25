@@ -1,6 +1,6 @@
 namespace FTS.UI.Screens
 {
-    public class MultiplayerScreen : MenuScreenBase
+    internal sealed class MultiplayerScreen : MenuScreenBase
     {
         
     }
