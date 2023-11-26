@@ -1,4 +1,4 @@
-using System;
+using FTS.Tools.ExtensionMethods;
 using FTS.Tools.ScriptableEvents;
 using UnityEngine;
 
@@ -10,20 +10,24 @@ namespace FTS.UI
         [SerializeField] private AudioClip _hoverClip;
         [SerializeField] private AudioClip _pressClip;
         [SerializeField] private AudioClip _musicClip;
-        [SerializeField] private EventInvoker<AudioClip> _invokeSound;
-        [SerializeField] private EventInvoker<AudioClip> _invokeMusic;
+
+        private EventInvoker<AudioClip> OnPlaySound => _onPlaySound ??= ExtensionMethods.LoadEventInvoker<AudioClip>(nameof(OnPlaySound));
+        private EventInvoker<AudioClip> _onPlaySound;
+        
+        private EventInvoker<AudioClip> OnPlayMusic => _onPlayMusic ??= ExtensionMethods.LoadEventInvoker<AudioClip>(nameof(OnPlayMusic));
+        private EventInvoker<AudioClip> _onPlayMusic;
         
         private void Start() => 
-            _invokeMusic.Raise(_musicClip);
+            OnPlayMusic.Raise(_musicClip);
 
         private void OnEnter(IMenuButtonUi menuButton) => 
-            _invokeSound.Raise(_hoverClip);
+            OnPlaySound.Raise(_hoverClip);
 
         private void OnExit(IMenuButtonUi menuButton) => 
-            _invokeSound.Raise(_hoverClip);
+            OnPlaySound.Raise(_hoverClip);
 
         private void OnPress(IMenuButtonUi menuButton) => 
-            _invokeSound.Raise(_pressClip);
+            OnPlaySound.Raise(_pressClip);
         
         private void OnEnable()
         {

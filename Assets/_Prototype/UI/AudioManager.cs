@@ -1,3 +1,4 @@
+using FTS.Tools.ExtensionMethods;
 using FTS.Tools.ScriptableEvents;
 using UnityEngine;
 
@@ -6,16 +7,19 @@ namespace FTS.Managers
     [RequireComponent(typeof(AudioSource)), DisallowMultipleComponent]
     public class AudioManager : MonoBehaviour
     {
-        [SerializeField] private EventObserver<AudioClip> _playSound;
-        [SerializeField] private EventObserver<AudioClip> _playMusic;
-
+        private EventInvoker<AudioClip> OnPlaySound => _onPlaySound ??= ExtensionMethods.LoadEventInvoker<AudioClip>(nameof(OnPlaySound));
+        private EventInvoker<AudioClip> _onPlaySound;
+        
+        private EventInvoker<AudioClip> OnPlayMusic => _onPlayMusic ??= ExtensionMethods.LoadEventInvoker<AudioClip>(nameof(OnPlayMusic));
+        private EventInvoker<AudioClip> _onPlayMusic;
+        
         private AudioSource AudioSource => _audioSource ??= GetComponent<AudioSource>();
         private AudioSource _audioSource;
 
-        private void OnPlaySound(AudioClip audioClip) => 
+        private void PlaySound(AudioClip audioClip) => 
             AudioSource.PlayOneShot(audioClip);
 
-        private void OnPlayMusic(AudioClip audioClip)
+        private void PlayMusic(AudioClip audioClip)
         {
             AudioSource.clip = audioClip;
             AudioSource.Play();
@@ -23,14 +27,14 @@ namespace FTS.Managers
         
         private void OnEnable()
         {
-            _playSound.AddObserver(OnPlaySound);
-            _playMusic.AddObserver(OnPlayMusic);
+            OnPlaySound.AddObserver(PlaySound);
+            OnPlayMusic.AddObserver(PlayMusic);
         }
 
         private void OnDisable()
         {
-            _playSound.RemoveObserver(OnPlaySound);
-            _playMusic.RemoveObserver(OnPlayMusic);
+            OnPlaySound.RemoveObserver(PlaySound);
+            OnPlayMusic.RemoveObserver(PlayMusic);
         }
     }
 }
