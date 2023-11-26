@@ -1,7 +1,6 @@
 using System;
 using FTS.Tools.ExtensionMethods;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
 
 namespace FTS.UI.Screens

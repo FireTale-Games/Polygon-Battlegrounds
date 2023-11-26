@@ -22,10 +22,7 @@ namespace FTS.UI
 
         private void OnEnter(IMenuButtonUi menuButton) => 
             OnPlaySound.Raise(_hoverClip);
-
-        private void OnExit(IMenuButtonUi menuButton) => 
-            OnPlaySound.Raise(_hoverClip);
-
+        
         private void OnPress(IMenuButtonUi menuButton) => 
             OnPlaySound.Raise(_pressClip);
         
@@ -33,7 +30,6 @@ namespace FTS.UI
         {
             IMenuController<IMenuButtonUi> _controller = GetComponent<IMenuController<IMenuButtonUi>>();
             _controller.OnEnter += OnEnter;
-            _controller.OnExit += OnExit;
             _controller.OnPress += OnPress;
         }
 
@@ -41,7 +37,6 @@ namespace FTS.UI
         {
             IMenuController<IMenuButtonUi> _controller = GetComponent<IMenuController<IMenuButtonUi>>();
             _controller.OnEnter -= OnEnter;
-            _controller.OnExit -= OnExit;
             _controller.OnPress -= OnPress;
         }
     }

@@ -8,8 +8,8 @@ namespace FTS.UI
         public Action<IMenuButtonUi> OnEnter { get; set; }
         public Action<IMenuButtonUi> OnExit { get; set; }
         public Action<IMenuButtonUi> OnPress { get; set; }
-        
-        public void Enter(IMenuButtonUi menuButton) =>
+
+        public void Enter(IMenuButtonUi menuButton) => 
             OnEnter?.Invoke(menuButton);
         public void Exit(IMenuButtonUi menuButton) =>
             OnExit?.Invoke(menuButton);
