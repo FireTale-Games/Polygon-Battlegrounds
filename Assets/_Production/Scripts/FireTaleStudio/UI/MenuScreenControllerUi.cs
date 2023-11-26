@@ -1,6 +1,8 @@
 using System;
+using FTS.Tools.ExtensionMethods;
 using FTS.UI.Screens;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace FTS.UI
 {
@@ -10,13 +12,28 @@ namespace FTS.UI
         private IScreen _currentScreen;
         private Action _closeRequestAction;
         private Action<IScreen> _openRequestAction;
+
+        private GameObject _previousButtonObject;
+        private EventSystem _eventSystem;
+
+        private void Awake() => _eventSystem = EventSystem.current;
+
+        private void OnEnter(IMenuButtonUi menuButton) => 
+            _eventSystem.SetSelectedGameObject(ExtensionMethods.FirstRaycastHit());
         
         private void OnPress(IMenuButtonUi menuButton)
         {
             IScreen screen = menuButton.ButtonScreen;
-            if (screen == null)
+            if (screen == null || screen == _currentScreen)
+            {
+                _eventSystem.SetSelectedGameObject(_previousButtonObject);
+                _previousButtonObject = null;
+                HideScreen(_currentScreen);
                 return;
+            }
             
+            _previousButtonObject = _eventSystem.currentSelectedGameObject;
+            _eventSystem.SetSelectedGameObject(screen.ButtonObject);
             ShowScreen(screen);
         }
         
@@ -43,10 +60,18 @@ namespace FTS.UI
             _currentScreen = null;
         }
         
-        private void OnEnable() => 
-            GetComponent<IMenuController<IMenuButtonUi>>().OnPress += OnPress;
+        private void OnEnable()
+        {
+            IMenuController<IMenuButtonUi> _controller = GetComponent<IMenuController<IMenuButtonUi>>();
+            _controller.OnEnter += OnEnter;
+            _controller.OnPress += OnPress;
+        }
 
-        private void OnDisable() => 
-            GetComponent<IMenuController<IMenuButtonUi>>().OnPress -= OnPress;
+        private void OnDisable()
+        {
+            IMenuController<IMenuButtonUi> _controller = GetComponent<IMenuController<IMenuButtonUi>>();
+            _controller.OnEnter -= OnEnter;
+            _controller.OnPress -= OnPress;
+        }
     }
 }

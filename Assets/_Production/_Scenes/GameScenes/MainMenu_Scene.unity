@@ -707,8 +707,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aee060925a35ce242b9f2d380d416335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playSound: {fileID: 11400000, guid: b020116a691ef004a884e257b7bf34b6, type: 2}
-  _playMusic: {fileID: 11400000, guid: 783a8e128135c8046acc745e131c66ca, type: 2}
 --- !u!1 &2107245062
 GameObject:
   m_ObjectHideFlags: 0

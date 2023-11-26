@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using FTS.Tools.ScriptableEvents;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
 
 namespace FTS.Tools.ExtensionMethods
@@ -26,5 +29,12 @@ namespace FTS.Tools.ExtensionMethods
 
         public static EventInvoker<T> LoadEventInvoker<T>(string name) => 
             Resources.Load<EventInvoker<T>>($"{typeof(T).Name}/{name}");
+        
+        public static GameObject FirstRaycastHit()
+        {
+            List<RaycastResult> tempList = new();
+            EventSystem.current.Null()?.RaycastAll(new PointerEventData(EventSystem.current) { position = Input.mousePosition }, tempList);
+            return tempList.FirstOrDefault().gameObject;
+        }
     }
 }
