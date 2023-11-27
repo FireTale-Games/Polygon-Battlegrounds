@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace FTS.UI
 {
-    internal sealed class MainMenuUiController : MonoBehaviour, IButtonHandler<IMenuButtonUi>, IMenuController<IMenuButtonUi>
+    [RequireComponent(typeof(MenuScreenControllerUi), typeof(MenuAudioController), typeof(MenuButtonController)), DisallowMultipleComponent]
+    internal sealed class MenuUiController : MonoBehaviour, IButtonHandler<IMenuButtonUi>, IMenuController<IMenuButtonUi>
     {
         public Action<IMenuButtonUi> OnEnter { get; set; }
         public Action<IMenuButtonUi> OnExit { get; set; }

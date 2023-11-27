@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FTS.UI
 {
-    [RequireComponent(typeof(MainMenuUiController)), DisallowMultipleComponent]
+    [DisallowMultipleComponent]
     internal sealed class MenuAudioController : MonoBehaviour
     {
         [SerializeField] private AudioClip _hoverClip;

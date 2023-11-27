@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FTS.UI
+namespace FTS.UI.Settings
 {
     public class SettingUi : MonoBehaviour, ISetting
     {

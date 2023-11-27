@@ -1,11 +1,10 @@
 using System;
 using FTS.UI.Screens;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace FTS.UI
 {
-    [RequireComponent(typeof(MainMenuUiController)), DisallowMultipleComponent]
+    [DisallowMultipleComponent]
     internal sealed class MenuScreenControllerUi : MonoBehaviour
     {
         private IScreen _currentScreen;
@@ -17,10 +16,12 @@ namespace FTS.UI
             IScreen screen = menuButton.ButtonScreen;
             if (screen == null || screen == _currentScreen)
             {
-                HideScreen(_currentScreen);
+                HideScreen(screen);
                 return;
             }
             
+            if (_currentScreen != null)
+                HideScreen(_currentScreen);
             ShowScreen(screen);
         }
         

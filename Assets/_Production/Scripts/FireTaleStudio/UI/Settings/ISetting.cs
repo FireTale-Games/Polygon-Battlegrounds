@@ -1,6 +1,6 @@
 using System;
 
-namespace FTS.UI
+namespace FTS.UI.Settings
 {
     public interface ISetting
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FTS.UI.Settings
 {
-    public class WindowModePrevNextUi : SettingsPrevNextUi
+    public class DisplayPrevNextUi : SettingsPrevNextUi
     {
         [SerializeField] private string[] fullScreenDisplay;
         public override object Value => _value ?? 0;
