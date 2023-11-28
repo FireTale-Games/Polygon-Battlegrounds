@@ -1,6 +1,7 @@
 using System;
 using FTS.Tools.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace FTS.UI.Screens
 {
@@ -8,6 +9,7 @@ namespace FTS.UI.Screens
     {
         protected const float _duration = 0.1f;
 
+        public GameObject ButtonObject => GetComponentInChildren<Button>().gameObject;
         public Action OnRequestToClose { get; set; }
         public Action<IScreen> OnRequestToOpen { get; set; }
 

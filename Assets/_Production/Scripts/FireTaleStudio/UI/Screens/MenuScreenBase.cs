@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FTS.UI.Screens
 {
-    public class MenuScreenBase : ScreenBase
+    internal class MenuScreenBase : ScreenBase
     {
         [SerializeField] protected Vector2 _openedDimension;
         

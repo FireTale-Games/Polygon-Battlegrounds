@@ -1,40 +1,34 @@
-using System;
+using FTS.Managers;
 using FTS.Save;
+using FTS.Tools.ExtensionMethods;
+using FTS.Tools.ScriptableEvents;
+using FTS.UI.Settings;
 
 namespace FTS.UI.Screens
 {
-    public class SettingsScreen : MenuScreenBase
+    internal sealed class SettingsScreen : MenuScreenBase
     {
-        private Action<string, object> OnSettingValueChange;
-        
-        protected override void Awake()
+        private void Start() => 
+            InitializeOptions();
+
+        private void InitializeOptions()
         {
-            base.Awake();
-            InitializeSettings();
+            EventInvoker<ISetting> OnSettingData = ExtensionMethods.LoadEventObject<ISetting>(nameof(OnSettingData));
+
+            ISetting[] _settings = GetComponentsInChildren<ISetting>();
+            foreach (ISetting setting in _settings)
+                setting.Initialize(OnSettingData, GetSavedValue(setting));
         }
 
-        private void OnDestroy() =>
-            OnSettingValueChange -= SettingValueChange;
-        
-        private void SettingValueChange(string sliderName, object value) => 
-            SaveManager.SaveGameSetting(new Save.Save(sliderName, value));
-
-        private void InitializeSettings()
+        private object GetSavedValue(ISetting setting)
         {
-            OnSettingValueChange += SettingValueChange;
+            SaveLoadData saveLoadData = FindObjectOfType<SettingManager>().saveLoadData;
             
-            ISetting[] _settingsSliders = GetComponentsInChildren<ISetting>();
-            foreach (ISetting _settingsSlider in _settingsSliders)
-                _settingsSlider.Initialize(OnSettingValueChange, GetSavedSliderValue(_settingsSlider.Name, _settingsSlider.Value));
-        }
-
-        private object GetSavedSliderValue(string sliderName, object sliderValue)
-        {
-            object savedValue = SaveManager.GetGameSetting(sliderName);
+            object savedValue = saveLoadData.GetGameSetting(setting.Name);
             if (savedValue == null)
-                SaveManager.SaveGameSetting(new Save.Save(sliderName, sliderValue));
+                saveLoadData.SaveGameSetting(setting);
             
-            return savedValue ?? sliderValue;
+            return savedValue ?? setting.Value;
         }
     }
 }
