@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 3195127231595363691}
   - component: {fileID: 5399639363652358150}
   m_Layer: 5
-  m_Name: PrevNext_Prefab
+  m_Name: PrevNextSettingUiBase_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

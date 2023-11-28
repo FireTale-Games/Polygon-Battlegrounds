@@ -1,14 +1,16 @@
 using System;
+using FTS.Tools.ExtensionMethods;
+using FTS.Tools.ScriptableEvents;
 using UnityEngine;
 
 namespace FTS.UI.Settings
 {
-    public class DisplayPrevNextUi : SettingsPrevNextUi
+    internal sealed class DisplaySettingsUi : SettingPrevNextBaseUi
     {
         [SerializeField] private string[] fullScreenDisplay;
         public override object Value => _value ?? 0;
         
-        protected override void InitializeButtons(Action<string, object> onValueChange)
+        protected override void InitializeButtons(EventInvoker<ISetting> onValueChange)
         {
             int value = Convert.ToInt32(Value);
             int enumLength = Enum.GetValues(typeof(FullScreenMode)).Length;
@@ -23,18 +25,21 @@ namespace FTS.UI.Settings
                 while (value == 2);
 
                 _value = value;
-                _valueText.text = fullScreenDisplay[value];
-                onValueChange?.Invoke(_valueText.name, Value);
+                onValueChange.Null()?.Raise(this);
             }
         }
 
-        protected override void InitializeValue(Action<string, object> onValueChange, object prevNextValue)
+        protected override void InitializeValue(EventInvoker<ISetting> onValueChange, object prevNextValue)
         {
             _value = prevNextValue ?? 0;
-            if (prevNextValue == null)
-                onValueChange?.Invoke(Name, Value);
-            
-            _valueText.text = fullScreenDisplay[Convert.ToByte(Value)];
+            onValueChange.Null()?.Raise(this);
+        }
+
+        public override void ApplyData()
+        {
+            byte value = Convert.ToByte(Value);
+            Screen.fullScreenMode = (FullScreenMode)Enum.GetValues(typeof(FullScreenMode)).GetValue(value);
+            _valueText.text = fullScreenDisplay[value];
         }
     }
 }

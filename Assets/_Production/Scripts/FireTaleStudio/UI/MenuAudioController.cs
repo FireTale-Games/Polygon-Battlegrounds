@@ -11,20 +11,20 @@ namespace FTS.UI
         [SerializeField] private AudioClip _pressClip;
         [SerializeField] private AudioClip _musicClip;
 
-        private EventInvoker<AudioClip> OnPlaySound => _onPlaySound ??= ExtensionMethods.LoadEventInvoker<AudioClip>(nameof(OnPlaySound));
+        private EventInvoker<AudioClip> OnPlaySound => _onPlaySound ??= ExtensionMethods.LoadEventObject<AudioClip>(nameof(OnPlaySound));
         private EventInvoker<AudioClip> _onPlaySound;
         
-        private EventInvoker<AudioClip> OnPlayMusic => _onPlayMusic ??= ExtensionMethods.LoadEventInvoker<AudioClip>(nameof(OnPlayMusic));
+        private EventInvoker<AudioClip> OnPlayMusic => _onPlayMusic ??= ExtensionMethods.LoadEventObject<AudioClip>(nameof(OnPlayMusic));
         private EventInvoker<AudioClip> _onPlayMusic;
         
         private void Start() => 
-            OnPlayMusic.Raise(_musicClip);
+            OnPlayMusic.Null()?.Raise(_musicClip);
 
         private void OnEnter(IMenuButtonUi menuButton) => 
-            OnPlaySound.Raise(_hoverClip);
+            OnPlaySound.Null()?.Raise(_hoverClip);
         
         private void OnPress(IMenuButtonUi menuButton) => 
-            OnPlaySound.Raise(_pressClip);
+            OnPlaySound.Null()?.Raise(_pressClip);
         
         private void OnEnable()
         {

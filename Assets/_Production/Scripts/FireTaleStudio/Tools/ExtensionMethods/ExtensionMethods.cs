@@ -24,7 +24,7 @@ namespace FTS.Tools.ExtensionMethods
                     onStart?.Invoke();
                 }).OnComplete(() => onComplete?.Invoke()).Play();
 
-        public static EventInvoker<T> LoadEventInvoker<T>(string name) => 
-            Resources.Load<EventInvoker<T>>($"{typeof(T).Name}/{name}");
+        public static EventInvoker<T> LoadEventObject<T>(string name) => 
+            Resources.Load<EventInvoker<T>>($"Events/{typeof(T).Name}/{name}");
     }
 }
