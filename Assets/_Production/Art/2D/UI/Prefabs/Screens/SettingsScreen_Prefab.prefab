@@ -788,7 +788,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
-      objectReference: {fileID: 503540786307612586}
+      objectReference: {fileID: 3881351215765134489}
     - target: {fileID: 731006293294362434, guid: e362a4e3500afe3458c2a0894b4ee1ca,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
@@ -1305,7 +1305,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
-      objectReference: {fileID: 2336493831836382226}
+      objectReference: {fileID: 1390872530218161953}
     - target: {fileID: 4690049312573035786, guid: d29276f90e300304fb1e4896bac34378,
         type: 3}
       propertyPath: m_Pivot.x
