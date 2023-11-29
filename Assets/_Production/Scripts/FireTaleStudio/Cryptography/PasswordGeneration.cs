@@ -12,7 +12,7 @@ namespace FTS.Cryptography
             string assemblyName = type.Assembly.GetName().Name;
             int hash = Animator.StringToHash(typeName);
             const string appSpecificConstant = "Polygon-Battlegrounds";
-
+            
             return $"{typeName}-{namespaceName}-{assemblyName}-{hash}-{appSpecificConstant}";
         }
 

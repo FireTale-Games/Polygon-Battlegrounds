@@ -9,7 +9,7 @@ namespace FTS.Data
     {
         private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(TI).Name}.save";
         private readonly IDecryptor _decryptor = new Decryptor();
-        private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI).BaseType);
+        private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI));
 
         public T LoadData()
         {

@@ -10,7 +10,7 @@ namespace FTS.Data
         private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(TI).Name}.save";
         private readonly IEncryptor _encryptor = new Encryptor();
         private readonly ISaltGeneration _saltGenerator = new SaltGeneration();
-        private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI).BaseType);
+        private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI));
 
         public void SaveData(T data)
         {
