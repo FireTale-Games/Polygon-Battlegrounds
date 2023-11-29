@@ -11,17 +11,17 @@ namespace FTS.Managers
         private EventObserver<ISetting> OnSettingData => _onSettingData ??= ExtensionMethods.LoadEventObject<ISetting>(nameof(OnSettingData));
         private EventObserver<ISetting> _onSettingData;
 
-        public SaveLoadData saveLoadData;
+        public SaveLoadData<SettingManager> saveLoadData;
         
         private void OnSetting(ISetting setting)
         {
-            if (saveLoadData.SaveGameSetting(setting))
+            if (saveLoadData.SaveGameSetting(setting.Name, setting.Value))
                 setting.ApplyData();
         }
 
         private void Awake()
         {
-            saveLoadData = new SaveLoadData();
+            saveLoadData = new SaveLoadData<SettingManager>();
             OnSettingData.Null()?.AddObserver(OnSetting);
         }
 

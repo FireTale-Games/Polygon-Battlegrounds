@@ -22,11 +22,11 @@ namespace FTS.UI.Screens
 
         private object GetSavedValue(ISetting setting)
         {
-            SaveLoadData saveLoadData = FindObjectOfType<SettingManager>().saveLoadData;
+            SaveLoadData<SettingManager> saveLoadData = FindObjectOfType<SettingManager>().saveLoadData;
             
             object savedValue = saveLoadData.GetGameSetting(setting.Name);
             if (savedValue == null)
-                saveLoadData.SaveGameSetting(setting);
+                saveLoadData.SaveGameSetting(setting.Name, setting.Value);
             
             return savedValue ?? setting.Value;
         }
