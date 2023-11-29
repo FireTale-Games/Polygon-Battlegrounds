@@ -782,6 +782,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2683380284765729328, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2683380284765729328, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2683380284765729328, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2683380284765729328, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3657415978740362765, guid: 119e04b2720b170418a534be63236be0,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -833,6 +853,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3802384499168255025, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966034363224441072, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966034363224441072, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966034363224441072, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966034363224441072, guid: 119e04b2720b170418a534be63236be0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
@@ -987,6 +1027,26 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6820329952440938698, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820329952440938698, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820329952440938698, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820329952440938698, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7172616255301769756, guid: 119e04b2720b170418a534be63236be0,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1063,6 +1123,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8350359172928165843, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662294119579941746, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662294119579941746, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662294119579941746, guid: 119e04b2720b170418a534be63236be0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662294119579941746, guid: 119e04b2720b170418a534be63236be0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0

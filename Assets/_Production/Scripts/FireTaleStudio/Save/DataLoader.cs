@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace FTS.Data
 {
-    internal sealed class DataLoader<T> : IDataLoader<T>
+    internal sealed class DataLoader<T, TI> : IDataLoader<T>
     {
-        private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(T).Name}.save";
+        private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(TI).Name}.save";
         private readonly IDecryptor _decryptor = new Decryptor();
-        private readonly string _password = new PasswordGeneration().GetPassword(typeof(T).BaseType);
+        private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI).BaseType);
 
         public T LoadData()
         {

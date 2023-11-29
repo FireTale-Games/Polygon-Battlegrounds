@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace FTS.Data
 {
-    internal sealed class DataSaver<T> : IDataSaver<T>
+    internal sealed class DataSaver<T, TI> : IDataSaver<T>
     {
-        private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(T).Name}.save";
+        private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(TI).Name}.save";
         private readonly IEncryptor _encryptor = new Encryptor();
         private readonly ISaltGeneration _saltGenerator = new SaltGeneration();
-        private readonly string _password = new PasswordGeneration().GetPassword(typeof(T).BaseType);
+        private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI).BaseType);
 
-        public bool SaveData(T data)
+        public void SaveData(T data)
         {
             try
             {
@@ -24,17 +24,16 @@ namespace FTS.Data
                 Array.Copy(encryptedData, 0, dataToSave, salt.Length, encryptedData.Length);
 
                 File.WriteAllBytes(_saveFilePath, dataToSave);
-                return true;
             }
             catch (Exception)
             {
-                return false;
+                // ignored
             }
         }
     }
 
     internal interface IDataSaver<in T>
     {
-        public bool SaveData(T data);
+        public void SaveData(T data);
     }
 }
