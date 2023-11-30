@@ -349,7 +349,7 @@ PrefabInstance:
     - target: {fileID: 938922620327265132, guid: 3d030cd35af094146af55baa0163ed2a,
         type: 3}
       propertyPath: m_Name
-      value: SlotOne_Button
+      value: ProfileOne
       objectReference: {fileID: 0}
     - target: {fileID: 7998926290805617864, guid: 3d030cd35af094146af55baa0163ed2a,
         type: 3}
@@ -671,7 +671,7 @@ PrefabInstance:
     - target: {fileID: 938922620327265132, guid: 3d030cd35af094146af55baa0163ed2a,
         type: 3}
       propertyPath: m_Name
-      value: Profile_Button
+      value: ProfileTwo
       objectReference: {fileID: 0}
     - target: {fileID: 7998926290805617864, guid: 3d030cd35af094146af55baa0163ed2a,
         type: 3}
@@ -795,7 +795,7 @@ PrefabInstance:
     - target: {fileID: 938922620327265132, guid: 3d030cd35af094146af55baa0163ed2a,
         type: 3}
       propertyPath: m_Name
-      value: Profile_Button
+      value: ProfileThree
       objectReference: {fileID: 0}
     - target: {fileID: 7998926290805617864, guid: 3d030cd35af094146af55baa0163ed2a,
         type: 3}

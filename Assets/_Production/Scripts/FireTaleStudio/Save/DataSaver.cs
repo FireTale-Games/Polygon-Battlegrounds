@@ -7,11 +7,17 @@ namespace FTS.Data
 {
     internal sealed class DataSaver<T, TI> : IDataSaver<T>
     {
-        private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(TI).Name}.save";
+        private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(TI).Name}";
         private readonly IEncryptor _encryptor = new Encryptor();
         private readonly ISaltGeneration _saltGenerator = new SaltGeneration();
         private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI));
 
+        internal DataSaver(string pathAddition = "")
+        {
+            _saveFilePath += $"{pathAddition}.save";
+            Debug.Log(_saveFilePath);
+        }
+        
         public void SaveData(T data)
         {
             try

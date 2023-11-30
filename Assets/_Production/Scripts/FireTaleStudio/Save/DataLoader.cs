@@ -7,9 +7,15 @@ namespace FTS.Data
 {
     internal sealed class DataLoader<T, TI> : IDataLoader<T>
     {
-        private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(TI).Name}.save";
+        private readonly string _saveFilePath = $"{Application.persistentDataPath}/{typeof(TI).Name}";
         private readonly IDecryptor _decryptor = new Decryptor();
         private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI));
+
+        internal DataLoader(string pathAddition = "")
+        {
+            _saveFilePath += $"{pathAddition}.save";
+            Debug.Log(_saveFilePath);
+        }
 
         public T LoadData()
         {
