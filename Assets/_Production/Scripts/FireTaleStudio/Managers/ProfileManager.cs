@@ -41,37 +41,30 @@ namespace FTS.Managers
         
         private void CreateNewProfile(IProfile profile)
         {
-            Dictionary<int, object> newPlayer = new();
-            int profileName = 0;
-            for (int i = 0; i < 9; i++)
-                profileName = profileName * 50 + Random.Range(0, 50);
-
-            newPlayer[profile.Name] = profileName;
+            int profileName = Enumerable.Range(0, 9).Aggregate(0, (current, _) => current * 50 + Random.Range(0, 50));
+            Dictionary<int, object> newPlayer = new() { [profile.Name] = profileName };
             _currentProfiles.Add(profile.Name, newPlayer);
-            _activeProfile = _currentProfiles.Keys.FirstOrDefault(i => i == profile.Name);
-            profile.SetValue(_currentProfiles[profile.Name][profile.Name]);
-            IDataSaver<Dictionary<int, object>> saver = new DataSaver<Dictionary<int, object>, object>(profile.Name.ToString());
-            saver.SaveData(_currentProfiles[profile.Name]);
+            _activeProfile = profile.Name;
+            profile.SetValue(profileName);
+            new DataSaver<Dictionary<int, object>, object>(profile.Name.ToString()).SaveData(newPlayer);
         }
         
-        public void SetInitialValues(IProfile[] profiles)
+        public void SetInitialValues(IEnumerable<IProfile> profiles)
         {
             EventInvoker<IProfile> OnSettingInvoker = ExtensionMethods.LoadEventObject<IProfile>(nameof(OnProfileSlot));
-            for (int i = 0; i < profiles.Length; i++)
+            foreach (IProfile profile in profiles)
             {
-                DataLoader<Dictionary<int, object>, object> loadedObject = new(profiles[i].Name.ToString());
+                DataLoader<Dictionary<int, object>, object> loadedObject = new(profile.Name.ToString());
                 Dictionary<int, object> profileLoad = loadedObject.LoadData();
-                if (profileLoad == null)
+
+                object savedValue = null;
+                if (profileLoad != null)
                 {
-                    profiles[i].Initialize(OnSettingInvoker, null);
-                    continue;
+                    _currentProfiles[profile.Name] = profileLoad;
+                    profileLoad.TryGetValue(profile.Name, out savedValue);
                 }
 
-                _currentProfiles[i] = profileLoad;
-                _currentProfiles[i].TryGetValue(profiles[i].Name, out object savedValue);
-                Debug.Log(savedValue);
-                Debug.Log(profiles[i].Name);
-                profiles[i].Initialize(OnSettingInvoker, savedValue);
+                profile.Initialize(OnSettingInvoker, savedValue);
             }
         }
     }
