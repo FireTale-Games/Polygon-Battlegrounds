@@ -12,12 +12,9 @@ namespace FTS.Data
         private readonly ISaltGeneration _saltGenerator = new SaltGeneration();
         private readonly string _password = new PasswordGeneration().GetPassword(typeof(TI));
 
-        internal DataSaver(string pathAddition = "")
-        {
+        internal DataSaver(string pathAddition = "") => 
             _saveFilePath += $"{pathAddition}.save";
-            Debug.Log(_saveFilePath);
-        }
-        
+
         public void SaveData(T data)
         {
             try
