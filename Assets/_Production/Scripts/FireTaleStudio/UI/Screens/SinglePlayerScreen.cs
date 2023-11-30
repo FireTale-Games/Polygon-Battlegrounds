@@ -5,7 +5,10 @@ namespace FTS.UI.Screens
 {
     internal sealed class SinglePlayerScreen : MenuScreenBase
     {
-        private void Start() => 
+        public override void Show(float? speed = null)
+        {
+            base.Show(speed);
             FindObjectOfType<ProfileManager>().SetInitialValues(GetComponentsInChildren<IProfile>());
+        }
     }
 }
