@@ -7,6 +7,8 @@ namespace FTS.UI
     [DisallowMultipleComponent]
     internal sealed class MenuScreenControllerUi : MonoBehaviour
     {
+        [SerializeField] private float _displaySpeed = 0.3f;
+        
         private IScreen _currentScreen;
         private Action _closeRequestAction;
         private Action<IScreen> _openRequestAction;
@@ -35,7 +37,7 @@ namespace FTS.UI
             };
             screen.OnRequestToClose += _closeRequestAction;
             screen.OnRequestToOpen += _openRequestAction;
-            screen.Show();
+            screen.Show(_displaySpeed);
             _currentScreen = screen;
         }
         
