@@ -842,6 +842,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterCreationScreen_Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 4109410123211518609, guid: 89469329279914d4b83fedd36a000f73,
+        type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: 63d744c8a2ed9244db991e61bd6d26df, type: 2}
+    - target: {fileID: 4465920422325328192, guid: 89469329279914d4b83fedd36a000f73,
+        type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5858954590971098187, guid: 89469329279914d4b83fedd36a000f73,
         type: 3}
       propertyPath: m_Pivot.x
@@ -942,6 +952,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7233848164809706925, guid: 89469329279914d4b83fedd36a000f73,
+        type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: c41d55c757cddfd45b439ffa16c71d2c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
