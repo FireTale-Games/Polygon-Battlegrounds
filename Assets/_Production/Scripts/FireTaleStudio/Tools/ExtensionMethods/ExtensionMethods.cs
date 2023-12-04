@@ -1,6 +1,5 @@
 using System;
 using DG.Tweening;
-using FTS.Tools.ScriptableEvents;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -23,8 +22,5 @@ namespace FTS.Tools.ExtensionMethods
                     self.blocksRaycasts = false;
                     onStart?.Invoke();
                 }).OnComplete(() => onComplete?.Invoke()).Play();
-
-        public static EventInvoker<T> LoadEventObject<T>(string name) => 
-            Resources.Load<EventInvoker<T>>($"Events/{typeof(T).Name}/{name}");
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using FTS.Tools.ExtensionMethods;
-using FTS.Tools.ScriptableEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,16 +13,16 @@ namespace FTS.UI.Settings
         public override int Name =>  Animator.StringToHash(_slider.name);
         public override object Value => _value ?? 100;
 
-        public override void Initialize(EventInvoker<ISetting> onValueChange, object sliderValue)
+        public override void Initialize(Action<ISetting> onValueChange, object sliderValue)
         {
             _value = Convert.ToByte(sliderValue);
             _slider.onValueChanged.AddListener(value =>
             {
                 _value = Convert.ToByte(value);
-                onValueChange.Null()?.Raise(this);
+                onValueChange?.Invoke(this);
             });
             
-            onValueChange.Null()?.Raise(this);
+            onValueChange?.Invoke(this);
         }
 
         public override void ApplyData()

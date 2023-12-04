@@ -1,17 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FTS.Data;
-using FTS.Tools.ExtensionMethods;
-using FTS.Tools.ScriptableEvents;
 using FTS.UI.Profiles;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace FTS.Managers
 {
-    internal sealed class ProfileManager : MonoBehaviour
+    internal sealed class ProfileManager : BaseManager
     {
-        private EventObserver<IProfile> OnProfileSlot => _onProfileSlot ??= ExtensionMethods.LoadEventObject<IProfile>(nameof(OnProfileSlot));
-        private EventObserver<IProfile> _onProfileSlot;
         private readonly Dictionary<int, Dictionary<int, object>> _currentProfiles = new();
         [SerializeField] private int _activeProfile;
 
@@ -22,12 +20,6 @@ namespace FTS.Managers
 
             CreateNewProfile(profile);
         }
-
-        private void Awake() => 
-            OnProfileSlot.Null()?.AddObserver(ProfileSlot);
-
-        private void OnDestroy() => 
-            OnProfileSlot.Null()?.RemoveObserver(ProfileSlot);
 
         private bool FindAndAssignProfile(IProfile profile)
         {
@@ -51,7 +43,7 @@ namespace FTS.Managers
         
         public void SetInitialValues(IEnumerable<IProfile> profiles)
         {
-            EventInvoker<IProfile> OnSettingInvoker = ExtensionMethods.LoadEventObject<IProfile>(nameof(OnProfileSlot));
+            Action<IProfile> OnProfileSlot = ProfileSlot;
             foreach (IProfile profile in profiles)
             {
                 DataLoader<Dictionary<int, object>, object> loadedObject = new(profile.Name.ToString());
@@ -64,7 +56,7 @@ namespace FTS.Managers
                     profileLoad.TryGetValue(profile.Name, out savedValue);
                 }
 
-                profile.Initialize(OnSettingInvoker, savedValue);
+                profile.Initialize(OnProfileSlot, savedValue);
             }
         }
     }

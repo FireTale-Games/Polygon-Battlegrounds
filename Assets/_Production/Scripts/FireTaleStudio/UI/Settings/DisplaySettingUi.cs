@@ -1,6 +1,4 @@
 using System;
-using FTS.Tools.ExtensionMethods;
-using FTS.Tools.ScriptableEvents;
 using UnityEngine;
 
 namespace FTS.UI.Settings
@@ -10,7 +8,7 @@ namespace FTS.UI.Settings
         [SerializeField] private string[] fullScreenDisplay;
         public override object Value => _value ?? 0;
         
-        protected override void InitializeButtons(EventInvoker<ISetting> onValueChange)
+        protected override void InitializeButtons(Action<ISetting> onValueChange)
         {
             int value = Convert.ToInt32(Value);
             int enumLength = Enum.GetValues(typeof(FullScreenMode)).Length;
@@ -25,14 +23,14 @@ namespace FTS.UI.Settings
                 while (value == 2);
 
                 _value = value;
-                onValueChange.Null()?.Raise(this);
+                onValueChange?.Invoke(this);
             }
         }
 
-        protected override void InitializeValue(EventInvoker<ISetting> onValueChange, object prevNextValue)
+        protected override void InitializeValue(Action<ISetting> onValueChange, object prevNextValue)
         {
             _value = prevNextValue ?? 0;
-            onValueChange.Null()?.Raise(this);
+            onValueChange?.Invoke(this);
         }
 
         public override void ApplyData()

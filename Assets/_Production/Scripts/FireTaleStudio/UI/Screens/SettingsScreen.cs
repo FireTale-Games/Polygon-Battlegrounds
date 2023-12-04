@@ -1,6 +1,5 @@
+using System;
 using FTS.Managers;
-using FTS.Tools.ExtensionMethods;
-using FTS.Tools.ScriptableEvents;
 using FTS.UI.Settings;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,15 +10,24 @@ namespace FTS.UI.Screens
     {
         [SerializeField] private Button _applyButton;
         [SerializeField] private Button _backButton;
-        
-        private EventInvoker<bool> OnSettingsApply => _onSettingsApply ??= ExtensionMethods.LoadEventObject<bool>(nameof(OnSettingsApply));
-        private EventInvoker<bool> _onSettingsApply;
-        
-        private void Start()
+
+        protected override void Awake()
         {
-            _applyButton.onClick.AddListener(() => OnSettingsApply.Null()?.Raise(true));
-            _backButton.onClick.AddListener(() => OnSettingsApply.Null()?.Raise(false));
-            FindObjectOfType<SettingManager>().SetInitialValues(GetComponentsInChildren<ISetting>());
+            base.Awake();
+            GameManager.Instance.OnInitialize += OnInitialize;
+        }
+
+        private void OnDestroy() => 
+            GameManager.Instance.OnInitialize -= OnInitialize;
+
+        private void OnInitialize(IManager manager)
+        {
+            if (manager is not SettingManager settingManager)
+                return;
+            
+            _applyButton.onClick.AddListener(() => settingManager.SettingsApply(true));
+            _backButton.onClick.AddListener(() => settingManager.SettingsApply(false));
+            settingManager.SetInitialValues(GetComponentsInChildren<ISetting>());
         }
     }
 }

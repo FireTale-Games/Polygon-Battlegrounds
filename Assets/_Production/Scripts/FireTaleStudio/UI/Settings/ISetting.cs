@@ -1,4 +1,4 @@
-using FTS.Tools.ScriptableEvents;
+using System;
 
 namespace FTS.UI.Settings
 {
@@ -6,7 +6,7 @@ namespace FTS.UI.Settings
     {
         public int Name { get; }
         public object Value { get; }
-        public void Initialize(EventInvoker<ISetting> onValueChange, object sliderValue);
+        public void Initialize(Action<ISetting> onValueChange, object sliderValue);
         public void SetValue(object value);
         public void ApplyData();
     }
