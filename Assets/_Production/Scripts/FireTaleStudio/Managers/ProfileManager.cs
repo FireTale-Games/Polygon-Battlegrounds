@@ -16,8 +16,6 @@ namespace FTS.Managers
         {
             if (_currentProfiles.TryGetValue(profile.Name, out _))
                 FindAndAssignProfile(profile);
-            
-            CreateNewProfile(profile);
         }
 
         private void FindAndAssignProfile(IProfile profile)
@@ -29,13 +27,12 @@ namespace FTS.Managers
             _activeProfile = _currentProfiles.Keys.FirstOrDefault(i => i == profile.Name);
         }
         
-        private void CreateNewProfile(IProfile profile)
+        public void CreateNewProfile(IProfile profile, string profileName)
         {
-            //int profileName = Enumerable.Range(0, 9).Aggregate(0, (current, _) => current * 50 + Random.Range(0, 50));
-            Dictionary<int, object> newPlayer = new() { [profile.Name] = profile.Name };
+            Dictionary<int, object> newPlayer = new() { [profile.Name] = profileName };
             _currentProfiles.Add(profile.Name, newPlayer);
             _activeProfile = profile.Name;
-            profile.SetValue(profile.Name);
+            profile.SetValue(profileName);
             new DataSaver<Dictionary<int, object>, object>(profile.Name.ToString()).SaveData(newPlayer);
         }
         

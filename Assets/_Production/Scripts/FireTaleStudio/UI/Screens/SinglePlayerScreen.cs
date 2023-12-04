@@ -9,7 +9,7 @@ namespace FTS.UI.Screens
     internal sealed class SinglePlayerScreen : MenuScreenBase, ISMScreen
     {
         [SerializeField] private Button _playButton;
-        [SerializeField] private MenuScreenBase _characterCreationScreen;
+        [SerializeField] private CharacterScreen _characterCreationScreen;
         private Action OnProfileShow;
         
         protected override void Awake()
@@ -34,12 +34,12 @@ namespace FTS.UI.Screens
             OnProfileShow?.Invoke();
         }
 
-        public void CreateNewProfile() => 
-            _characterCreationScreen.Show();
+        public void CreateNewProfile(IProfile profile) => 
+            _characterCreationScreen.Show(profile);
     }
 
     internal interface ISMScreen
     {
-        public void CreateNewProfile();
+        public void CreateNewProfile(IProfile profile);
     }
 }

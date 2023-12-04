@@ -36,7 +36,7 @@ namespace FTS.UI.Profiles
                 return;
             }
             
-            GetComponentInParent<ISMScreen>().CreateNewProfile();
+            GetComponentInParent<ISMScreen>().CreateNewProfile(this);
         }
     }
 
