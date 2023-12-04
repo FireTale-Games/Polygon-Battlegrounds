@@ -4,7 +4,6 @@ using System.Linq;
 using FTS.Data;
 using FTS.UI.Profiles;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace FTS.Managers
 {
@@ -15,35 +14,34 @@ namespace FTS.Managers
 
         private void ProfileSlot(IProfile profile)
         {
-            if (FindAndAssignProfile(profile))
-                return;
-
+            if (_currentProfiles.TryGetValue(profile.Name, out _))
+                FindAndAssignProfile(profile);
+            
             CreateNewProfile(profile);
         }
 
-        private bool FindAndAssignProfile(IProfile profile)
+        private void FindAndAssignProfile(IProfile profile)
         {
             if (!_currentProfiles.TryGetValue(profile.Name, out Dictionary<int, object> foundProfile)) 
-                return false;
+                return;
             
             profile.SetValue(foundProfile[profile.Name]);
             _activeProfile = _currentProfiles.Keys.FirstOrDefault(i => i == profile.Name);
-            return true;
         }
         
         private void CreateNewProfile(IProfile profile)
         {
-            int profileName = Enumerable.Range(0, 9).Aggregate(0, (current, _) => current * 50 + Random.Range(0, 50));
-            Dictionary<int, object> newPlayer = new() { [profile.Name] = profileName };
+            //int profileName = Enumerable.Range(0, 9).Aggregate(0, (current, _) => current * 50 + Random.Range(0, 50));
+            Dictionary<int, object> newPlayer = new() { [profile.Name] = profile.Name };
             _currentProfiles.Add(profile.Name, newPlayer);
             _activeProfile = profile.Name;
-            profile.SetValue(profileName);
+            profile.SetValue(profile.Name);
             new DataSaver<Dictionary<int, object>, object>(profile.Name.ToString()).SaveData(newPlayer);
         }
         
         public void SetInitialValues(IEnumerable<IProfile> profiles)
         {
-            Action<IProfile> OnProfileSlot = ProfileSlot;
+            Action<IProfile> OnProfileSelected = ProfileSlot;
             foreach (IProfile profile in profiles)
             {
                 DataLoader<Dictionary<int, object>, object> loadedObject = new(profile.Name.ToString());
@@ -56,7 +54,7 @@ namespace FTS.Managers
                     profileLoad.TryGetValue(profile.Name, out savedValue);
                 }
 
-                profile.Initialize(OnProfileSlot, savedValue);
+                profile.Initialize(OnProfileSelected, savedValue);
             }
         }
     }

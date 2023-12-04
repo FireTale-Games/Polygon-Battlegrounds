@@ -260,7 +260,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7239106891956756627}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -339,6 +339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _openedDimension: {x: 800, y: 500}
+  _playButton: {fileID: 7210363337295260929}
 --- !u!1001 &1026643495472553890
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1149,7 +1150,7 @@ PrefabInstance:
     - target: {fileID: 8886565810182709774, guid: d29276f90e300304fb1e4896bac34378,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
