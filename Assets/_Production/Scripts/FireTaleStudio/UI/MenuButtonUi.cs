@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 namespace FTS.UI
 {
-    public class MenuButtonUi : MonoBehaviour, IMenuButtonUi, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
+    internal class MenuButtonUi : MonoBehaviour, IMenuButtonUi, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
     {
-        [SerializeReference] private TextMeshProUGUI _text; 
-        [field: SerializeField] public ScreenBase Screen { get; private set; }
+        [SerializeReference] protected TextMeshProUGUI _text; 
+        [field: SerializeField] protected ScreenBase Screen { get; private set; }
         public IScreen ButtonScreen => Screen;
         
         private IButtonHandler<IMenuButtonUi> ButtonHandler => _buttonHandler ??= GetComponentInParent<IButtonHandler<IMenuButtonUi>>();

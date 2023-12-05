@@ -1,4 +1,3 @@
-using System;
 using FTS.Managers;
 using FTS.UI.Settings;
 using UnityEngine;
@@ -10,17 +9,8 @@ namespace FTS.UI.Screens
     {
         [SerializeField] private Button _applyButton;
         [SerializeField] private Button _backButton;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            GameManager.Instance.OnInitialize += OnInitialize;
-        }
-
-        private void OnDestroy() => 
-            GameManager.Instance.OnInitialize -= OnInitialize;
-
-        private void OnInitialize(IManager manager)
+        
+        protected override void OnInitialize(IManager manager)
         {
             if (manager is not SettingManager settingManager)
                 return;

@@ -338,8 +338,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _openedDimension: {x: 800, y: 500}
-  _playButton: {fileID: 0}
-  _characterCreationScreen: {fileID: 0}
 --- !u!1001 &1026643495472553890
 PrefabInstance:
   m_ObjectHideFlags: 0

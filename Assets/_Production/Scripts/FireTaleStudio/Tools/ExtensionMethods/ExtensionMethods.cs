@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -22,5 +23,8 @@ namespace FTS.Tools.ExtensionMethods
                     self.blocksRaycasts = false;
                     onStart?.Invoke();
                 }).OnComplete(() => onComplete?.Invoke()).Play();
+        
+        public static string AddSpaceBetweenCapitalLetters(this string self) =>
+            self.First() + new string(self.Skip(1).SelectMany(c => char.IsUpper(c) ? new[] { ' ', c } : new[] { c }).ToArray());
     }
 }

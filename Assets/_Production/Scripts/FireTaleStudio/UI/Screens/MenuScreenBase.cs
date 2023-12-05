@@ -1,4 +1,5 @@
 using DG.Tweening;
+using FTS.Managers;
 using FTS.Tools.ExtensionMethods;
 using UnityEngine;
 
@@ -20,7 +21,14 @@ namespace FTS.UI.Screens
             _rectTransform = GetComponent<RectTransform>(); 
             _originalPosition = _rectTransform.position;
             _originalDimension = _rectTransform.rect.size;
+
+            GameManager.Instance.OnInitialize += OnInitialize;
         }
+
+        private void OnDestroy() => 
+            GameManager.Instance.OnInitialize -= OnInitialize;
+
+        protected virtual void OnInitialize(IManager manager) { }
 
         public override void Show(float? speed = null)
         {
@@ -48,7 +56,7 @@ namespace FTS.UI.Screens
             _mySequence.Play();
         }
 
-        private void OnCompletePlay(float speed)
+        protected virtual void OnCompletePlay(float speed)
         {
             float partialDuration = speed / transform.childCount / 2.0f;
             for (int i = 0; i < transform.childCount; i++)
