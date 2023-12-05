@@ -1,7 +1,9 @@
 using System;
 using FTS.Managers;
+using FTS.Tools.ExtensionMethods;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace FTS.UI.Screens
@@ -10,6 +12,7 @@ namespace FTS.UI.Screens
     {
         [SerializeField] private TextMeshProUGUI _createProfileText;
         [SerializeField] private GameObject _createProfileObject;
+        [SerializeField] private CanvasGroup _characterProfileCanvas;
         [SerializeField] private Button _createProfileButton;
         
         private Func<bool> OnGetProfile;
@@ -31,6 +34,8 @@ namespace FTS.UI.Screens
                 
                 profileManager.CreateNewProfile(_createProfileText.text);
                 _createProfileObject.SetActive(false);
+                _characterProfileCanvas.gameObject.SetActive(true);
+                _characterProfileCanvas.ShowCanvasGroup(0.35f);
             }
 
             bool GetProfile() => 
@@ -47,7 +52,9 @@ namespace FTS.UI.Screens
             }
             
             Debug.Log("Doesn't have profile");
+            _characterProfileCanvas.gameObject.SetActive(false);
             _createProfileObject.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(_createProfileObject.GetComponentInChildren<TMP_InputField>().gameObject);
         }
     }
 }
