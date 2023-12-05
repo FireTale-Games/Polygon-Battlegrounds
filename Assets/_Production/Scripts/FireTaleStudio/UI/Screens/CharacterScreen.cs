@@ -1,6 +1,5 @@
 using System;
 using FTS.Managers;
-using FTS.UI.Profiles;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,30 +12,42 @@ namespace FTS.UI.Screens
         [SerializeField] private GameObject _createProfileObject;
         [SerializeField] private Button _createProfileButton;
         
-        private Action OnCreateProfile;
-        //private Func<>
-        
+        private Func<bool> OnGetProfile;
+
         protected override void OnInitialize(IManager manager)
         {
             if (manager is not ProfileManager profileManager)
                 return;
             
-            OnCreateProfile += OnProfile;
+            OnGetProfile += GetProfile;
+
+            _createProfileButton.onClick.AddListener(CreateProfileButtonBind);
+
             return;
-            
-            void OnProfile()
+            void CreateProfileButtonBind()
             {
                 if (_createProfileText.text.Length <= 3)
                     return;
                 
                 profileManager.CreateNewProfile(_createProfileText.text);
+                _createProfileObject.SetActive(false);
             }
+
+            bool GetProfile() => 
+                profileManager.GetProfile.HasValue;
         }
 
         protected override void OnCompletePlay(float speed)
         {
             base.OnCompletePlay(speed);
-            //if (_createProfileObject)
+            if (OnGetProfile.Invoke())
+            {
+                Debug.Log("Have profile");
+                return;
+            }
+            
+            Debug.Log("Doesn't have profile");
+            _createProfileObject.SetActive(true);
         }
     }
 }

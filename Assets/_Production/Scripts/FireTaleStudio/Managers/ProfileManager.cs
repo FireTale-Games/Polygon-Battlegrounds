@@ -10,6 +10,7 @@ namespace FTS.Managers
     {
         private readonly Dictionary<int, Dictionary<int, object>> _currentProfiles = new();
         private int _activeProfile;
+        public int? GetProfile => FindAndAssignProfile();
 
         //private void ProfileSlot(IProfile profile)
         //{
@@ -22,25 +23,22 @@ namespace FTS.Managers
         //    _activeProfile = null;
         //}
         
-        private void ProfileSlot(IProfile profile) => 
-            _activeProfile = profile.Name;
+        private void ProfileSlot(int profileName) => 
+            _activeProfile = profileName;
 
-        private void FindAndAssignProfile(IProfile profile)
+        private int? FindAndAssignProfile()
         {
-            if (!_currentProfiles.TryGetValue(profile.Name, out Dictionary<int, object> foundProfile)) 
-                return;
+            if (!_currentProfiles.TryGetValue(_activeProfile, out Dictionary<int, object> foundProfile)) 
+                return null;
             
-            profile.SetValue(foundProfile[profile.Name]);
-            _activeProfile = _currentProfiles.Keys.FirstOrDefault(i => i == profile.Name);
+            return foundProfile.Keys.FirstOrDefault(i => i == _activeProfile);
         }
         
-        public void CreateNewProfile(IProfile profile, string profileName)
+        public void CreateNewProfile(string profileName)
         {
-            Dictionary<int, object> newPlayer = new() { [profile.Name] = profileName };
-            _currentProfiles.Add(profile.Name, newPlayer);
-            _activeProfile = profile.Name;
-            profile.SetValue(profileName);
-            new DataSaver<Dictionary<int, object>, object>(profile.Name.ToString()).SaveData(newPlayer);
+            Dictionary<int, object> newPlayer = new() { [_activeProfile] = profileName };
+            _currentProfiles.Add(_activeProfile, newPlayer);
+            new DataSaver<Dictionary<int, object>, object>(_activeProfile.ToString()).SaveData(newPlayer);
         }
 
         private object LoadValue(IProfile profile)
@@ -57,7 +55,7 @@ namespace FTS.Managers
         
         public void SetInitialValues(IEnumerable<IProfile> profiles)
         {
-            Action<IProfile> OnProfileSelected = ProfileSlot;
+            Action<int> OnProfileSelected = ProfileSlot;
             foreach (IProfile profile in profiles)
             {
                 object savedValue = LoadValue(profile);
