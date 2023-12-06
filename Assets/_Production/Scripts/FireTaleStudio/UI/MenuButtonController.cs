@@ -11,7 +11,7 @@ namespace FTS.UI
         [SerializeField] private Color _selectedColor;
         [SerializeField] private Color _hoveredColor;
         
-        private GameObject _previousButtonObject;
+        [SerializeField] private GameObject _previousButtonObject;
 
         private void OnEnter(IMenuButtonUi menuButton) => 
             menuButton.SetTextColor(menuButton == _previousButtonObject.Null()?.GetComponent<IMenuButtonUi>() ? _selectedColor : _hoveredColor);

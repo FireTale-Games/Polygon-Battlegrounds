@@ -12,7 +12,7 @@ namespace FTS.Tools.ExtensionMethods
         
         public static void ShowCanvasGroup(this CanvasGroup self, float fadeDuration, Action onStart = null, Action onComplete = null)
         {
-            if (!self.gameObject.activeSelf)
+            if (self == null)
                 return;
             
             self.DOFade(1, fadeDuration).OnStart(() => onStart?.Invoke()).OnComplete(() =>

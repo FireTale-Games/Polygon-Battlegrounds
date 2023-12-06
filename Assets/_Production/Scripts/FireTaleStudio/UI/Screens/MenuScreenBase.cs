@@ -47,7 +47,7 @@ namespace FTS.UI.Screens
             float realSpeed = speed ?? _duration;
             base.Hide(realSpeed);
             for (int i = 0; i < transform.childCount; i++)
-                transform.GetChild(i).GetComponent<CanvasGroup>().HideCanvasGroup(0);
+                transform.GetChild(i).GetComponent<CanvasGroup>().Null()?.HideCanvasGroup(0);
             
             _mySequence?.Kill();
             _mySequence = DOTween.Sequence();
@@ -62,7 +62,7 @@ namespace FTS.UI.Screens
             for (int i = 0; i < transform.childCount; i++)
             {
                 int index = i;
-                DOVirtual.DelayedCall(i * partialDuration, () => transform.GetChild(index).GetComponent<CanvasGroup>().ShowCanvasGroup(partialDuration));
+                DOVirtual.DelayedCall(i * partialDuration, () => transform.GetChild(index).GetComponent<CanvasGroup>().Null()?.ShowCanvasGroup(partialDuration));
             }
         }
     }
