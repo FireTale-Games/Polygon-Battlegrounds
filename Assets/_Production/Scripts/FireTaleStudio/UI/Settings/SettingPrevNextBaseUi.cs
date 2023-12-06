@@ -1,4 +1,4 @@
-using FTS.Tools.ScriptableEvents;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,14 +14,14 @@ namespace FTS.UI.Settings
         public override int Name => Animator.StringToHash(_valueText.name);
         public override object Value => _value; 
         
-        public override void Initialize(EventInvoker<ISetting> onValueChange, object prevNextValue)
+        public override void Initialize(Action<ISetting> onValueChange, object prevNextValue)
         {
             InitializeValue(onValueChange, prevNextValue);
             InitializeButtons(onValueChange);
         }
 
-        protected virtual void InitializeButtons(EventInvoker<ISetting> onValueChange) { }
-        protected virtual void InitializeValue(EventInvoker<ISetting> onValueChange, object prevNextValue) { }
+        protected virtual void InitializeButtons(Action<ISetting> onValueChange) { }
+        protected virtual void InitializeValue(Action<ISetting> onValueChange, object prevNextValue) { }
         public override void ApplyData() { }
     }
 }

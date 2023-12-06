@@ -7,16 +7,19 @@ namespace FTS.UI
     [DisallowMultipleComponent]
     internal sealed class MenuScreenControllerUi : MonoBehaviour
     {
+        [SerializeField] private float _displaySpeed = 0.3f;
+        
         private IScreen _currentScreen;
         private Action _closeRequestAction;
         private Action<IScreen> _openRequestAction;
-
+        
         private void OnPress(IMenuButtonUi menuButton)
         {
             IScreen screen = menuButton.ButtonScreen;
             if (screen == null || screen == _currentScreen)
             {
                 HideScreen(screen);
+                GetComponent<MenuUiController>()?.ScreenChange();
                 return;
             }
             
@@ -35,8 +38,9 @@ namespace FTS.UI
             };
             screen.OnRequestToClose += _closeRequestAction;
             screen.OnRequestToOpen += _openRequestAction;
-            screen.Show();
+            screen.Show(_displaySpeed);
             _currentScreen = screen;
+            GetComponent<MenuUiController>()?.ScreenChange(_currentScreen);
         }
         
         private void HideScreen(IScreen screen)

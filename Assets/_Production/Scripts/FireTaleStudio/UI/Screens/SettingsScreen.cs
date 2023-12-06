@@ -1,34 +1,23 @@
 using FTS.Managers;
-using FTS.Save;
-using FTS.Tools.ExtensionMethods;
-using FTS.Tools.ScriptableEvents;
 using FTS.UI.Settings;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace FTS.UI.Screens
 {
     internal sealed class SettingsScreen : MenuScreenBase
     {
-        private void Start() => 
-            InitializeOptions();
-
-        private void InitializeOptions()
+        [SerializeField] private Button _applyButton;
+        [SerializeField] private Button _backButton;
+        
+        protected override void OnInitialize(IManager manager)
         {
-            EventInvoker<ISetting> OnSettingData = ExtensionMethods.LoadEventObject<ISetting>(nameof(OnSettingData));
-
-            ISetting[] _settings = GetComponentsInChildren<ISetting>();
-            foreach (ISetting setting in _settings)
-                setting.Initialize(OnSettingData, GetSavedValue(setting));
-        }
-
-        private object GetSavedValue(ISetting setting)
-        {
-            SaveLoadData saveLoadData = FindObjectOfType<SettingManager>().saveLoadData;
+            if (manager is not SettingManager settingManager)
+                return;
             
-            object savedValue = saveLoadData.GetGameSetting(setting.Name);
-            if (savedValue == null)
-                saveLoadData.SaveGameSetting(setting);
-            
-            return savedValue ?? setting.Value;
+            _applyButton.onClick.AddListener(() => settingManager.SettingsApply(true));
+            _backButton.onClick.AddListener(() => settingManager.SettingsApply(false));
+            settingManager.SetInitialValues(GetComponentsInChildren<ISetting>());
         }
     }
 }

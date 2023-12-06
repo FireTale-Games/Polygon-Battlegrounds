@@ -1,5 +1,5 @@
-using FTS.Tools.ExtensionMethods;
-using FTS.Tools.ScriptableEvents;
+using System;
+using FTS.Managers;
 using UnityEngine;
 
 namespace FTS.UI
@@ -11,33 +11,45 @@ namespace FTS.UI
         [SerializeField] private AudioClip _pressClip;
         [SerializeField] private AudioClip _musicClip;
 
-        private EventInvoker<AudioClip> OnPlaySound => _onPlaySound ??= ExtensionMethods.LoadEventObject<AudioClip>(nameof(OnPlaySound));
-        private EventInvoker<AudioClip> _onPlaySound;
-        
-        private EventInvoker<AudioClip> OnPlayMusic => _onPlayMusic ??= ExtensionMethods.LoadEventObject<AudioClip>(nameof(OnPlayMusic));
-        private EventInvoker<AudioClip> _onPlayMusic;
+        private Action<AudioClip> OnPlayMusic;
+        private Action<AudioClip> OnPlaySound;
+        private Action<AudioClip> OnPlayVoice;
         
         private void Start() => 
-            OnPlayMusic.Null()?.Raise(_musicClip);
-
+            OnPlayMusic?.Invoke(_musicClip);
+        
         private void OnEnter(IMenuButtonUi menuButton) => 
-            OnPlaySound.Null()?.Raise(_hoverClip);
+            OnPlaySound?.Invoke(_hoverClip);
         
         private void OnPress(IMenuButtonUi menuButton) => 
-            OnPlaySound.Null()?.Raise(_pressClip);
-        
+            OnPlaySound?.Invoke(_pressClip);
+
+        private void OnInitialize(IManager manager)
+        {
+            if (manager is not AudioManager audioManager)
+                return;
+
+            OnPlayMusic += audioManager.PlayMusic;
+            OnPlaySound += audioManager.PlaySound;
+            OnPlayVoice += audioManager.PlayVoice;
+        }
+
         private void OnEnable()
         {
             IMenuController<IMenuButtonUi> _controller = GetComponent<IMenuController<IMenuButtonUi>>();
             _controller.OnEnter += OnEnter;
             _controller.OnPress += OnPress;
+            
+            GameManager.Instance.OnInitialize += OnInitialize;
         }
-
+        
         private void OnDisable()
         {
             IMenuController<IMenuButtonUi> _controller = GetComponent<IMenuController<IMenuButtonUi>>();
             _controller.OnEnter -= OnEnter;
             _controller.OnPress -= OnPress;
+            
+            GameManager.Instance.OnInitialize -= OnInitialize;
         }
     }
 }

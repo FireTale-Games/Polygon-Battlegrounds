@@ -1,26 +1,12 @@
 using System;
-using FTS.Tools.ExtensionMethods;
-using FTS.Tools.ScriptableEvents;
 using FTS.UI.Settings;
 using UnityEngine;
 
 namespace FTS.Managers
 {
     [RequireComponent(typeof(AudioSource)), DisallowMultipleComponent]
-    internal sealed class AudioManager : MonoBehaviour
+    internal sealed class AudioManager : BaseManager
     {
-        private EventInvoker<ISetting> OnSettingData => _onSettingData ??= ExtensionMethods.LoadEventObject<ISetting>(nameof(OnSettingData));
-        private EventInvoker<ISetting> _onSettingData;
-        
-        private EventInvoker<AudioClip> OnPlaySound => _onPlaySound ??= ExtensionMethods.LoadEventObject<AudioClip>(nameof(OnPlaySound));
-        private EventInvoker<AudioClip> _onPlaySound;
-        
-        private EventInvoker<AudioClip> OnPlayMusic => _onPlayMusic ??= ExtensionMethods.LoadEventObject<AudioClip>(nameof(OnPlayMusic));
-        private EventInvoker<AudioClip> _onPlayMusic;
-        
-        private EventInvoker<AudioClip> OnPlayVoice => _onPlayVoice ??= ExtensionMethods.LoadEventObject<AudioClip>(nameof(OnPlayVoice));
-        private EventInvoker<AudioClip> _onPlayVoice;
-        
         private AudioSource MusicSource => _musicSource ??= GetComponents<AudioSource>()[0];
         private AudioSource _musicSource;
         
@@ -61,35 +47,19 @@ namespace FTS.Managers
             }
         }
         
-        private void PlayMusic(AudioClip audioClip)
+        public void PlayMusic(AudioClip audioClip)
         {
             MusicSource.clip = audioClip;
             MusicSource.Play();
         }
         
-        private void PlaySound(AudioClip audioClip) => 
+        public void PlaySound(AudioClip audioClip) => 
             SoundSource.PlayOneShot(audioClip);
         
-        private void PlayVoice(AudioClip audioClip)
+        public void PlayVoice(AudioClip audioClip)
         {
             VoiceSource.clip = audioClip;
             VoiceSource.Play();
-        }
-        
-        private void Awake()
-        {
-            OnSettingData.Null()?.AddObserver(SettingData);
-            OnPlaySound.Null()?.AddObserver(PlaySound);
-            OnPlayMusic.Null()?.AddObserver(PlayMusic);
-            OnPlayVoice.Null()?.AddObserver(PlayVoice);
-        }
-
-        private void OnDestroy()
-        {
-            OnSettingData.Null()?.RemoveObserver(SettingData);
-            OnPlaySound.Null()?.RemoveObserver(PlaySound);
-            OnPlayMusic.Null()?.RemoveObserver(PlayMusic);
-            OnPlayVoice.Null()?.RemoveObserver(PlayVoice);
         }
     }
 }

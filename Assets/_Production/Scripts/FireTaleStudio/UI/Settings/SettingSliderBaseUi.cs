@@ -1,7 +1,4 @@
 using System;
-using System.Globalization;
-using FTS.Tools.ExtensionMethods;
-using FTS.Tools.ScriptableEvents;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,22 +11,25 @@ namespace FTS.UI.Settings
         [SerializeField] private TextMeshProUGUI _valueText;
 
         public override int Name =>  Animator.StringToHash(_slider.name);
-        public override object Value => (byte)_slider.value;
+        public override object Value => _value ?? 100;
 
-        public override void Initialize(EventInvoker<ISetting> onValueChange, object sliderValue)
+        public override void Initialize(Action<ISetting> onValueChange, object sliderValue)
         {
-            _slider.value = Convert.ToByte(sliderValue);
-            _valueText.text = sliderValue.ToString();
-
+            _value = Convert.ToByte(sliderValue);
             _slider.onValueChanged.AddListener(value =>
             {
-                _valueText.text = value.ToString(CultureInfo.InvariantCulture);
-                onValueChange.Null()?.Raise(this);
+                _value = Convert.ToByte(value);
+                onValueChange?.Invoke(this);
             });
             
-            onValueChange.Null()?.Raise(this);
+            onValueChange?.Invoke(this);
         }
 
-        public override void ApplyData() { }
+        public override void ApplyData()
+        {
+            byte value = Convert.ToByte(Value);
+            _slider.value = value;
+            _valueText.text = value.ToString();
+        }
     }
 }

@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _openedDimension: {x: 500, y: 200}
+  _exitButton: {fileID: 2326428900678344628}
 --- !u!1 &8693231184397861766
 GameObject:
   m_ObjectHideFlags: 0
