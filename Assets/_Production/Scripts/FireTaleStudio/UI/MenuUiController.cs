@@ -1,4 +1,5 @@
 using System;
+using FTS.UI.Screens;
 using UnityEngine;
 
 namespace FTS.UI
@@ -10,11 +11,16 @@ namespace FTS.UI
         public Action<IMenuButtonUi> OnExit { get; set; }
         public Action<IMenuButtonUi> OnPress { get; set; }
 
+        public Action<IScreen> OnScreenChange { get; set; }
+
         public void Enter(IMenuButtonUi menuButton) => 
             OnEnter?.Invoke(menuButton);
         public void Exit(IMenuButtonUi menuButton) =>
             OnExit?.Invoke(menuButton);
         public void Press(IMenuButtonUi menuButton) =>
             OnPress?.Invoke(menuButton);
+
+        public void ScreenChange(IScreen screen = null) =>
+            OnScreenChange?.Invoke(screen);
     }
 }

@@ -14,7 +14,7 @@ namespace FTS.UI.Screens
         [SerializeField] private GameObject _createProfileObject;
         [SerializeField] private CanvasGroup _characterProfileCanvas;
         [SerializeField] private Button _createProfileButton;
-        
+
         private Func<bool> OnGetProfile;
 
         protected override void OnInitialize(IManager manager)
@@ -36,6 +36,7 @@ namespace FTS.UI.Screens
                 _createProfileObject.SetActive(false);
                 _characterProfileCanvas.gameObject.SetActive(true);
                 _characterProfileCanvas.ShowCanvasGroup(0.35f);
+                EventSystem.current.SetSelectedGameObject(_characterProfileCanvas.GetComponentInChildren<Button>().gameObject);
             }
 
             bool GetProfile() => 
@@ -46,12 +47,8 @@ namespace FTS.UI.Screens
         {
             base.OnCompletePlay(speed);
             if (OnGetProfile.Invoke())
-            {
-                Debug.Log("Have profile");
                 return;
-            }
             
-            Debug.Log("Doesn't have profile");
             _characterProfileCanvas.gameObject.SetActive(false);
             _createProfileObject.SetActive(true);
             EventSystem.current.SetSelectedGameObject(_createProfileObject.GetComponentInChildren<TMP_InputField>().gameObject);
