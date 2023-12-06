@@ -11,6 +11,7 @@ namespace FTS.UI.Screens
         protected override void Awake()
         {
             base.Awake();
+            _playGame.onClick.RemoveAllListeners();
             _playGame.onClick.AddListener(() => SceneManager.LoadScene("EmptyTemplate_Scene"));
         }
     }
