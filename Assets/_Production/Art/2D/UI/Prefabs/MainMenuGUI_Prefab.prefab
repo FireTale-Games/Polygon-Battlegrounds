@@ -1417,6 +1417,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: LobbyScreen_Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 5891138786779623448, guid: d4fb6567506dfc945b6d4994fd44829a,
+        type: 3}
+      propertyPath: <Screen>k__BackingField
+      value: 
+      objectReference: {fileID: 3916041757310730301}
     - target: {fileID: 7814625937941036905, guid: d4fb6567506dfc945b6d4994fd44829a,
         type: 3}
       propertyPath: m_Pivot.x

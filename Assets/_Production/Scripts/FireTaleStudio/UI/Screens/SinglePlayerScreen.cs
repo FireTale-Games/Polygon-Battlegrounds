@@ -17,10 +17,7 @@ namespace FTS.UI.Screens
             if (manager is MenuPlayManager menuPlayManager)
                 BindToMenuPlayManager(menuPlayManager);
         }
-
-        private void BindToMenuPlayManager(MenuPlayManager menuPlayManager) => 
-            OnSinglePlayerShow = () => menuPlayManager.SetGameType(GameType.Singleplayer);
-
+        
         private void BindToProfileManager(ProfileManager profileManager)
         {
             IProfile[] profiles = GetComponentsInChildren<IProfile>();
@@ -28,6 +25,10 @@ namespace FTS.UI.Screens
             OnProfileShow = () => profileManager.RefreshValues(profiles);
         }
 
+        private void BindToMenuPlayManager(MenuPlayManager menuPlayManager) => 
+            OnSinglePlayerShow = () => menuPlayManager.SetGameType(GameType.Singleplayer);
+
+        
         public override void Show(float? speed = null)
         {
             base.Show(speed);
