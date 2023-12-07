@@ -25,7 +25,7 @@ namespace FTS.UI.Screens
             GameManager.Instance.OnInitialize += OnInitialize;
         }
 
-        private void OnDestroy() => 
+        protected virtual void OnDestroy() => 
             GameManager.Instance.OnInitialize -= OnInitialize;
 
         protected virtual void OnInitialize(IManager manager) { }

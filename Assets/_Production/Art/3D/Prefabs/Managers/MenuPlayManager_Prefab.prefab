@@ -41,7 +41,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6161295093196459621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c201956bf18baf4f82a67a9d7374762, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e81ee16eb702d14a95487a61499ed68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectedScene: EmptyTemplate_Scene
+  _selectedScene: Game_Scene
+  _gameSettings:
+    <GameType>k__BackingField: 0
+    <LobbySettings>k__BackingField:
+      r_lobbyName: 
+      r_playerNumber: 0
+    <WorldSettings>k__BackingField:
+      r_worldName: 

@@ -23,7 +23,6 @@ namespace FTS.UI.Screens
                 return;
             
             OnGetProfile += GetProfile;
-
             _createProfileButton.onClick.AddListener(CreateProfileButtonBind);
 
             return;
