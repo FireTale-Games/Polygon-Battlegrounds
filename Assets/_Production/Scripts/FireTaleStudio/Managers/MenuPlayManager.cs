@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 namespace FTS.Managers
 {
     public enum GameType : byte {None, Singleplayer, Multiplayer}
+    public enum LobbyType : byte {Public, Private}
     
     [DisallowMultipleComponent]
     internal sealed class MenuPlayManager : BaseManager
@@ -18,6 +19,8 @@ namespace FTS.Managers
         [field: SerializeField] public GameSettings GameSettings { get; private set; } = new();
 
         public void SetGameType(GameType type) => GameSettings.SetGameType(type);
+        public void SetLobbySettings(LobbySettings lobbySettings) => GameSettings.SetLobbySettings(lobbySettings);
+        public void SetMapSettings(MapSettings mapSettings) => GameSettings.SetMapSettings(mapSettings);
         
         private string[] GetSceneNames() =>
             EditorBuildSettings.scenes.Where(scene => scene.path != SceneManager.GetActiveScene().path)
@@ -28,15 +31,15 @@ namespace FTS.Managers
     }
 
     [Serializable]
-    internal class GameSettings
+    internal sealed class GameSettings
     {
         [field: SerializeField, ReadOnly] public GameType GameType { get; private set; } = GameType.None;
         [field: SerializeField] public LobbySettings LobbySettings { get; private set; }
-        [field: SerializeField] public WorldSettings WorldSettings { get; private set; }
+        [field: SerializeField] public MapSettings MapSettings { get; private set; }
 
-        public void SetGameType(GameType gameType) => GameType = gameType;
-        public void SetLobbySettings(LobbySettings lobbySettings) => LobbySettings = lobbySettings;
-        public void SetWorldSettings(WorldSettings worldSettings) => WorldSettings = worldSettings;
+        internal void SetGameType(GameType gameType) => GameType = gameType;
+        internal void SetLobbySettings(LobbySettings lobbySettings) => LobbySettings = lobbySettings;
+        internal void SetMapSettings(MapSettings mapSettings) => MapSettings = mapSettings;
     }
 
     [Serializable]
@@ -44,22 +47,24 @@ namespace FTS.Managers
     {
         [ReadOnly] public string r_lobbyName;
         [ReadOnly] public int r_playerNumber;
+        [ReadOnly] public LobbyType r_lobbyType;
 
-        public LobbySettings(string lobbyName, int playerNumber)
+        public LobbySettings(string lobbyName, int playerNumber, LobbyType lobbyType)
         {
             r_lobbyName = lobbyName;
             r_playerNumber = playerNumber;
+            r_lobbyType = lobbyType;
         }
     }
     
     [Serializable]
-    internal struct WorldSettings
+    internal struct MapSettings
     {
-        [ReadOnly] public string r_worldName;
+        [ReadOnly] public string r_mapName;
 
-        public WorldSettings(string worldName)
+        public MapSettings(string mapName)
         {
-            r_worldName = worldName;
+            r_mapName = mapName;
         }
     }
 }
