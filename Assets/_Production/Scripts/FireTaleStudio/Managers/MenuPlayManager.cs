@@ -15,9 +15,9 @@ namespace FTS.Managers
         [Dropdown(nameof(GetSceneNames))]
         [SerializeField] private string _selectedScene;
         
-        [SerializeField] private GameSettings _gameSettings = new();
+        [field: SerializeField] public GameSettings GameSettings { get; private set; } = new();
 
-        public void SetGameType(GameType type) => _gameSettings.SetGameType(type);
+        public void SetGameType(GameType type) => GameSettings.SetGameType(type);
         
         private string[] GetSceneNames() =>
             EditorBuildSettings.scenes.Where(scene => scene.path != SceneManager.GetActiveScene().path)

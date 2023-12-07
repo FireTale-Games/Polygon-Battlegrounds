@@ -46,7 +46,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 469337613232100080}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -696,6 +696,8 @@ MonoBehaviour:
   _createProfileObject: {fileID: 2613444222040177749}
   _characterProfileCanvas: {fileID: 8266988865600581650}
   _createProfileButton: {fileID: 1751478152168723913}
+  _nextButton: {fileID: 2728279649751024211}
+  _menuScreenBases: []
 --- !u!225 &5780320921595053025
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1778,6 +1780,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d29276f90e300304fb1e4896bac34378, type: 3}
+--- !u!114 &2728279649751024211 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 922578252986036608, guid: d29276f90e300304fb1e4896bac34378,
+    type: 3}
+  m_PrefabInstance: {fileID: 2959256289482240979}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 075deaf79c3af554c8262972746059f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3719627216128628493 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1913931798263702750, guid: d29276f90e300304fb1e4896bac34378,

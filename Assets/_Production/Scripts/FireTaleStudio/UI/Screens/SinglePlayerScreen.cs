@@ -19,7 +19,7 @@ namespace FTS.UI.Screens
         }
 
         private void BindToMenuPlayManager(MenuPlayManager menuPlayManager) => 
-            OnSinglePlayerShow += () => menuPlayManager.SetGameType(GameType.Singleplayer);
+            OnSinglePlayerShow = () => menuPlayManager.SetGameType(GameType.Singleplayer);
 
         private void BindToProfileManager(ProfileManager profileManager)
         {
