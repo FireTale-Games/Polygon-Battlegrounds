@@ -60,7 +60,6 @@ namespace FTS.UI.Screens
             }
             
             menuPlayManager.SetLobbySettings(new LobbySettings(_gameName = _gameName.Length <= 0 ? _gameName.GenerateRandomString(10) : _gameName, _playerNumber, _lobbyType));
-            SceneManager.LoadScene("Lobby_Scene");
         }
 
         public override void Show(float? speed = null)
