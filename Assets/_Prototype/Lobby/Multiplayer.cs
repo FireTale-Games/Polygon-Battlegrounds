@@ -66,11 +66,9 @@ namespace FTS.Multiplayer
         private async Task Authenticate(string playerName)
         {
             if (UnityServices.State == ServicesInitializationState.Uninitialized)
-            {
+            { 
                 InitializationOptions options = new();
-
                 options.SetProfile(playerName);
-
                 await UnityServices.InitializeAsync(options);
             }
 
@@ -81,7 +79,6 @@ namespace FTS.Multiplayer
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
                 PlayerId = AuthenticationService.Instance.PlayerId;
                 PlayerName = AuthenticationService.Instance.PlayerName;
-
             }
         }
         

@@ -11,7 +11,7 @@ namespace FTS.UI.Screens
 {
     internal sealed class CharacterScreen : MenuScreenBase
     {
-        [SerializeField] private TextMeshProUGUI _createProfileText;
+        [SerializeField] private TMP_InputField _createProfileText;
         [SerializeField] private GameObject _createProfileObject;
         [SerializeField] private CanvasGroup _characterProfileCanvas;
         [SerializeField] private Button _createProfileButton;
@@ -55,10 +55,10 @@ namespace FTS.UI.Screens
             int? GetProfile() => 
                 profileManager.GetProfile;
         }
-        
+
         private void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
         {
-            OnGetGameType += GetGameType;
+            OnGetGameType = GetGameType;
             OnProfileSet = value => menuPlayManager.SetPlayerSettings(new PlayerSettings(value));
             
             return;

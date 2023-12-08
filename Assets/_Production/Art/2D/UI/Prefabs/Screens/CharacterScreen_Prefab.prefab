@@ -692,7 +692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _openedDimension: {x: 1920, y: 1080}
-  _createProfileText: {fileID: 7176816958955141225}
+  _createProfileText: {fileID: 5478988076507068276}
   _createProfileObject: {fileID: 2613444222040177749}
   _characterProfileCanvas: {fileID: 8266988865600581650}
   _createProfileButton: {fileID: 1751478152168723913}
