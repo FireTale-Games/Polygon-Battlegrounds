@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace FTS.Data
 {
-    [CreateAssetMenu(fileName = "Game Settings", menuName = "FTS/Data/Game Settings")]
-    internal sealed class GameSettings : ScriptableObject
+    [Serializable]
+    internal sealed class GameSettings
     {
         [field: SerializeField, ReadOnly] public GameType GameType { get; private set; } = GameType.None;
         [field: SerializeField] public PlayerSettings PlayerSettings { get; private set; }

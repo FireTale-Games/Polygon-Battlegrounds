@@ -171,8 +171,8 @@ MonoBehaviour:
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 6561191266884317321}
     m_SelectOnDown: {fileID: 2709933827641362715}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 6301094690741776258}
+    m_SelectOnRight: {fileID: 7190214468507473658}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -539,12 +539,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 6561191266884317321}
+    m_SelectOnDown: {fileID: 2709933827641362715}
+    m_SelectOnLeft: {fileID: 3619656105282316642}
+    m_SelectOnRight: {fileID: 6301094690741776258}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -720,8 +720,8 @@ MonoBehaviour:
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 6561191266884317321}
     m_SelectOnDown: {fileID: 2709933827641362715}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnLeft: {fileID: 7190214468507473658}
+    m_SelectOnRight: {fileID: 3619656105282316642}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1836,9 +1836,9 @@ GameObject:
   - component: {fileID: 3991236599703721333}
   - component: {fileID: 1762816056951675903}
   - component: {fileID: 5058254912454303223}
-  - component: {fileID: 6240808380178518305}
+  - component: {fileID: 7014030278170064263}
   m_Layer: 5
-  m_Name: GameSelectionScreen_Prefab
+  m_Name: MultiplayerGameSelectionScreen_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1914,7 +1914,7 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!114 &6240808380178518305
+--- !u!114 &7014030278170064263
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1923,12 +1923,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3609930480391791262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4738fac0ea2d3894cb864ca82ae7d61f, type: 3}
+  m_Script: {fileID: 11500000, guid: e91f92dd6d1880143a75d861f1520623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _openedDimension: {x: 1920, y: 1080}
   _playGame: {fileID: 2709933827641362715}
-  _multiplayerOptions: {fileID: 750590302304705752}
   _playerDropdown: {fileID: 6301094690741776258}
   _gameTypeDropdown: {fileID: 3619656105282316642}
   _gameNameInputField: {fileID: 7190214468507473658}
@@ -3591,7 +3590,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
-      objectReference: {fileID: 2709933827641362715}
+      objectReference: {fileID: 6301094690741776258}
     - target: {fileID: 3180807602963605231, guid: 81450acba99e4b34bab9c0e51c7832a4,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
@@ -3747,7 +3746,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
-      objectReference: {fileID: 2709933827641362715}
+      objectReference: {fileID: 6301094690741776258}
     - target: {fileID: 3180807602963605231, guid: 81450acba99e4b34bab9c0e51c7832a4,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
@@ -3899,11 +3898,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7775836097197313677}
     m_Modifications:
-    - target: {fileID: 922578252986036608, guid: d29276f90e300304fb1e4896bac34378,
-        type: 3}
-      propertyPath: <Screen>k__BackingField
-      value: 
-      objectReference: {fileID: 6240808380178518305}
     - target: {fileID: 1913931798263702750, guid: d29276f90e300304fb1e4896bac34378,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
@@ -4095,11 +4089,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7775836097197313677}
     m_Modifications:
-    - target: {fileID: 922578252986036608, guid: d29276f90e300304fb1e4896bac34378,
-        type: 3}
-      propertyPath: <Screen>k__BackingField
-      value: 
-      objectReference: {fileID: 6240808380178518305}
     - target: {fileID: 1913931798263702750, guid: d29276f90e300304fb1e4896bac34378,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
@@ -4295,7 +4284,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Navigation.m_SelectOnDown
       value: 
-      objectReference: {fileID: 2709933827641362715}
+      objectReference: {fileID: 6301094690741776258}
     - target: {fileID: 3180807602963605231, guid: 81450acba99e4b34bab9c0e51c7832a4,
         type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
