@@ -1,5 +1,5 @@
 using System;
-using FTS.Tools.ExtensionMethods;
+using FTS.Tools.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 

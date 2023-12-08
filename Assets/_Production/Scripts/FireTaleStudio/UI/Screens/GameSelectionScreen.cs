@@ -1,8 +1,10 @@
 using System;
+using FTS.Data;
 using FTS.Managers;
-using FTS.Tools.ExtensionMethods;
+using FTS.Tools.Extensions;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace FTS.UI.Screens
@@ -19,7 +21,7 @@ namespace FTS.UI.Screens
         private int _playerNumber = 2;
         private LobbyType _lobbyType = LobbyType.Public;
         private string _gameName = "";
-        private Func<GameType> OnGetGameType; 
+        private Func<GameType> OnShowScreen; 
 
         protected override void OnInitialize(IManager manager)
         {
@@ -29,30 +31,42 @@ namespace FTS.UI.Screens
 
         private void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
         {
-            OnGetGameType += GetGameType;
+            OnShowScreen += ShowScreen;
             
             foreach (IMapButtonUi mapButton in GetComponentsInChildren<IMapButtonUi>())
                 mapButton.MapButton.onClick.AddListener(() => _mapName = mapButton.MapName);
             _playerDropdown.onValueChanged.AddListener(value => _playerNumber = value + 2);
             _gameTypeDropdown.onValueChanged.AddListener(value => _lobbyType = (LobbyType)value);
             _gameNameInputField.onValueChanged.AddListener(value => _gameName = value);
-            _playGame.onClick.AddListener(() => AssignGameValues(menuPlayManager));
+            _playGame.onClick.RemoveAllListeners();
+            _playGame.onClick.AddListener(() => StartGame(menuPlayManager));
             
             return;
-            GameType GetGameType() => 
-                menuPlayManager.GameSettings.GameType;
+            GameType ShowScreen()
+            {
+                menuPlayManager.SetMapSettings(new MapSettings());
+                menuPlayManager.SetLobbySettings(new LobbySettings());
+                return menuPlayManager.GameSettings.GameType;
+            }
         }
 
-        private void AssignGameValues(MenuPlayManager menuPlayManager)
+        private void StartGame(MenuPlayManager menuPlayManager)
         {
             menuPlayManager.SetMapSettings(new MapSettings(_mapName));
+            if (menuPlayManager.GameSettings.GameType == GameType.Singleplayer)
+            {
+                SceneManager.LoadScene(menuPlayManager.GameSettings.MapSettings.r_mapName);
+                return;
+            }
+            
             menuPlayManager.SetLobbySettings(new LobbySettings(_gameName = _gameName.Length <= 0 ? _gameName.GenerateRandomString(10) : _gameName, _playerNumber, _lobbyType));
+            SceneManager.LoadScene("Lobby_Scene");
         }
 
         public override void Show(float? speed = null)
         {
             base.Show(speed);
-            _multiplayerOptions.SetActive(OnGetGameType?.Invoke() == GameType.Multiplayer);
+            _multiplayerOptions.SetActive(OnShowScreen?.Invoke() == GameType.Multiplayer);
         }
     }
 }

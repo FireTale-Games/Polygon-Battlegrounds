@@ -1,6 +1,6 @@
 using DG.Tweening;
 using FTS.Managers;
-using FTS.Tools.ExtensionMethods;
+using FTS.Tools.Extensions;
 using UnityEngine;
 
 namespace FTS.UI.Screens

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FTS.Data;
 using FTS.UI.Profiles;
-using FTS.UI.Screens;
 
 namespace FTS.Managers
 {
@@ -12,17 +11,6 @@ namespace FTS.Managers
         private readonly Dictionary<int, Dictionary<int, object>> _currentProfiles = new();
         private int _activeProfile;
         public int? GetProfile => FindAndAssignProfile();
-
-        //private void ProfileSlot(IProfile profile)
-        //{
-        //    if (_currentProfiles.TryGetValue(profile.Name, out _))
-        //    {
-        //        FindAndAssignProfile(profile);
-        //        return;
-        //    }
-//
-        //    _activeProfile = null;
-        //}
         
         private void ProfileSlot(int profileName) => 
             _activeProfile = profileName;
@@ -47,7 +35,8 @@ namespace FTS.Managers
             DataLoader<Dictionary<int, object>, object> loadedObject = new(profile.Name.ToString());
             Dictionary<int, object> profileLoad = loadedObject.LoadData();
             
-            if (profileLoad == null) return null;
+            if (profileLoad == null) 
+                return null;
 
             _currentProfiles[profile.Name] = profileLoad;
             profileLoad.TryGetValue(profile.Name, out object savedValue);

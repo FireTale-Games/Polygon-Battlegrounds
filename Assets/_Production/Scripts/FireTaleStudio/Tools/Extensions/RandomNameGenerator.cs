@@ -1,13 +1,13 @@
 using System;
 
-namespace FTS.Tools.ExtensionMethods
+namespace FTS.Tools.Extensions
 {
     public static class RandomNameGenerator
     {
         private static readonly char[] Chars =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
 
-        private static readonly Random Random = new Random();
+        private static readonly Random Random = new();
 
         public static string GenerateRandomString(this string self, int length)
         {

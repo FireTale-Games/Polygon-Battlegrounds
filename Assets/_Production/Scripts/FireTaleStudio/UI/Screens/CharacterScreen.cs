@@ -1,6 +1,7 @@
 using System;
+using FTS.Data;
 using FTS.Managers;
-using FTS.Tools.ExtensionMethods;
+using FTS.Tools.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,8 +18,9 @@ namespace FTS.UI.Screens
         [SerializeField] private MenuButtonUi _nextButton;
         [SerializeField] private MenuScreenBase[] _menuScreenBases;
         
-        private Func<bool> OnGetProfile;
-        private Func<GameType> OnGetGameType; 
+        private Func<int?> OnGetProfile;
+        private Func<GameType> OnGetGameType;
+        private Action<int> OnProfileSet;
 
         protected override void OnInitialize(IManager manager)
         {
@@ -45,15 +47,19 @@ namespace FTS.UI.Screens
                 _characterProfileCanvas.gameObject.SetActive(true);
                 _characterProfileCanvas.ShowCanvasGroup(0.35f);
                 EventSystem.current.SetSelectedGameObject(_characterProfileCanvas.GetComponentInChildren<Button>().gameObject);
+
+                int? invoke = OnGetProfile?.Invoke();
+                OnProfileSet?.Invoke(invoke!.Value);
             }
 
-            bool GetProfile() => 
-                profileManager.GetProfile.HasValue;
+            int? GetProfile() => 
+                profileManager.GetProfile;
         }
         
         private void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
         {
             OnGetGameType += GetGameType;
+            OnProfileSet = value => menuPlayManager.SetPlayerSettings(new PlayerSettings(value));
             
             return;
             GameType GetGameType() => 
@@ -63,8 +69,12 @@ namespace FTS.UI.Screens
         protected override void OnCompletePlay(float speed)
         {
             base.OnCompletePlay(speed);
-            if (OnGetProfile.Invoke())
+            int? profile = OnGetProfile.Invoke();
+            if (profile.HasValue)
+            {
+                OnProfileSet?.Invoke(profile.Value);
                 return;
+            }
             
             _characterProfileCanvas.gameObject.SetActive(false);
             _createProfileObject.SetActive(true);

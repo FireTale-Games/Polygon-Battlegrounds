@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace FTS.Tools.ExtensionMethods
+namespace FTS.Tools.Extensions
 {
     public static class ExtensionMethods
     {

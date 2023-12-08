@@ -45,10 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _selectedScene: Game_Scene
-  _gameSettings:
-    <GameType>k__BackingField: 0
-    <LobbySettings>k__BackingField:
-      r_lobbyName: 
-      r_playerNumber: 0
-    <WorldSettings>k__BackingField:
-      r_worldName: 
+  <GameSettings>k__BackingField: {fileID: 11400000, guid: e09aa9648abce1a4bbad04aca1f02903,
+    type: 2}
