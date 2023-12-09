@@ -24,7 +24,7 @@ namespace FTS.UI.Screens
             if (manager is MenuPlayManager menuPlayManager)
                 BindToMenuPlayManager(menuPlayManager);
         }
-
+        
         private void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
         {
             foreach (IMapButtonUi mapButton in GetComponentsInChildren<IMapButtonUi>())
@@ -33,6 +33,10 @@ namespace FTS.UI.Screens
             _gameTypeDropdown.onValueChanged.AddListener(value => _lobbyType = (LobbyType)value);
             _gameNameInputField.onValueChanged.AddListener(value => _gameName = value);
             _playGame.onClick.AddListener(() => StartGame(menuPlayManager));
+            _playGame.onClick.AddListener(OnCreateLobby);
+
+            return;
+            async void OnCreateLobby() => await menuPlayManager.CreateLobby();
         }
 
         private void StartGame(MenuPlayManager menuPlayManager)

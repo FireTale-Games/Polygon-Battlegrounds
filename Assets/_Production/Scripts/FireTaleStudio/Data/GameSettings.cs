@@ -5,7 +5,7 @@ using UnityEngine;
 namespace FTS.Data
 {
     [Serializable]
-    internal sealed class GameSettings
+    internal sealed class GameSettings : IGameSettings
     {
         [field: SerializeField, ReadOnly] public GameType GameType { get; private set; } = GameType.None;
         [field: SerializeField] public PlayerSettings PlayerSettings { get; private set; }
@@ -16,6 +16,14 @@ namespace FTS.Data
         internal void SetLobbySettings(LobbySettings lobbySettings) => LobbySettings = lobbySettings;
         internal void SetMapSettings(MapSettings mapSettings) => MapSettings = mapSettings;
         internal void SetPlayerSettings(PlayerSettings playerSettings) => PlayerSettings = playerSettings;
+    }
+
+    internal interface IGameSettings
+    {
+        public GameType GameType { get; }
+        public PlayerSettings PlayerSettings { get; }
+        public LobbySettings LobbySettings { get; }
+        public MapSettings MapSettings { get; }
     }
     
     internal enum GameType : byte {None, Singleplayer, Multiplayer}
@@ -39,7 +47,7 @@ namespace FTS.Data
         [ReadOnly] public int r_playerNumber;
         [ReadOnly] public LobbyType r_lobbyType;
 
-        public LobbySettings(string lobbyName, int playerNumber, LobbyType lobbyType)
+        public LobbySettings(string lobbyName, int playerNumber, LobbyType lobbyType = LobbyType.Public)
         {
             r_lobbyName = lobbyName;
             r_playerNumber = playerNumber;

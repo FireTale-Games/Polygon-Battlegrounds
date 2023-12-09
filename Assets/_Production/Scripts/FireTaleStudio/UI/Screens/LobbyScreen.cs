@@ -1,49 +1,68 @@
 using System;
+using System.Collections.Generic;
 using FTS.Managers;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
+// ReSharper disable ConvertClosureToMethodGroup
 
 namespace FTS.UI.Screens
 {
     internal sealed class LobbyScreen : MenuScreenBase
     {
+        [SerializeField] private RectTransform _lobbyList;
+        [SerializeField] private Transform _lobbySingleTemplate;
         [SerializeField] private Button _joinGame;
         [SerializeField] private Button _refreshLobby;
         [SerializeField] private Button _backButton;
 
         private Action<bool> OnLobbyShow;
-        
-        protected override void Awake()
-        {
-            base.Awake();
-            InitializeButtons();
-        }
+        private Action<Lobby> OnLobbyJoin;
         
         protected override void OnInitialize(IManager manager)
         {
-            if (manager is not MultiplayerManager multiplayerManager)
-                return;
-            
-            OnLobbyShow = value=> multiplayerManager.SetNetworkConnection(value);
+            if (manager is MultiplayerManager multiplayerManager)
+                BindToMultiplayerManager(multiplayerManager);
+
+            if (manager is MenuPlayManager menuPlayManager)
+                BindToMenuPlayerManager(menuPlayManager);
+        }
+
+        private void BindToMultiplayerManager(MultiplayerManager multiplayerManager)
+        {
+            OnLobbyShow += value => multiplayerManager.SetNetworkConnection(value);
             _backButton.onClick.AddListener(() => OnLobbyShow?.Invoke(false));
         }
         
-        private void InitializeButtons()
+        private void BindToMenuPlayerManager(MenuPlayManager menuPlayManager)
         {
-            _refreshLobby.onClick.AddListener(RefreshLobbyList);
-            _joinGame.onClick.AddListener(JoinLobby);
+            OnLobbyShow = OnShowAuthenticate;
+            OnLobbyJoin = menuPlayManager.JoinLobby;
+            menuPlayManager.OnLobbyListChanged += LobbyManager_OnLobbyListChanged;
+            
+            _joinGame.onClick.AddListener(() => menuPlayManager.JoinLobbyByCode("ss"));
+            _refreshLobby.onClick.AddListener(() => menuPlayManager.RefreshLobbyList());
+            
+            return;
+            async void OnShowAuthenticate(bool value) => await menuPlayManager.Authenticate();
         }
 
-        private void RefreshLobbyList()
-        {
-            
+        private void LobbyManager_OnLobbyListChanged(object sender, MenuPlayManager.OnLobbyListChangedEventArgs e) =>
+            UpdateLobbyList(e.lobbyList);
+        
+        private void UpdateLobbyList(List<Lobby> lobbyList) {
+            foreach (Transform child in _lobbyList) {
+                Destroy(child.gameObject);
+            }
+
+            foreach (Lobby lobby in lobbyList) {
+                Transform lobbySingleTransform = Instantiate(_lobbySingleTemplate, _lobbyList);
+                lobbySingleTransform.gameObject.SetActive(true);
+                LobbyListSingleUI lobbyListSingleUI = lobbySingleTransform.GetComponent<LobbyListSingleUI>();
+                lobbyListSingleUI.UpdateLobby(OnLobbyJoin, lobby);
+            }
         }
         
-        private void JoinLobby()
-        {
-            
-        }
-
         public override void Show(float? speed = null)
         {
             base.Show(speed);
