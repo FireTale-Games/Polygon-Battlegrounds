@@ -11,18 +11,18 @@ namespace FTS.UI.Screens
         [SerializeField] private Button _playGame;
         private string _mapName = "WorldOne_Scene";
 
-        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
+        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager)
         {
             foreach (IMapButtonUi mapButton in GetComponentsInChildren<IMapButtonUi>())
                 mapButton.MapButton.onClick.AddListener(() => _mapName = mapButton.MapName);
             _playGame.onClick.RemoveAllListeners();
-            _playGame.onClick.AddListener(() => StartGame(menuPlayManager));
+            _playGame.onClick.AddListener(() => StartGame(lobbyManager));
         }
 
-        private void StartGame(MenuPlayManager menuPlayManager)
+        private void StartGame(Managers.LobbyManager lobbyManager)
         {
-            menuPlayManager.SetMapSettings(new MapSettings(_mapName));
-            SceneManager.LoadScene(menuPlayManager.GameSettings.MapSettings.r_mapName);
+            lobbyManager.SetMapSettings(new MapSettings(_mapName));
+            SceneManager.LoadScene(lobbyManager.GameSettings.MapSettings.r_mapName);
         }
     }
 }

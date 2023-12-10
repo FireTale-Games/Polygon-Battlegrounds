@@ -20,6 +20,6 @@ public class LobbyPlayerSingleUI : MonoBehaviour {
 
     private void KickPlayer(string playerId) 
     {
-            LobbyManager.Instance.KickPlayer(playerId);
+            //LobbyManager.Instance.KickPlayer(playerId);
     }
 }

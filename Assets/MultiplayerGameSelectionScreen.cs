@@ -19,24 +19,24 @@ namespace FTS.UI.Screens
         private LobbyType _lobbyType = LobbyType.Public;
         private string _gameName = "";
         
-        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
+        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager)
         {
             foreach (IMapButtonUi mapButton in GetComponentsInChildren<IMapButtonUi>())
                 mapButton.MapButton.onClick.AddListener(() => _mapName = mapButton.MapName);
             _playerDropdown.onValueChanged.AddListener(value => _playerNumber = value + 2);
             _gameTypeDropdown.onValueChanged.AddListener(value => _lobbyType = (LobbyType)value);
             _gameNameInputField.onValueChanged.AddListener(value => _gameName = value);
-            _playGame.onClick.AddListener(() => StartGame(menuPlayManager));
+            _playGame.onClick.AddListener(() => StartGame(lobbyManager));
             _playGame.onClick.AddListener(OnCreateLobby);
 
             return;
-            async void OnCreateLobby() => await menuPlayManager.CreateLobby();
+            async void OnCreateLobby() => await lobbyManager.CreateLobby();
         }
 
-        private void StartGame(MenuPlayManager menuPlayManager)
+        private void StartGame(Managers.LobbyManager lobbyManager)
         {
-            menuPlayManager.SetMapSettings(new MapSettings(_mapName));
-            menuPlayManager.SetLobbySettings(new LobbySettings(
+            lobbyManager.SetMapSettings(new MapSettings(_mapName));
+            lobbyManager.SetLobbySettings(new LobbySettings(
                 _gameName = _gameName.Length <= 0 ? _gameName.GenerateRandomString(10) : _gameName, _playerNumber,
                 _lobbyType));
         }

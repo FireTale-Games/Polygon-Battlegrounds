@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FTS.TESTING;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,13 +29,13 @@ public class LobbyListUI : MonoBehaviour {
     }
 
     private void Start() {
-        LobbyManager.Instance.OnLobbyListChanged += LobbyManager_OnLobbyListChanged;
-        LobbyManager.Instance.OnJoinedLobby += LobbyManager_OnJoinedLobby;
-        LobbyManager.Instance.OnLeftLobby += LobbyManager_OnLeftLobby;
-        LobbyManager.Instance.OnKickedFromLobby += LobbyManager_OnKickedFromLobby;
+        LobbyManagerTesting.Instance.OnLobbyListChanged += LobbyManager_OnLobbyListChanged;
+        LobbyManagerTesting.Instance.OnJoinedLobby += LobbyManager_OnJoinedLobby;
+        LobbyManagerTesting.Instance.OnLeftLobby += LobbyManager_OnLeftLobby;
+        LobbyManagerTesting.Instance.OnKickedFromLobby += LobbyManager_OnKickedFromLobby;
     }
 
-    private void LobbyManager_OnKickedFromLobby(object sender, LobbyManager.LobbyEventArgs e) {
+    private void LobbyManager_OnKickedFromLobby(object sender, LobbyManagerTesting.LobbyEventArgs e) {
         Show();
     }
 
@@ -42,11 +43,11 @@ public class LobbyListUI : MonoBehaviour {
         Show();
     }
 
-    private void LobbyManager_OnJoinedLobby(object sender, LobbyManager.LobbyEventArgs e) {
+    private void LobbyManager_OnJoinedLobby(object sender, LobbyManagerTesting.LobbyEventArgs e) {
         Hide();
     }
 
-    private void LobbyManager_OnLobbyListChanged(object sender, LobbyManager.OnLobbyListChangedEventArgs e) {
+    private void LobbyManager_OnLobbyListChanged(object sender, LobbyManagerTesting.OnLobbyListChangedEventArgs e) {
         UpdateLobbyList(e.lobbyList);
     }
 
@@ -66,7 +67,7 @@ public class LobbyListUI : MonoBehaviour {
     }
 
     private void RefreshButtonClick() {
-        LobbyManager.Instance.RefreshLobbyList();
+        LobbyManagerTesting.Instance.RefreshLobbyList();
     }
 
     private void CreateLobbyButtonClick() {

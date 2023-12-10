@@ -36,13 +36,13 @@ namespace FTS.UI.Screens
             if (manager is ProfileManager profileManager)
                 BindToProfileManager(profileManager);
 
-            if (manager is MenuPlayManager menuPlayManager)
-                BindToMenuPlayManager(menuPlayManager);
+            if (manager is LobbyManager menuPlayManager)
+                BindToLobbyManager(menuPlayManager);
         }
 
         protected virtual void BindToSettingsManager(SettingManager settingManager) { }
         protected virtual void BindToProfileManager(ProfileManager profileManager) { }
-        protected virtual void BindToMenuPlayManager(MenuPlayManager menuPlayManager) { }
+        protected virtual void BindToLobbyManager(LobbyManager lobbyManager) { }
         
         public override void Show(float? speed = null)
         {

@@ -47,14 +47,14 @@ namespace FTS.UI.Screens
                 profileManager.GetProfile;
         }
 
-        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
+        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager)
         {
             OnGetGameType = GetGameType;
-            OnProfileSet = value => menuPlayManager.SetPlayerSettings(new PlayerSettings(value));
+            OnProfileSet = value => lobbyManager.SetPlayerSettings(new PlayerSettings(value));
             
             return;
             GameType GetGameType() => 
-                menuPlayManager.GameSettings.GameType;
+                lobbyManager.GameSettings.GameType;
         }
         
         protected override void OnCompletePlay(float speed)

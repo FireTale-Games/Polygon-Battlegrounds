@@ -11,14 +11,14 @@ namespace FTS.UI.Screens
         [SerializeField] private Transform playerSingleTemplate;
         [SerializeField] private Transform _playerList;
         
-        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
+        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager)
         {
-            menuPlayManager.OnJoinedLobby += UpdateLobby_Event;
-            menuPlayManager.OnJoinedLobbyUpdate += UpdateLobby_Event;
+            lobbyManager.OnJoinedLobby += UpdateLobby_Event;
+            lobbyManager.OnJoinedLobbyUpdate += UpdateLobby_Event;
 
         }
 
-        private void UpdateLobby_Event(object sender, MenuPlayManager.LobbyEventArgs e) => 
+        private void UpdateLobby_Event(object sender, Managers.LobbyManager.LobbyEventArgs e) => 
             UpdateLobby(e.lobby);
 
         private void UpdateLobby(Lobby lobby) {

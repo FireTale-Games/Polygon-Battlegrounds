@@ -11,8 +11,8 @@ namespace FTS.UI.Screens
         private Action OnSinglePlayerShow;
         
 
-        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager) => 
-            OnSinglePlayerShow = () => menuPlayManager.SetGameType(GameType.Multiplayer);
+        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager) => 
+            OnSinglePlayerShow = () => lobbyManager.SetGameType(GameType.Multiplayer);
 
         protected override void BindToProfileManager(ProfileManager profileManager)
         {

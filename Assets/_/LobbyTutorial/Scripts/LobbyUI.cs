@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using FTS.TESTING;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies.Models;
@@ -26,15 +27,15 @@ public class LobbyUI : MonoBehaviour {
         playerSingleTemplate.gameObject.SetActive(false);
         
         leaveLobbyButton.onClick.AddListener(() => {
-            LobbyManager.Instance.LeaveLobby();
+            LobbyManagerTesting.Instance.LeaveLobby();
         });
     }
 
     private void Start() {
-        LobbyManager.Instance.OnJoinedLobby += UpdateLobby_Event;
-        LobbyManager.Instance.OnJoinedLobbyUpdate += UpdateLobby_Event;
-        LobbyManager.Instance.OnLeftLobby += LobbyManager_OnLeftLobby;
-        LobbyManager.Instance.OnKickedFromLobby += LobbyManager_OnLeftLobby;
+        LobbyManagerTesting.Instance.OnJoinedLobby += UpdateLobby_Event;
+        LobbyManagerTesting.Instance.OnJoinedLobbyUpdate += UpdateLobby_Event;
+        LobbyManagerTesting.Instance.OnLeftLobby += LobbyManager_OnLeftLobby;
+        LobbyManagerTesting.Instance.OnKickedFromLobby += LobbyManager_OnLeftLobby;
 
         Hide();
     }
@@ -44,12 +45,12 @@ public class LobbyUI : MonoBehaviour {
         Hide();
     }
 
-    private void UpdateLobby_Event(object sender, LobbyManager.LobbyEventArgs e) {
+    private void UpdateLobby_Event(object sender, LobbyManagerTesting.LobbyEventArgs e) {
         UpdateLobby();
     }
 
     private void UpdateLobby() {
-        UpdateLobby(LobbyManager.Instance.GetJoinedLobby());
+        UpdateLobby(LobbyManagerTesting.Instance.GetJoinedLobby());
     }
 
     private void UpdateLobby(Lobby lobby) {
@@ -61,14 +62,14 @@ public class LobbyUI : MonoBehaviour {
             LobbyPlayerSingleUI lobbyPlayerSingleUI = playerSingleTransform.GetComponent<LobbyPlayerSingleUI>();
 
             lobbyPlayerSingleUI.SetKickPlayerButtonVisible(
-                LobbyManager.Instance.IsLobbyHost() &&
+                LobbyManagerTesting.Instance.IsLobbyHost() &&
                 player.Id != AuthenticationService.Instance.PlayerId // Don't allow kick self
             );
 
             lobbyPlayerSingleUI.UpdatePlayer(player);
         }
 
-        changeGameModeButton.gameObject.SetActive(LobbyManager.Instance.IsLobbyHost());
+        changeGameModeButton.gameObject.SetActive(LobbyManagerTesting.Instance.IsLobbyHost());
 
         lobbyNameText.text = lobby.Name;
         playerCountText.text = lobby.Players.Count + "/" + lobby.MaxPlayers;

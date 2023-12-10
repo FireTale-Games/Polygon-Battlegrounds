@@ -12,7 +12,7 @@ using PlayerSettings = FTS.Data.PlayerSettings;
 namespace FTS.Managers
 {
     [DisallowMultipleComponent]
-    internal sealed class MenuPlayManager : BaseManager
+    internal sealed class LobbyManager : BaseManager
     {
         [SerializeField] private GameSettings _gameSettings = new();
         public IGameSettings GameSettings => _gameSettings;

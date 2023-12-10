@@ -27,11 +27,11 @@ public class LobbyCreateUI : MonoBehaviour {
         Instance = this;
 
         createButton.onClick.AddListener(() => {
-            LobbyManager.Instance.CreateLobby(
-                lobbyName,
-                maxPlayers,
-                isPrivate
-            );
+            //LobbyManager.Instance.CreateLobby(
+            //    lobbyName,
+            //    maxPlayers,
+            //    isPrivate
+            //);
             Hide();
         });
 

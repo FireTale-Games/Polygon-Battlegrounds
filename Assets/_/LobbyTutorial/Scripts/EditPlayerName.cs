@@ -45,7 +45,7 @@ public class EditPlayerName : MonoBehaviour {
     }
 
     private void EditPlayerName_OnNameChanged(object sender, EventArgs e) {
-        LobbyManager.Instance.UpdatePlayerName(GetPlayerName());
+        //LobbyManager.Instance.UpdatePlayerName(GetPlayerName());
     }
 
     public string GetPlayerName() {

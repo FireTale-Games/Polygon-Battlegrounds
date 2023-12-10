@@ -17,8 +17,8 @@ namespace FTS.UI.Screens
             OnProfileShow = () => profileManager.RefreshValues(profiles);
         }
 
-        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager) => 
-            OnSinglePlayerShow = () => menuPlayManager.SetGameType(GameType.Singleplayer);
+        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager) => 
+            OnSinglePlayerShow = () => lobbyManager.SetGameType(GameType.Singleplayer);
 
         
         public override void Show(float? speed = null)
