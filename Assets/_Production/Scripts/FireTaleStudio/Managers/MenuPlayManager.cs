@@ -45,8 +45,8 @@ namespace FTS.Managers
         public void SetMapSettings(MapSettings mapSettings) => _gameSettings.SetMapSettings(mapSettings);
         
         private void Update() {
-            //HandleLobbyHeartbeat();
-            //HandleLobbyPolling();
+            HandleLobbyHeartbeat();
+            HandleLobbyPolling();
         }
         
         public bool IsLobbyHost() => 
@@ -189,13 +189,22 @@ namespace FTS.Managers
         }
 
         public async void JoinLobby(Lobby lobby) {
-            Player player = GetPlayer();
+            try
+            {
+                Player player = GetPlayer();
 
-            _joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobby.Id, new JoinLobbyByIdOptions {
-                Player = player
-            });
+                _joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobby.Id, new JoinLobbyByIdOptions
+                {
+                    Player = player
+                });
 
-            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+                OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+            }
+            catch (LobbyServiceException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         #endregion REFRESH_LOBBY

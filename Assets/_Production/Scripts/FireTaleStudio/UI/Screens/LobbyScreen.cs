@@ -40,7 +40,6 @@ namespace FTS.UI.Screens
             OnLobbyJoin = menuPlayManager.JoinLobby;
             menuPlayManager.OnLobbyListChanged += LobbyManager_OnLobbyListChanged;
             
-            _joinGame.onClick.AddListener(() => menuPlayManager.JoinLobbyByCode("ss"));
             _refreshLobby.onClick.AddListener(() => menuPlayManager.RefreshLobbyList());
             
             return;
