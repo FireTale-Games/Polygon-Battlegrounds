@@ -10,19 +10,11 @@ namespace FTS.UI.Screens
         private Action OnProfileShow;
         private Action OnSinglePlayerShow;
         
-        protected override void OnInitialize(IManager manager)
-        {
-            if (manager is ProfileManager profileManager)
-                BindToProfileManager(profileManager);
 
-            if (manager is MenuPlayManager menuPlayManager)
-                BindToMenuPlayManager(menuPlayManager);
-        }
-
-        private void BindToMenuPlayManager(MenuPlayManager menuPlayManager) => 
+        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager) => 
             OnSinglePlayerShow = () => menuPlayManager.SetGameType(GameType.Multiplayer);
 
-        private void BindToProfileManager(ProfileManager profileManager)
+        protected override void BindToProfileManager(ProfileManager profileManager)
         {
             IProfile[] profiles = GetComponentsInChildren<IProfile>();
             profileManager.SetInitialValues(profiles);

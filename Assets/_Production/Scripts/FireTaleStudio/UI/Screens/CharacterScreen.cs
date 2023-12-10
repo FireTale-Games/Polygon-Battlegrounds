@@ -22,16 +22,7 @@ namespace FTS.UI.Screens
         private Func<GameType> OnGetGameType;
         private Action<int> OnProfileSet;
 
-        protected override void OnInitialize(IManager manager)
-        {
-            if (manager is ProfileManager profileManager)
-                BindToProfileManager(profileManager);
-
-            if (manager is MenuPlayManager menuPlayManager)
-                BindToMenuPlayManager(menuPlayManager);
-        }
-
-        private void BindToProfileManager(ProfileManager profileManager)
+        protected override void BindToProfileManager(ProfileManager profileManager)
         {
             OnGetProfile += GetProfile;
             _createProfileButton.onClick.AddListener(CreateProfileButtonBind);
@@ -56,7 +47,7 @@ namespace FTS.UI.Screens
                 profileManager.GetProfile;
         }
 
-        private void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
+        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
         {
             OnGetGameType = GetGameType;
             OnProfileSet = value => menuPlayManager.SetPlayerSettings(new PlayerSettings(value));

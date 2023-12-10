@@ -18,14 +18,8 @@ namespace FTS.UI.Screens
         private int _playerNumber = 2;
         private LobbyType _lobbyType = LobbyType.Public;
         private string _gameName = "";
-
-        protected override void OnInitialize(IManager manager)
-        {
-            if (manager is MenuPlayManager menuPlayManager)
-                BindToMenuPlayManager(menuPlayManager);
-        }
         
-        private void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
+        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
         {
             foreach (IMapButtonUi mapButton in GetComponentsInChildren<IMapButtonUi>())
                 mapButton.MapButton.onClick.AddListener(() => _mapName = mapButton.MapName);

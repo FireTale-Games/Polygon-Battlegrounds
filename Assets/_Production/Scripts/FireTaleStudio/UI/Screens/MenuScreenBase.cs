@@ -28,8 +28,22 @@ namespace FTS.UI.Screens
         protected virtual void OnDestroy() => 
             GameManager.Instance.OnInitialize -= OnInitialize;
 
-        protected virtual void OnInitialize(IManager manager) { }
+        private void OnInitialize(IManager manager)
+        {
+            if (manager is SettingManager settingManager)
+                BindToSettingsManager(settingManager);
+            
+            if (manager is ProfileManager profileManager)
+                BindToProfileManager(profileManager);
 
+            if (manager is MenuPlayManager menuPlayManager)
+                BindToMenuPlayManager(menuPlayManager);
+        }
+
+        protected virtual void BindToSettingsManager(SettingManager settingManager) { }
+        protected virtual void BindToProfileManager(ProfileManager profileManager) { }
+        protected virtual void BindToMenuPlayManager(MenuPlayManager menuPlayManager) { }
+        
         public override void Show(float? speed = null)
         {
             float realSpeed = speed ?? _duration;

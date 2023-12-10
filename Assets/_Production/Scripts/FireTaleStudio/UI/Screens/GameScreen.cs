@@ -9,19 +9,9 @@ namespace FTS.UI.Screens
     internal sealed class GameScreen : MenuScreenBase
     {
         [SerializeField] private Transform playerSingleTemplate;
-        [SerializeField] private Button _backButton;
         [SerializeField] private Transform _playerList;
         
-        protected override void OnInitialize(IManager manager)
-        {
-            if (manager is MultiplayerManager multiplayerManager)
-                _backButton.onClick.AddListener(() => multiplayerManager.SetNetworkConnection(false));
-
-            if (manager is MenuPlayManager menuPlayManager)
-                BindToMenuPlayManager(menuPlayManager);
-        }
-
-        private void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
+        protected override void BindToMenuPlayManager(MenuPlayManager menuPlayManager)
         {
             menuPlayManager.OnJoinedLobby += UpdateLobby_Event;
             menuPlayManager.OnJoinedLobbyUpdate += UpdateLobby_Event;
