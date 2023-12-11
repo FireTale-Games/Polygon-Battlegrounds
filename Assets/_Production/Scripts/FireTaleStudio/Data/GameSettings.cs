@@ -27,7 +27,6 @@ namespace FTS.Data
     }
     
     internal enum GameType : byte {None, Singleplayer, Multiplayer}
-    internal enum LobbyType : byte {Public, Private}
     
     [Serializable]
     internal struct PlayerSettings
@@ -45,13 +44,13 @@ namespace FTS.Data
     {
         [ReadOnly] public string r_lobbyName;
         [ReadOnly] public int r_playerNumber;
-        [ReadOnly] public LobbyType r_lobbyType;
+        [ReadOnly] public string r_lobbyPassword;
 
-        public LobbySettings(string lobbyName, int playerNumber, LobbyType lobbyType = LobbyType.Public)
+        public LobbySettings(string lobbyName, int playerNumber, string lobbyPassword)
         {
             r_lobbyName = lobbyName;
             r_playerNumber = playerNumber;
-            r_lobbyType = lobbyType;
+            r_lobbyPassword = lobbyPassword;
         }
     }
     

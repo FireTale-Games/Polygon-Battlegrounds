@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Logo
+      name: Logo_Sprite
       rect:
         serializedVersion: 2
         x: 1
@@ -131,7 +131,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Button
+      name: Button_Sprite
       rect:
         serializedVersion: 2
         x: 548
@@ -151,6 +151,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Lock_Sprite
+      rect:
+        serializedVersion: 2
+        x: 886
+        y: 942
+        width: 58
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48e4d8de3e4ff5a46b189645e04c586d
+      internalID: -1876699849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Empty_Sprite
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 1014
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51a6cfdf4e8b24a4baa2e618edf34e88
+      internalID: -465976116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -162,8 +204,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Button: -2037390631
-      Logo: -1788651940
+      Button_Sprite: -2037390631
+      Empty_Sprite: -465976116
+      Lock_Sprite: -1876699849
+      Logo_Sprite: -1788651940
+      Unlock_Sprite: 52845842
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

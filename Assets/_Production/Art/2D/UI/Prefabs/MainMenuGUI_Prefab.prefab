@@ -2103,6 +2103,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5512487931216334035, guid: d4fb6567506dfc945b6d4994fd44829a,
+        type: 3}
+      propertyPath: <Screen>k__BackingField
+      value: 
+      objectReference: {fileID: 7179852242538972194}
     - target: {fileID: 5891138786779623448, guid: d4fb6567506dfc945b6d4994fd44829a,
         type: 3}
       propertyPath: <Screen>k__BackingField

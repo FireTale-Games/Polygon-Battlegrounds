@@ -88,26 +88,23 @@ namespace FTS.Managers
         {
             int playerName = GameSettings.PlayerSettings.r_playerName;
             Dictionary<int, object> playerData = new DataLoader<Dictionary<int, object>, object>(playerName.ToString()).LoadData();
-            await Authenticate(playerData[playerName] as string);
+            await Authenticate(playerData[playerName].ToString());
         }
 
         private async Task Authenticate(string playerName)
         {
             if (UnityServices.State == ServicesInitializationState.Uninitialized)
-            { 
+            {
                 InitializationOptions options = new();
                 options.SetProfile(playerName);
                 await UnityServices.InitializeAsync(options);
-                PlayerName = playerName;
             }
-
-            AuthenticationService.Instance.SignedIn += () => Debug.Log("Signed in as " + AuthenticationService.Instance.PlayerId);
 
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
                 PlayerId = AuthenticationService.Instance.PlayerId;
-                PlayerName = AuthenticationService.Instance.PlayerName;
+                PlayerName = playerName;
             }
         }
         
@@ -118,19 +115,27 @@ namespace FTS.Managers
         
         public async Task CreateLobby()
         {
+
+            //Debug.Log(new DataObject(DataObject.VisibilityOptions.Public, new DataLoader<Dictionary<int, object>, object>(GameSettings.PlayerSettings.r_playerName.ToString()).LoadData()[GameSettings.PlayerSettings.r_playerName]));
+            Debug.Log(PlayerName);
+            
             try
             {
                 CreateLobbyOptions lobbyOptions = new()
                 {
-                    IsPrivate = GameSettings.LobbySettings.r_lobbyType == LobbyType.Private,
+                    IsPrivate = false,
+                    Data = new Dictionary<string, DataObject>
+                    {{"Password", new DataObject(DataObject.VisibilityOptions.Public, GameSettings.LobbySettings.r_lobbyPassword)}},
                     Player = GetPlayer()
                 };
 
+                Debug.Log(lobbyOptions.Player.Data["PlayerName"].Value);
+                
                 Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(GameSettings.LobbySettings.r_lobbyName, GameSettings.LobbySettings.r_playerNumber, lobbyOptions);
                 _joinedLobby = lobby;
                 
                 Debug.Log("Created Lobby: " + GameSettings.LobbySettings.r_lobbyName + " with code " + _joinedLobby.LobbyCode);
-                OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+                //OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
                 Debug.Log("Created Lobby " + lobby.Name);
             }
             catch (LobbyServiceException e)

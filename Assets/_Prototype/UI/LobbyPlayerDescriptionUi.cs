@@ -8,14 +8,18 @@ namespace FTS.UI
         [SerializeField] private TextMeshProUGUI _playerNameLabel;
         [SerializeField] private TextMeshProUGUI _playerTypeLabel;
         
-        public void Initialize()
+        public void Initialize(string playerName, string playerType)
         {
-            Debug.Log("Initialized");
+            _playerNameLabel.text = playerName;
+            _playerTypeLabel.text = playerType;
         }
+
+        public void Destroy() => Destroy(gameObject);
     }
 
     internal interface ILobbyPlayerDescriptionUi
     {
-        public void Initialize();
+        public void Initialize(string playerName, string playerType);
+        public void Destroy();
     }
 }
