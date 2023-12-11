@@ -34,11 +34,8 @@ namespace FTS.Managers
             public Lobby lobby;
         }
         
-        public event EventHandler<OnLobbyListChangedEventArgs> OnLobbyListChanged;
-        public class OnLobbyListChangedEventArgs : EventArgs {
-            public List<Lobby> lobbyList;
-        }
-        
+        public event EventHandler<Lobby[]> OnLobbyListChanged;
+
         public void SetGameType(GameType type) => _gameSettings.SetGameType(type);
         public void SetPlayerSettings(PlayerSettings playerSettings) => _gameSettings.SetPlayerSettings(playerSettings);
         public void SetLobbySettings(LobbySettings lobbySettings) => _gameSettings.SetLobbySettings(lobbySettings);
@@ -165,7 +162,7 @@ namespace FTS.Managers
                 };
 
                 QueryResponse lobbyListQueryResponse = await Lobbies.Instance.QueryLobbiesAsync();
-                OnLobbyListChanged?.Invoke(this, new OnLobbyListChangedEventArgs { lobbyList = lobbyListQueryResponse.Results });
+                OnLobbyListChanged?.Invoke(this, lobbyListQueryResponse.Results.ToArray());
             } catch (LobbyServiceException e) {
                 Debug.Log(e);
             }

@@ -1,5 +1,6 @@
 using System;
 using FTS.Managers;
+using FTS.UI.Settings;
 using UnityEngine;
 
 namespace FTS.UI
@@ -15,9 +16,6 @@ namespace FTS.UI
         private Action<AudioClip> OnPlaySound;
         private Action<AudioClip> OnPlayVoice;
         
-        private void Start() => 
-            OnPlayMusic?.Invoke(_musicClip);
-        
         private void OnEnter(IMenuButtonUi menuButton) => 
             OnPlaySound?.Invoke(_hoverClip);
         
@@ -26,12 +24,17 @@ namespace FTS.UI
 
         private void OnInitialize(IManager manager)
         {
-            if (manager is not AudioManager audioManager)
-                return;
+            if (manager is  AudioManager audioManager)
+                BindToAudioManager(audioManager);
+        }
 
+        private void BindToAudioManager(AudioManager audioManager)
+        {
             OnPlayMusic += audioManager.PlayMusic;
             OnPlaySound += audioManager.PlaySound;
             OnPlayVoice += audioManager.PlayVoice;
+            
+            OnPlayMusic?.Invoke(_musicClip);
         }
 
         private void OnEnable()
@@ -43,11 +46,14 @@ namespace FTS.UI
             GameManager.Instance.OnInitialize += OnInitialize;
         }
         
-        private void OnDisable()
+        private void OnDestroy()
         {
             IMenuController<IMenuButtonUi> _controller = GetComponent<IMenuController<IMenuButtonUi>>();
             _controller.OnEnter -= OnEnter;
             _controller.OnPress -= OnPress;
+            OnPlayMusic = null;
+            OnPlaySound = null;
+            OnPlayVoice = null;
             
             GameManager.Instance.OnInitialize -= OnInitialize;
         }

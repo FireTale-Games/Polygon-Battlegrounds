@@ -29,16 +29,13 @@ namespace FTS.UI.Screens
         private Action<Lobby> OnLobbyJoin;
         private Action<Lobby> OnLobbySelect;
         
-        private void UpdateLobbyList(List<Lobby> lobbyList) {
+        private void UpdateLobbyList(IEnumerable<Lobby> lobbyList) {
             foreach (Transform child in _lobbyList) 
                 Destroy(child.gameObject);
 
             foreach (Lobby lobby in lobbyList) {
                 LobbyGameUiData lobbyGameUiData = new(
                     lobby.IsPrivate ? _lockUnlock[0] : _lockUnlock[1],
-                    lobby.Name,
-                    lobby.Players.Count,
-                    lobby.MaxPlayers,
                     OnLobbyJoin,
                     OnLobbySelect);
                     
@@ -49,13 +46,13 @@ namespace FTS.UI.Screens
 
         protected override void BindToLobbyManager(LobbyManager lobbyManager)
         {
-            lobbyManager.OnLobbyListChanged += UpdateLobbyList_Event;
+            lobbyManager.OnLobbyListChanged += UpdateLobbyList_EventHandler;
             _refreshLobby.onClick.AddListener(lobbyManager.RefreshLobbyList);
             OnLobbyJoin = lobbyManager.JoinLobby;
         }
 
-        private void UpdateLobbyList_Event(object sender, LobbyManager.OnLobbyListChangedEventArgs e) => 
-            UpdateLobbyList(e.lobbyList);
+        private void UpdateLobbyList_EventHandler(object sender, Lobby[] lobbyList) => 
+            UpdateLobbyList(lobbyList);
 
         protected override void OnDestroy()
         {
