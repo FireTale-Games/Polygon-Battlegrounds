@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FTS.Data;
+using FTS.Tools.Utilities;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
@@ -25,60 +26,59 @@ namespace FTS.Managers
         public Lobby GetJoinedLobby() => _joinedLobby;
         private Lobby _joinedLobby;
         
-        private float heartbeatTimer;
-        private float lobbyPollTimer;
+        private const float _heartbeatTimerDelay = 25.0f;
+        private const float k_poolingTimer = 2.0f;
+
+        private readonly CountdownTimer _heartbeatTimer = new(_heartbeatTimerDelay);
+        private readonly CountdownTimer _poolingTimer = new(k_poolingTimer);
         
-        public event EventHandler<LobbyEventArgs> OnJoinedLobby;
-        public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
-        public class LobbyEventArgs : EventArgs {
-            public Lobby lobby;
-        }
-        
+        public event EventHandler<Lobby> OnJoinedLobby;
+        public event EventHandler<Lobby> OnJoinedLobbyUpdate;
         public event EventHandler<Lobby[]> OnLobbyListChanged;
 
         public void SetGameType(GameType type) => _gameSettings.SetGameType(type);
         public void SetPlayerSettings(PlayerSettings playerSettings) => _gameSettings.SetPlayerSettings(playerSettings);
         public void SetLobbySettings(LobbySettings lobbySettings) => _gameSettings.SetLobbySettings(lobbySettings);
         public void SetMapSettings(MapSettings mapSettings) => _gameSettings.SetMapSettings(mapSettings);
-        
-        private void Update() {
-            HandleLobbyHeartbeat();
-            HandleLobbyPolling();
+
+        private void Awake()
+        {
+            _heartbeatTimer.OnTimeStop += HandleLobbyHeartbeat;
+            _poolingTimer.OnTimeStop += HandleLobbyPolling;
         }
-        
-        public bool IsLobbyHost() => 
-            _joinedLobby != null && _joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
+
+        private void Update() {
+            _heartbeatTimer.Tick(Time.deltaTime);
+            _poolingTimer.Tick(Time.deltaTime);
+        }
         
         private async void HandleLobbyHeartbeat()
         {
-            if (!IsLobbyHost()) 
-                return;
-        
-            heartbeatTimer -= Time.deltaTime;
-            if (heartbeatTimer >= 0f) 
-                return;
-            
-            const float heartbeatTimerMax = 15f;
-            heartbeatTimer = heartbeatTimerMax;
-
-            Debug.Log("Heartbeat");
-            await LobbyService.Instance.SendHeartbeatPingAsync(_joinedLobby.Id);
+            try
+            {
+                await LobbyService.Instance.SendHeartbeatPingAsync(_joinedLobby.Id);
+                _heartbeatTimer.Start();
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+                _heartbeatTimer.Pause();
+            }
         }
 
         private async void HandleLobbyPolling()
         {
-            if (_joinedLobby == null) 
-                return;
-        
-            lobbyPollTimer -= Time.deltaTime;
-            if (lobbyPollTimer >= 0f) 
-                return;
-            
-            const float lobbyPollTimerMax = 1.1f;
-            lobbyPollTimer = lobbyPollTimerMax;
-
-            _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
-            OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = _joinedLobby });
+            try
+            {
+                _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
+                OnJoinedLobbyUpdate?.Invoke(this, _joinedLobby);
+                _poolingTimer.Start();
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+                _poolingTimer.Pause();
+            }
         }
         
         // AUTHENTICATION ----------------------------------------------------------
@@ -115,10 +115,6 @@ namespace FTS.Managers
         
         public async Task CreateLobby()
         {
-
-            //Debug.Log(new DataObject(DataObject.VisibilityOptions.Public, new DataLoader<Dictionary<int, object>, object>(GameSettings.PlayerSettings.r_playerName.ToString()).LoadData()[GameSettings.PlayerSettings.r_playerName]));
-            Debug.Log(PlayerName);
-            
             try
             {
                 CreateLobbyOptions lobbyOptions = new()
@@ -133,9 +129,11 @@ namespace FTS.Managers
                 
                 Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(GameSettings.LobbySettings.r_lobbyName, GameSettings.LobbySettings.r_playerNumber, lobbyOptions);
                 _joinedLobby = lobby;
+                _heartbeatTimer.Start();
+                _poolingTimer.Start();
                 
                 Debug.Log("Created Lobby: " + GameSettings.LobbySettings.r_lobbyName + " with code " + _joinedLobby.LobbyCode);
-                //OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+                OnJoinedLobby?.Invoke(this, lobby );
                 Debug.Log("Created Lobby " + lobby.Name);
             }
             catch (LobbyServiceException e)
@@ -186,8 +184,7 @@ namespace FTS.Managers
             });
 
             _joinedLobby = lobby;
-
-            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+            OnJoinedLobby?.Invoke(this, lobby);
         }
 
         public async void JoinLobby(Lobby lobby) {
@@ -200,16 +197,49 @@ namespace FTS.Managers
                     Player = player
                 });
 
-                OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+                _poolingTimer.Start();
+                OnJoinedLobby?.Invoke(this, lobby );
             }
             catch (LobbyServiceException e)
             {
-                Console.WriteLine(e);
-                throw;
+                Debug.Log(e);
             }
         }
 
-        #endregion REFRESH_LOBBY
+        #endregion JOIN_LOBBY
+        
+        #region DELETE_LOBBY
+
+        public async Task LeaveLobby()
+        {
+            if (_joinedLobby == null)
+                return;
+            
+            try
+            {
+                if (_joinedLobby.Players[0].Id == PlayerId)
+                {
+                    _heartbeatTimer.Pause();
+                    _poolingTimer.Pause();
+                    for (int i = 1; i < _joinedLobby.Players.Count; i++)
+                    {
+                        Debug.Log("Removing player " + _joinedLobby.Players[i].Data["PlayerName"].Value);
+                        await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, _joinedLobby.Players[i].Id);
+                    }
+                    await Lobbies.Instance.DeleteLobbyAsync(_joinedLobby.Id);
+                }
+                else
+                    await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, PlayerId);
+                
+                _joinedLobby = null;
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+        
+        #endregion : DELETE_LOBBY
         
         private Player GetPlayer() =>
             new(AuthenticationService.Instance.PlayerId, null, new Dictionary<string, PlayerDataObject> {

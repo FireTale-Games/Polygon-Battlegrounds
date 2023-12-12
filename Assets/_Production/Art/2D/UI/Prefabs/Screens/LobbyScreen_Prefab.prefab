@@ -831,6 +831,7 @@ MonoBehaviour:
   _openedDimension: {x: 1920, y: 1080}
   _searchInputField: {fileID: 8766743943770906981}
   _searchInputButton: {fileID: 6968744263047775500}
+  _gameScreen: {fileID: 0}
   _lockUnlockSprites:
   - {fileID: -1876699849, guid: ab6bf74703af9b44ca5ad083198deda3, type: 3}
   - {fileID: -465976116, guid: ab6bf74703af9b44ca5ad083198deda3, type: 3}

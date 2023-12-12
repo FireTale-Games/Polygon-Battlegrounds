@@ -8,7 +8,7 @@ namespace FTS.Tools.Utilities
         protected float Time { get; set; }
         protected bool IsRunning { get; private set; }
         public float Progress => Time / initialTime;
-        public readonly Action OnTimeStart = delegate { };
+        public Action OnTimeStart = delegate { };
         public Action OnTimeStop = delegate { };
 
         protected Timer(float value)

@@ -1,4 +1,5 @@
 using System;
+using FTS.UI.Screens;
 using TMPro;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -11,17 +12,19 @@ namespace FTS.UI
         public readonly Sprite r_lockSprite;
         public readonly Action<Lobby> r_onSelectLobby;
         public readonly Action<Lobby> r_onJoinLobby;
+        public readonly MenuScreenBase r_menuScreenBase;
 
-        internal LobbyGameUiData(Sprite lockSprite, Action<Lobby> onJoinLobby, Action<Lobby> onSelectLobby)
+        internal LobbyGameUiData(Sprite lockSprite, Action<Lobby> onJoinLobby, Action<Lobby> onSelectLobby, MenuScreenBase menuScreenBase)
         {
             r_lockSprite = lockSprite;
             r_onSelectLobby = onSelectLobby;
             r_onJoinLobby = onJoinLobby;
+            r_menuScreenBase = menuScreenBase;
         }
     }
     
     internal sealed class LobbyGameUi : MonoBehaviour, ILobbyGameUi
-    {
+    { 
         [SerializeField] private Image _lockImage;
         [SerializeField] private TextMeshProUGUI _lobbyName;
         [SerializeField] private TextMeshProUGUI _playerNumberLabel;
@@ -35,6 +38,7 @@ namespace FTS.UI
             _playerNumberLabel.text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
             _selectLobby.onClick.AddListener(() => lobbyGameUiData.r_onSelectLobby?.Invoke(lobby));
             _joinButton.onClick.AddListener(() => lobbyGameUiData.r_onJoinLobby?.Invoke(lobby));
+            _joinButton.GetComponent<MenuButtonUi>().SetBaseScreen(lobbyGameUiData.r_menuScreenBase);
         }
 
         private void OnDestroy()

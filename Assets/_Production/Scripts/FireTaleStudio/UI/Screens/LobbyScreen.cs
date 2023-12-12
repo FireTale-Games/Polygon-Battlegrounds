@@ -15,6 +15,7 @@ namespace FTS.UI.Screens
         [SerializeField] private Button _searchInputButton;
 
         [Header("Lobby Data"), Space(2)] 
+        [SerializeField] private MenuScreenBase _gameScreen;
         [SerializeField] private Sprite[] _lockUnlockSprites;
         [SerializeField] private LobbyGameUi _lobbyGameUi;
         [SerializeField] private RectTransform _lobbyList;
@@ -79,7 +80,8 @@ namespace FTS.UI.Screens
                 LobbyGameUiData lobbyGameUiData = new(
                     lobby.Data["Password"].Value != string.Empty ? _lockUnlockSprites[0] : _lockUnlockSprites[1],
                     OnLobbyJoin,
-                    OnLobbySelect);
+                    OnLobbySelect,
+                    _gameScreen);
                     
                 LobbyGameUi lobbyGameUi = Instantiate(_lobbyGameUi, _lobbyList);
                 lobbyGameUi.Initialize(lobbyGameUiData, lobby);
