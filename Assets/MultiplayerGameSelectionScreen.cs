@@ -26,16 +26,17 @@ namespace FTS.UI.Screens
             _playerDropdown.onValueChanged.AddListener(value => _playerNumber = value + 2);
             _gamePasswordField.onValueChanged.AddListener(value => _lobbyPassword = value);
             _gameNameInputField.onValueChanged.AddListener(value => _gameName = value);
-            _playGame.onClick.AddListener(() => StartGame(lobbyManager));
+            _playGame.onClick.AddListener(() => SetLobbyData(lobbyManager));
             _playGame.onClick.AddListener(OnCreateLobby);
 
             return;
             async void OnCreateLobby() => await lobbyManager.CreateLobby();
         }
 
-        private void StartGame(LobbyManager lobbyManager)
+        private void SetLobbyData(LobbyManager lobbyManager)
         {
-            lobbyManager.SetMapSettings(new MapSettings(_mapName));
+            MapData mapData = new(0.5f, 1.0f, 1.0f, 1.0f, 20.0f, true);
+            lobbyManager.SetMapSettings(new MapSettings(_mapName, mapData));
             lobbyManager.SetLobbySettings(new LobbySettings(
                 _gameName = _gameName.Length <= 0 ? _gameName.GenerateRandomString(10) : _gameName, _playerNumber, 
                 _lobbyPassword));

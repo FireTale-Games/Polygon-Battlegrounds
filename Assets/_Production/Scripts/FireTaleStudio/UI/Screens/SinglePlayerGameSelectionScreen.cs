@@ -11,7 +11,7 @@ namespace FTS.UI.Screens
         [SerializeField] private Button _playGame;
         private string _mapName = "WorldOne_Scene";
 
-        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager)
+        protected override void BindToLobbyManager(LobbyManager lobbyManager)
         {
             foreach (IMapButtonUi mapButton in GetComponentsInChildren<IMapButtonUi>())
                 mapButton.MapButton.onClick.AddListener(() => _mapName = mapButton.MapName);
@@ -19,9 +19,9 @@ namespace FTS.UI.Screens
             _playGame.onClick.AddListener(() => StartGame(lobbyManager));
         }
 
-        private void StartGame(Managers.LobbyManager lobbyManager)
+        private void StartGame(LobbyManager lobbyManager)
         {
-            lobbyManager.SetMapSettings(new MapSettings(_mapName));
+            lobbyManager.SetMapSettings(new MapSettings(_mapName, new MapData()));
             SceneManager.LoadScene(lobbyManager.GameSettings.MapSettings.r_mapName);
         }
     }

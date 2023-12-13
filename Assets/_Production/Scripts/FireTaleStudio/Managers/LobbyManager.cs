@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FTS.Data;
 using FTS.Tools.Utilities;
+using Newtonsoft.Json;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
@@ -21,13 +23,11 @@ namespace FTS.Managers
         public string PlayerId { get; private set; }
         public string PlayerName { get; private set; }
 
-        public const string KEY_PLAYER_NAME = "PlayerName";
-        
         public Lobby GetJoinedLobby() => _joinedLobby;
         private Lobby _joinedLobby;
         
         private const float _heartbeatTimerDelay = 25.0f;
-        private const float k_poolingTimer = 2.0f;
+        private const float k_poolingTimer = 1.05f;
 
         private readonly CountdownTimer _heartbeatTimer = new(_heartbeatTimerDelay);
         private readonly CountdownTimer _poolingTimer = new(k_poolingTimer);
@@ -121,7 +121,10 @@ namespace FTS.Managers
                 {
                     IsPrivate = false,
                     Data = new Dictionary<string, DataObject>
-                    {{"Password", new DataObject(DataObject.VisibilityOptions.Public, GameSettings.LobbySettings.r_lobbyPassword)}},
+                    {
+                        {"Password", new DataObject(DataObject.VisibilityOptions.Public, GameSettings.LobbySettings.r_lobbyPassword)},
+                        {"MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(GameSettings.MapSettings.r_mapData))}
+                    },
                     Player = GetPlayer()
                 };
 
@@ -208,6 +211,7 @@ namespace FTS.Managers
 
         #endregion JOIN_LOBBY
         
+        // DELETE LOBBY --------------------------------------------------------
         #region DELETE_LOBBY
 
         public async Task LeaveLobby()
@@ -241,9 +245,39 @@ namespace FTS.Managers
         
         #endregion : DELETE_LOBBY
         
+        // UPDATE LOBBY -------------------------------------------------------------------
+        #region UPDATE_LOBBY
+
+        public async void UpdateLobbyData(MapData mapData)
+        {
+            try
+            {
+                _gameSettings.SetMapDataSettings(mapData);
+                Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(_joinedLobby.Id, new UpdateLobbyOptions {
+                    Data = new Dictionary<string, DataObject> {
+                        { "MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(mapData)) }
+                    }
+                });
+
+                _joinedLobby = lobby;
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+
+        #endregion
+        
         private Player GetPlayer() =>
             new(AuthenticationService.Instance.PlayerId, null, new Dictionary<string, PlayerDataObject> {
-                { KEY_PLAYER_NAME, new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, PlayerName) },
+                { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, PlayerName) },
             });
+        
+        public bool IsLobbyHost() =>
+            _joinedLobby != null && _joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
+
+        private bool IsPlayerInLobby() =>
+            _joinedLobby is { Players: not null } && _joinedLobby.Players.Any(player => player.Id == AuthenticationService.Instance.PlayerId);
     }
 }

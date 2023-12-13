@@ -15,6 +15,7 @@ namespace FTS.Data
         internal void SetGameType(GameType gameType) => GameType = gameType;
         internal void SetLobbySettings(LobbySettings lobbySettings) => LobbySettings = lobbySettings;
         internal void SetMapSettings(MapSettings mapSettings) => MapSettings = mapSettings;
+        internal void SetMapDataSettings(MapData mapData) => MapSettings = new MapSettings(MapSettings.r_mapName, mapData);
         internal void SetPlayerSettings(PlayerSettings playerSettings) => PlayerSettings = playerSettings;
     }
 
@@ -58,10 +59,33 @@ namespace FTS.Data
     internal struct MapSettings
     {
         [ReadOnly] public string r_mapName;
+        [ReadOnly] public MapData r_mapData;
 
-        public MapSettings(string mapName)
+        public MapSettings(string mapName, MapData mapData)
         {
             r_mapName = mapName;
+            r_mapData = mapData;
+        }
+    }
+    
+    [Serializable]
+    internal struct MapData
+    {
+        [ReadOnly] public float r_aiDifficulty;
+        [ReadOnly] public float r_resourcesDrop;
+        [ReadOnly] public float r_craftCost;
+        [ReadOnly] public float r_upgradeCost;
+        [ReadOnly] public float r_waveCooldown;
+        [ReadOnly] public bool r_monsterRarity;
+
+        public MapData(float aiDifficulty, float resourcesDrop, float craftCost, float upgradeCost, float waveCooldown, bool monsterRarity)
+        {
+            r_aiDifficulty = aiDifficulty;
+            r_resourcesDrop = resourcesDrop;
+            r_craftCost = craftCost;
+            r_upgradeCost = upgradeCost;
+            r_waveCooldown = waveCooldown;
+            r_monsterRarity = monsterRarity;
         }
     }
 }

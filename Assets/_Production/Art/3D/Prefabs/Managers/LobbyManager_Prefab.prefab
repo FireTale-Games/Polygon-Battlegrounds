@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7875459018231019050}
   - component: {fileID: 1700626372648358940}
   m_Layer: 0
-  m_Name: MenuPlayManager_Prefab
+  m_Name: LobbyManager_Prefab
   m_TagString: Managers
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
