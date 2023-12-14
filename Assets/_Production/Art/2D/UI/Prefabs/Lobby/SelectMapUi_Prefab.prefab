@@ -87,8 +87,9 @@ GameObject:
   - component: {fileID: 4929547972116567581}
   - component: {fileID: 4069446997269430528}
   - component: {fileID: 2678207445551912289}
+  - component: {fileID: 8350767624913946287}
   m_Layer: 5
-  m_Name: Map_Prefab
+  m_Name: SelectMapUi_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,6 +153,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8350767624913946287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6975936088518077744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b97a434735e3fea469b1f38e53e2661d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapImage: {fileID: 2000937133616559980}
+  _mapButton: {fileID: 0}
+  _mapLabel: {fileID: 6947728200473582256}
 --- !u!1 &7565270948607939319
 GameObject:
   m_ObjectHideFlags: 0

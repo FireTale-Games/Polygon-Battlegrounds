@@ -1,8 +1,6 @@
 using System;
 using FTS.Data;
 using FTS.UI.Map;
-using Newtonsoft.Json;
-using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 namespace FTS.UI
@@ -25,9 +23,8 @@ namespace FTS.UI
                 mapSetting.SetDefaultValues(isLobbyHost);
         }
 
-        public void UpdateMap(Lobby lobby)
+        public void UpdateMap(MapData mapData)
         {
-            MapData mapData = JsonConvert.DeserializeObject<MapData>(lobby.Data["MapData"].Value);
             _aiDifficultyDropdownMapSetting.SetLabelValue(mapData.r_aiDifficulty);
             _resourcesDropDropdownMapSetting.SetLabelValue(mapData.r_resourcesDrop);
             _craftCostDropdownMapSetting.SetLabelValue(mapData.r_craftCost);

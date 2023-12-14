@@ -1,4 +1,8 @@
+using FTS.Data;
+using FTS.Data.Map;
 using FTS.Managers;
+using FTS.UI.Map;
+using Newtonsoft.Json;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +11,11 @@ namespace FTS.UI.Screens
 {
     internal sealed class GameScreen : MenuScreenBase
     {
-        [SerializeField] private MapSettingUi mapSettingUi;
-
+        [SerializeField] private MapSettingUi _mapSettingUi;
+        [SerializeField] private MapDisplayUi _mapDisplayUi;
+        
         [Header("Host Components"), Space(2)] 
-        [SerializeField] private RectTransform[] _mapRectTransform;
-        [SerializeField] private MapSelectUi _mapSelectUi;
+        [SerializeField] private MapSelectionUi _mapSelectionUi;
         [SerializeField] private LobbyCodeUi _lobbyCodeUi;
         
         [Header("Components"), Space(2)]
@@ -26,7 +30,8 @@ namespace FTS.UI.Screens
             _backButton.onClick.AddListener(OnLeaveLobby);
             
             // Host Data
-            mapSettingUi.Initialize(lobbyManager.UpdateLobbyData);
+            _mapSettingUi.Initialize(mapData => { lobbyManager.SetMapDataSettings(mapData); lobbyManager.UpdateLobbyData(); });
+            _mapSelectionUi.Initialize(mapId => { lobbyManager.SetMapId(mapId); lobbyManager.UpdateLobbyData(); });
 
             return;
             async void OnLeaveLobby() => await lobbyManager.LeaveLobby();
@@ -46,8 +51,8 @@ namespace FTS.UI.Screens
                 lobbyPlayerSingleUI.UpdatePlayer(player);
             }
             
-            mapSettingUi.SetDefaultValues(e.isHost);
-            _mapSelectUi.SetDefaultValues(e.isHost, _mapRectTransform);
+            _mapSettingUi.SetDefaultValues(e.isHost);
+            _mapSelectionUi.SetDefaultValues(e.isHost, ItemDatabase.GetAllOfType<GameMap>());
             _lobbyCodeUi.SetDefaultValues(e.isHost, e.isHost ? e.lobby.LobbyCode : string.Empty);
         }
         
@@ -65,7 +70,9 @@ namespace FTS.UI.Screens
                 lobbyPlayerSingleUI.UpdatePlayer(player);
             }
             
-            mapSettingUi.UpdateMap(lobby);
+            MapSettings mapSetting = JsonConvert.DeserializeObject<MapSettings>(lobby.Data["MapData"].Value);
+            _mapSettingUi.UpdateMap(mapSetting.r_mapData);
+            _mapDisplayUi.UpdateMap(mapSetting.r_mapId);
         }
         
         private void ClearLobby() {

@@ -222,8 +222,9 @@ GameObject:
   - component: {fileID: 5371418150539894770}
   - component: {fileID: 6815793948748649040}
   - component: {fileID: 2995743102964798174}
+  - component: {fileID: 370589681970383302}
   m_Layer: 5
-  m_Name: SelectMapButtonUi
+  m_Name: SelectMapUi_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -331,3 +332,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &370589681970383302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8326352799749161922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b97a434735e3fea469b1f38e53e2661d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapImage: {fileID: 874833376051365108}
+  _mapButton: {fileID: 2995743102964798174}
+  _mapLabel: {fileID: 8013183134317119630}

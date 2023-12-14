@@ -15,8 +15,9 @@ namespace FTS.Data
         internal void SetGameType(GameType gameType) => GameType = gameType;
         internal void SetLobbySettings(LobbySettings lobbySettings) => LobbySettings = lobbySettings;
         internal void SetMapSettings(MapSettings mapSettings) => MapSettings = mapSettings;
-        internal void SetMapDataSettings(MapData mapData) => MapSettings = new MapSettings(MapSettings.r_mapName, mapData);
+        internal void SetMapDataSettings(MapData mapData) => MapSettings = new MapSettings(MapSettings.r_mapId, mapData);
         internal void SetPlayerSettings(PlayerSettings playerSettings) => PlayerSettings = playerSettings;
+        internal void SetMapId(int mapId) => MapSettings = new MapSettings(mapId, MapSettings.r_mapData);
     }
 
     internal interface IGameSettings
@@ -58,12 +59,12 @@ namespace FTS.Data
     [Serializable]
     internal struct MapSettings
     {
-        [ReadOnly] public string r_mapName;
+        [ReadOnly] public int r_mapId;
         [ReadOnly] public MapData r_mapData;
 
-        public MapSettings(string mapName, MapData mapData)
+        public MapSettings(int mapId, MapData mapData)
         {
-            r_mapName = mapName;
+            r_mapId = mapId;
             r_mapData = mapData;
         }
     }

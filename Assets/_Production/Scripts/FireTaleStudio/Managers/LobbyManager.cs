@@ -40,6 +40,8 @@ namespace FTS.Managers
         public void SetPlayerSettings(PlayerSettings playerSettings) => _gameSettings.SetPlayerSettings(playerSettings);
         public void SetLobbySettings(LobbySettings lobbySettings) => _gameSettings.SetLobbySettings(lobbySettings);
         public void SetMapSettings(MapSettings mapSettings) => _gameSettings.SetMapSettings(mapSettings);
+        public void SetMapDataSettings(MapData mapData) => _gameSettings.SetMapDataSettings(mapData);
+        public void SetMapId(int mapId) => _gameSettings.SetMapId(mapId); 
 
         private void Awake()
         {
@@ -123,7 +125,7 @@ namespace FTS.Managers
                     Data = new Dictionary<string, DataObject>
                     {
                         {"Password", new DataObject(DataObject.VisibilityOptions.Public, GameSettings.LobbySettings.r_lobbyPassword)},
-                        {"MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(GameSettings.MapSettings.r_mapData))}
+                        {"MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(GameSettings.MapSettings))}
                     },
                     Player = GetPlayer()
                 };
@@ -248,14 +250,13 @@ namespace FTS.Managers
         // UPDATE LOBBY -------------------------------------------------------------------
         #region UPDATE_LOBBY
 
-        public async void UpdateLobbyData(MapData mapData)
+        public async void UpdateLobbyData()
         {
             try
             {
-                _gameSettings.SetMapDataSettings(mapData);
                 Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(_joinedLobby.Id, new UpdateLobbyOptions {
                     Data = new Dictionary<string, DataObject> {
-                        { "MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(mapData)) }
+                        { "MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(_gameSettings.MapSettings)) }
                     }
                 });
 
