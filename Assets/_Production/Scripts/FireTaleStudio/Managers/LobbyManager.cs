@@ -32,7 +32,7 @@ namespace FTS.Managers
         private readonly CountdownTimer _heartbeatTimer = new(_heartbeatTimerDelay);
         private readonly CountdownTimer _poolingTimer = new(k_poolingTimer);
         
-        public event EventHandler<Lobby> OnJoinedLobby;
+        public event EventHandler<(Lobby, bool)> OnJoinedLobby;
         public event EventHandler<Lobby> OnJoinedLobbyUpdate;
         public event EventHandler<Lobby[]> OnLobbyListChanged;
 
@@ -136,7 +136,7 @@ namespace FTS.Managers
                 _poolingTimer.Start();
                 
                 Debug.Log("Created Lobby: " + GameSettings.LobbySettings.r_lobbyName + " with code " + _joinedLobby.LobbyCode);
-                OnJoinedLobby?.Invoke(this, lobby );
+                OnJoinedLobby?.Invoke(this, (lobby, true));
                 Debug.Log("Created Lobby " + lobby.Name);
             }
             catch (LobbyServiceException e)
@@ -187,7 +187,7 @@ namespace FTS.Managers
             });
 
             _joinedLobby = lobby;
-            OnJoinedLobby?.Invoke(this, lobby);
+            OnJoinedLobby?.Invoke(this, (lobby, false));
         }
 
         public async void JoinLobby(Lobby lobby) {
@@ -201,7 +201,7 @@ namespace FTS.Managers
                 });
 
                 _poolingTimer.Start();
-                OnJoinedLobby?.Invoke(this, lobby );
+                OnJoinedLobby?.Invoke(this, (lobby, false));
             }
             catch (LobbyServiceException e)
             {

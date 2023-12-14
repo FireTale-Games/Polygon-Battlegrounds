@@ -193,6 +193,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: CheckTrue_Sprite
+      rect:
+        serializedVersion: 2
+        x: 946
+        y: 984
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7b31bedf8ec1424fa60065473eda0ef
+      internalID: 1382834463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CheckerFalse_Sprite
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 943
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fb6ad4900765ca4c936a1c610c9383a
+      internalID: -1951253547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -205,6 +247,8 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Button_Sprite: -2037390631
+      CheckTrue_Sprite: 1382834463
+      CheckerFalse_Sprite: -1951253547
       Empty_Sprite: -465976116
       Lock_Sprite: -1876699849
       Logo_Sprite: -1788651940
