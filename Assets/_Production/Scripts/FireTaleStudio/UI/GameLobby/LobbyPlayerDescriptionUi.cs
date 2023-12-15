@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace FTS.UI
+namespace FTS.UI.GameLobby
 {
     internal sealed class LobbyPlayerDescriptionUi : MonoBehaviour, ILobbyPlayerDescriptionUi
     {

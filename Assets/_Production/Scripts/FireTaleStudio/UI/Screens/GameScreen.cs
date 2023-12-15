@@ -1,7 +1,7 @@
 using FTS.Data;
 using FTS.Data.Map;
 using FTS.Managers;
-using FTS.UI.Map;
+using FTS.UI.GameLobby;
 using Newtonsoft.Json;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -47,8 +47,8 @@ namespace FTS.UI.Screens
             foreach (Player player in e.lobby.Players) {
                 Transform playerSingleTransform = Instantiate(playerSingleTemplate, _playerList);
                 playerSingleTransform.gameObject.SetActive(true);
-                LobbyPlayerSingleUI lobbyPlayerSingleUI = playerSingleTransform.GetComponent<LobbyPlayerSingleUI>();
-                lobbyPlayerSingleUI.UpdatePlayer(player);
+                PlayerUi playerUi = playerSingleTransform.GetComponent<PlayerUi>();
+                playerUi.UpdatePlayer(player);
             }
             
             _mapSettingUi.SetDefaultValues(e.isHost);
@@ -66,8 +66,8 @@ namespace FTS.UI.Screens
             foreach (Player player in lobby.Players) {
                 Transform playerSingleTransform = Instantiate(playerSingleTemplate, _playerList);
                 playerSingleTransform.gameObject.SetActive(true);
-                LobbyPlayerSingleUI lobbyPlayerSingleUI = playerSingleTransform.GetComponent<LobbyPlayerSingleUI>();
-                lobbyPlayerSingleUI.UpdatePlayer(player);
+                PlayerUi playerUi = playerSingleTransform.GetComponent<PlayerUi>();
+                playerUi.UpdatePlayer(player);
             }
             
             MapSettings mapSetting = JsonConvert.DeserializeObject<MapSettings>(lobby.Data["MapData"].Value);

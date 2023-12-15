@@ -11,7 +11,7 @@ namespace FTS.UI.Map
                 _ => 1.0f
             };
 
-        public override void SetLabelValue(float value) =>
+        public override void SetValue(float value) =>
             _label.text = value switch
             {
                 0.5f => "Easy",

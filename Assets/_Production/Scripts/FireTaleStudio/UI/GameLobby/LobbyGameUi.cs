@@ -5,24 +5,8 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FTS.UI
+namespace FTS.UI.GameLobby
 {
-    internal readonly struct LobbyGameUiData
-    {
-        public readonly Sprite r_lockSprite;
-        public readonly Action<Lobby> r_onSelectLobby;
-        public readonly Action<Lobby> r_onJoinLobby;
-        public readonly MenuScreenBase r_menuScreenBase;
-
-        internal LobbyGameUiData(Sprite lockSprite, Action<Lobby> onJoinLobby, Action<Lobby> onSelectLobby, MenuScreenBase menuScreenBase)
-        {
-            r_lockSprite = lockSprite;
-            r_onSelectLobby = onSelectLobby;
-            r_onJoinLobby = onJoinLobby;
-            r_menuScreenBase = menuScreenBase;
-        }
-    }
-    
     internal sealed class LobbyGameUi : MonoBehaviour, ILobbyGameUi
     { 
         [SerializeField] private Image _lockImage;
@@ -51,5 +35,21 @@ namespace FTS.UI
     internal interface ILobbyGameUi
     {
         public void Initialize(LobbyGameUiData lobbyGameUiData, Lobby lobby);
+    }
+    
+    internal readonly struct LobbyGameUiData
+    {
+        public readonly Sprite r_lockSprite;
+        public readonly Action<Lobby> r_onSelectLobby;
+        public readonly Action<Lobby> r_onJoinLobby;
+        public readonly MenuScreenBase r_menuScreenBase;
+
+        internal LobbyGameUiData(Sprite lockSprite, Action<Lobby> onJoinLobby, Action<Lobby> onSelectLobby, MenuScreenBase menuScreenBase)
+        {
+            r_lockSprite = lockSprite;
+            r_onSelectLobby = onSelectLobby;
+            r_onJoinLobby = onJoinLobby;
+            r_menuScreenBase = menuScreenBase;
+        }
     }
 }

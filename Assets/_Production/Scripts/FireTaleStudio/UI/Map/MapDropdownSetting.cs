@@ -26,7 +26,8 @@ namespace FTS.UI.Map
         }
 
         public abstract float GetDropdownValue();
-        public abstract void SetLabelValue(float value);
+
+        public abstract void SetValue(float value);
 
         private void OnDestroy() => _dropdown.onValueChanged.RemoveAllListeners();
     }

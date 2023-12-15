@@ -13,7 +13,7 @@ namespace FTS.UI.Map
                 _ => 20.0f
             };
 
-        public override void SetLabelValue(float value) =>
+        public override void SetValue(float value) =>
             _label.text = $"{value}s";
     }
 }

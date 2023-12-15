@@ -4,7 +4,7 @@ using FTS.Data.Map;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FTS.UI.Map
+namespace FTS.UI.GameLobby
 {
     internal sealed class MapSelectionUi : MonoBehaviour
     {
@@ -28,7 +28,7 @@ namespace FTS.UI.Map
             {
                 foreach (GameMap gameMap in _maps)
                 {
-                    SelectMapUi selectMap = Instantiate(selectMapUi, transform);
+                    SelectMapUi selectMap = Instantiate(selectMapUi, _mapList.transform);
                     selectMap.Initialize(gameMap, OnUpdateLobbyData);
                 }
                 

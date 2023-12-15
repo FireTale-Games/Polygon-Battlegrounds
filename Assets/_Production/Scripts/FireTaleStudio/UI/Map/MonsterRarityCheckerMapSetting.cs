@@ -6,8 +6,9 @@ namespace FTS.UI.Map
     {
         public override bool GetCheckerValue() => _isEnabled;
 
-        public override void SetSpriteValue(Sprite sprite)
+        public override void SetValue(Sprite sprite)
         {
+            _button.enabled = true;
             _buttonImage.sprite = sprite;
             _display.sprite = sprite;
         }

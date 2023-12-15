@@ -11,7 +11,7 @@ namespace FTS.UI.Map
         [SerializeField] protected bool _isEnabled = true;
         
         [Header("Components")]
-        [SerializeField] private Button _button;
+        [SerializeField] protected Button _button;
         [SerializeField] protected Image _buttonImage;
         [SerializeField] protected Image _display;
         
@@ -19,11 +19,13 @@ namespace FTS.UI.Map
             _button.onClick.AddListener(() =>
             {
                 _isEnabled = !_isEnabled;
+                _button.enabled = false;
                 onChangeData?.Invoke();
             });
 
         public override void SetDefaultValues(bool isHost)
         {
+            _button.enabled = true;
             _button.gameObject.SetActive(isHost);
             _display.gameObject.SetActive(!isHost);
             if (isHost) _buttonImage.sprite = _defaultSprite;
@@ -31,7 +33,8 @@ namespace FTS.UI.Map
         }
 
         public abstract bool GetCheckerValue();
-        public abstract void SetSpriteValue(Sprite sprite);
+
+        public virtual void SetValue(Sprite sprite) { _button.enabled = true; }
 
         private void OnDestroy() => _button.onClick.RemoveAllListeners();
     }  

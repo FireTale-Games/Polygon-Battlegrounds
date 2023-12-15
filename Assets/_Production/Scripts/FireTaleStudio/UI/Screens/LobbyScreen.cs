@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FTS.Managers;
+using FTS.UI.GameLobby;
 using TMPro;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;

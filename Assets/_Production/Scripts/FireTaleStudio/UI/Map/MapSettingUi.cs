@@ -25,12 +25,12 @@ namespace FTS.UI
 
         public void UpdateMap(MapData mapData)
         {
-            _aiDifficultyDropdownMapSetting.SetLabelValue(mapData.r_aiDifficulty);
-            _resourcesDropDropdownMapSetting.SetLabelValue(mapData.r_resourcesDrop);
-            _craftCostDropdownMapSetting.SetLabelValue(mapData.r_craftCost);
-            _upgradeCostDropdownMapSetting.SetLabelValue(mapData.r_upgradeCost);
-            _waveCooldownDropdownMapSetting.SetLabelValue(mapData.r_waveCooldown);
-            _monsterRarityCheckerMapSetting.SetSpriteValue(mapData.r_monsterRarity ? _trueFalseSprites[0] : _trueFalseSprites[1]);
+            _aiDifficultyDropdownMapSetting.SetValue(mapData.r_aiDifficulty);
+            _resourcesDropDropdownMapSetting.SetValue(mapData.r_resourcesDrop);
+            _craftCostDropdownMapSetting.SetValue(mapData.r_craftCost);
+            _upgradeCostDropdownMapSetting.SetValue(mapData.r_upgradeCost);
+            _waveCooldownDropdownMapSetting.SetValue(mapData.r_waveCooldown);
+            _monsterRarityCheckerMapSetting.SetValue(mapData.r_monsterRarity ? _trueFalseSprites[0] : _trueFalseSprites[1]);
         }
 
         public void Initialize(Action<MapData> updateLobbyData)

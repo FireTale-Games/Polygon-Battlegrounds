@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FTS.UI.Map
+namespace FTS.UI.GameLobby
 {
     internal sealed class SelectMapUi : MonoBehaviour
     {
