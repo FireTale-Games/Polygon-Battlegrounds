@@ -22,7 +22,7 @@ namespace FTS.UI.GameLobby
         public void SetDefaultValues(bool isHost, List<GameMap> _maps)
         {
             for (int i = _mapList.childCount - 1; i >= 0; i--)
-                Destroy(_mapList.GetChild(i));
+                Destroy(_mapList.GetChild(i).gameObject);
             
             if (isHost)
             {

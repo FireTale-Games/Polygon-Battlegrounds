@@ -419,7 +419,7 @@ MonoBehaviour:
   _mapSelectionUi: {fileID: 3065077489627234184}
   _lobbyCodeUi: {fileID: 4109890475270131063}
   _backButton: {fileID: 3230689787956796583}
-  playerSingleTemplate: {fileID: 7493961752815071589, guid: 10881a674abdee0468ff7a69d58b3836,
+  _playerUi: {fileID: 6323227755309193331, guid: 10881a674abdee0468ff7a69d58b3836,
     type: 3}
   _playerList: {fileID: 1906861277092861390}
 --- !u!1 &4567355078624830885

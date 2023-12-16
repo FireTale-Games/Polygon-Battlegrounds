@@ -19,11 +19,9 @@ namespace FTS.Managers
     {
         [SerializeField] private GameSettings _gameSettings = new();
         public IGameSettings GameSettings => _gameSettings;
-        
-        public string PlayerId { get; private set; }
-        public string PlayerName { get; private set; }
 
-        public Lobby GetJoinedLobby() => _joinedLobby;
+        private string _playerId;
+        private string _playerName;
         private Lobby _joinedLobby;
         
         private const float _heartbeatTimerDelay = 25.0f;
@@ -33,7 +31,8 @@ namespace FTS.Managers
         private readonly CountdownTimer _poolingTimer = new(k_poolingTimer);
         
         public event EventHandler<(Lobby, bool)> OnJoinedLobby;
-        public event EventHandler<Lobby> OnJoinedLobbyUpdate;
+        public event EventHandler<(Lobby, bool)> OnJoinedLobbyUpdate;
+        public event EventHandler<Lobby> OnLeaveLobby;
         public event EventHandler<Lobby[]> OnLobbyListChanged;
 
         public void SetGameType(GameType type) => _gameSettings.SetGameType(type);
@@ -56,6 +55,12 @@ namespace FTS.Managers
         
         private async void HandleLobbyHeartbeat()
         {
+            if (!IsLobbyHost())
+            {
+                _heartbeatTimer.Pause();
+                return;
+            }
+            
             try
             {
                 await LobbyService.Instance.SendHeartbeatPingAsync(_joinedLobby.Id);
@@ -73,13 +78,22 @@ namespace FTS.Managers
             try
             {
                 _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
-                OnJoinedLobbyUpdate?.Invoke(this, _joinedLobby);
+                if (!IsPlayerInLobby()) {
+                    Debug.Log("Kicked from Lobby!");
+                    OnLeaveLobby?.Invoke(this, _joinedLobby);
+                    _joinedLobby = null;
+                    _poolingTimer.Stop();
+                    return;
+                }
+                
+                OnJoinedLobbyUpdate?.Invoke(this, (_joinedLobby, IsLobbyHost()));
                 _poolingTimer.Start();
             }
             catch (LobbyServiceException e)
             {
                 Debug.Log(e);
                 _poolingTimer.Pause();
+                OnLeaveLobby?.Invoke(this, _joinedLobby);
             }
         }
         
@@ -105,8 +119,8 @@ namespace FTS.Managers
             if (!AuthenticationService.Instance.IsSignedIn)
             {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                PlayerId = AuthenticationService.Instance.PlayerId;
-                PlayerName = playerName;
+                _playerId = AuthenticationService.Instance.PlayerId;
+                _playerName = playerName;
             }
         }
         
@@ -218,28 +232,37 @@ namespace FTS.Managers
 
         public async Task LeaveLobby()
         {
-            if (_joinedLobby == null)
-                return;
-            
             try
             {
-                if (_joinedLobby.Players[0].Id == PlayerId)
+                if (IsLobbyHost())
                 {
                     _heartbeatTimer.Pause();
                     _poolingTimer.Pause();
-                    for (int i = 1; i < _joinedLobby.Players.Count; i++)
-                    {
-                        Debug.Log("Removing player " + _joinedLobby.Players[i].Data["PlayerName"].Value);
+                    for (int i = _joinedLobby.Players.Count - 1; i >= 0; i--)
                         await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, _joinedLobby.Players[i].Id);
-                    }
                     await Lobbies.Instance.DeleteLobbyAsync(_joinedLobby.Id);
                 }
                 else
-                    await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, PlayerId);
+                    await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, _playerId);
                 
                 _joinedLobby = null;
             }
             catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+        
+        public async Task KickPlayer(string playerId)
+        {
+            if (!IsLobbyHost()) 
+                return;
+            
+            try 
+            {
+                await LobbyService.Instance.RemovePlayerAsync(_joinedLobby.Id, playerId);
+            } 
+            catch (LobbyServiceException e) 
             {
                 Debug.Log(e);
             }
@@ -272,13 +295,12 @@ namespace FTS.Managers
         
         private Player GetPlayer() =>
             new(AuthenticationService.Instance.PlayerId, null, new Dictionary<string, PlayerDataObject> {
-                { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, PlayerName) },
+                { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, _playerName) },
             });
         
-        public bool IsLobbyHost() =>
-            _joinedLobby != null && _joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
-
+        private bool IsLobbyHost() => _joinedLobby != null && _joinedLobby.HostId == _playerId;
+        
         private bool IsPlayerInLobby() =>
-            _joinedLobby is { Players: not null } && _joinedLobby.Players.Any(player => player.Id == AuthenticationService.Instance.PlayerId);
+            _joinedLobby is { Players: not null } && _joinedLobby.Players.Any(player => player.Id == _playerId);
     }
 }
