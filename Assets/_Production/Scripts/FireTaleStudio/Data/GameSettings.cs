@@ -5,27 +5,19 @@ using UnityEngine;
 namespace FTS.Data
 {
     [CreateAssetMenu(fileName = "Game Settings", menuName = "FTS/Game Settings")]
-    internal sealed class GameSettings : ScriptableObject, IGameSettings
+    internal sealed class GameSettings : ScriptableObject
     {
         [field: SerializeField, ReadOnly] public GameType GameType { get; private set; } = GameType.None;
         [field: SerializeField] public PlayerSettings PlayerSettings { get; private set; }
         [field: SerializeField] public LobbySettings LobbySettings { get; private set; }
         [field: SerializeField] public MapSettings MapSettings { get; private set; }
 
-        internal void SetGameType(GameType gameType) => GameType = gameType;
-        internal void SetLobbySettings(LobbySettings lobbySettings) => LobbySettings = lobbySettings;
-        internal void SetMapSettings(MapSettings mapSettings) => MapSettings = mapSettings;
-        internal void SetMapDataSettings(MapData mapData) => MapSettings = new MapSettings(MapSettings.r_mapId, mapData);
-        internal void SetPlayerSettings(PlayerSettings playerSettings) => PlayerSettings = playerSettings;
-        internal void SetMapId(int mapId) => MapSettings = new MapSettings(mapId, MapSettings.r_mapData);
-    }
-
-    internal interface IGameSettings
-    {
-        public GameType GameType { get; }
-        public PlayerSettings PlayerSettings { get; }
-        public LobbySettings LobbySettings { get; }
-        public MapSettings MapSettings { get; }
+        public void SetGameType(GameType gameType) => GameType = gameType;
+        public void SetLobbySettings(LobbySettings lobbySettings) => LobbySettings = lobbySettings;
+        public void SetMapSettings(MapSettings mapSettings) => MapSettings = mapSettings;
+        public void SetMapDataSettings(MapData mapData) => MapSettings = new MapSettings(MapSettings.r_mapId, mapData);
+        public void SetPlayerSettings(PlayerSettings playerSettings) => PlayerSettings = playerSettings;
+        public void SetMapId(int mapId) => MapSettings = new MapSettings(mapId, MapSettings.r_mapData);
     }
     
     internal enum GameType : byte {None, Singleplayer, Multiplayer}

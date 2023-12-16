@@ -3,7 +3,6 @@ using FTS.Data;
 using FTS.Data.Map;
 using FTS.Managers;
 using FTS.UI.GameLobby;
-using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,8 +26,8 @@ namespace FTS.UI.Screens
         
         protected override void BindToLobbyManager(LobbyManager lobbyManager)
         {
-            lobbyManager.OnJoinedLobby += JoinLobby_Event;
-            lobbyManager.LobbyNetworkUpdate.OnSettingsUpdate += UpdateLobby_Event;
+            lobbyManager.LobbyNetworkUpdate.OnLobbyPlayersUpdate += JoinLobby;
+            lobbyManager.LobbyNetworkUpdate.OnSettingsUpdate += UpdateLobby;
 
             _backButton.onClick.AddListener(OnLeaveLobby);
             _onPlayerKick = OnKickFromLobby;
@@ -48,31 +47,21 @@ namespace FTS.UI.Screens
         //    _backButton.onClick?.Invoke();
         //}
 
-        private void JoinLobby_Event(object sender, (Lobby lobby, bool isHost) e) =>
-            JoinLobby(e);
-
-        private void JoinLobby((Lobby lobby, bool isHost) e)
+        private void JoinLobby(object sender, LobbyRef lobbyRef)
         {
             ClearLobby();
-            
-            foreach (Player player in e.lobby.Players) 
-                Instantiate(_playerUi, _playerList).UpdatePlayer(player, e.isHost && player.Id != e.lobby.HostId ? _onPlayerKick : null);
-            
-            _mapSettingUi.SetDefaultValues(e.isHost);
-            _mapSelectionUi.SetDefaultValues(e.isHost, ItemDatabase.GetAllOfType<GameMap>());
-            _lobbyCodeUi.SetDefaultValues(e.isHost, e.isHost ? e.lobby.LobbyCode : string.Empty);
+
+            for (int i = 0; i < lobbyRef.r_playerRefs.Length; i++)
+                Instantiate(_playerUi, _playerList).UpdatePlayer(lobbyRef.r_playerRefs[i].r_playerName, lobbyRef.r_playerRefs[i].r_playerId,
+                    lobbyRef.r_isHost && i != 0 ? _onPlayerKick : null);
+
+            _mapSettingUi.SetDefaultValues(lobbyRef.r_isHost);
+            _mapSelectionUi.SetDefaultValues(lobbyRef.r_isHost, ItemDatabase.GetAllOfType<GameMap>());
+            _lobbyCodeUi.SetDefaultValues(lobbyRef.r_isHost, lobbyRef.r_isHost ? lobbyRef.r_lobbyCode : string.Empty);
         }
         
-        private void UpdateLobby_Event(object sender, MapSettings mapSettings) =>
-            UpdateLobby(mapSettings);
-
-        private void UpdateLobby(MapSettings mapSettings)
+        private void UpdateLobby(object sender, MapSettings mapSettings)
         {
-            ClearLobby();
-
-            //foreach (Player player in e.lobby.Players) 
-            //    Instantiate(_playerUi, _playerList).UpdatePlayer(player, e.isHost && player.Id != e.lobby.HostId ? _onPlayerKick : null);            
-            
             _mapSettingUi.UpdateMap(mapSettings.r_mapData);
             _mapDisplayUi.UpdateMap(mapSettings.r_mapId);
         }

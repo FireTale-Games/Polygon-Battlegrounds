@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FTS.Data;
@@ -18,34 +19,42 @@ namespace FTS.Managers
     {
         [SerializeField] private LobbyNetworkManager _lobbyNetworkManager;
         [SerializeField] private GameSettings _gameSettings;
-        public IGameSettings GameSettings => _gameSettings;
-        public ILobbyNetworkUpdate LobbyNetworkUpdate => _lobbyNetworkManager;
 
+        private bool IsLobbyHost => _joinedLobby != null && _joinedLobby.HostId == _playerId;
+        public GameType GameType => _gameSettings.GameType;
+        public ILobbyNetworkUpdate LobbyNetworkUpdate => _lobbyNetworkManager;
         private string _playerId;
         private string _playerName;
         private Lobby _joinedLobby;
         
-        public EventHandler<MapSettings> OnUpdate;
-        
         private const float _heartbeatTimerDelay = 25.0f;
         private readonly CountdownTimer _heartbeatTimer = new(_heartbeatTimerDelay);
         
-        public event EventHandler<(Lobby, bool)> OnJoinedLobby;
         public event EventHandler<Lobby[]> OnLobbyListChanged;
 
         public void SetGameType(GameType type) => _gameSettings.SetGameType(type);
         public void SetPlayerSettings(PlayerSettings playerSettings) => _gameSettings.SetPlayerSettings(playerSettings);
         public void SetLobbySettings(LobbySettings lobbySettings) => _gameSettings.SetLobbySettings(lobbySettings);
         public void SetMapSettings(MapSettings mapSettings) => _gameSettings.SetMapSettings(mapSettings);
-        public void SetMapDataSettings(MapData mapData) => _gameSettings.SetMapDataSettings(mapData);
-        public void SetMapId(int mapId) => _gameSettings.SetMapId(mapId); 
-        
+
+        public void SetMapDataSettings(MapData mapData)
+        {
+            _gameSettings.SetMapDataSettings(mapData);
+            _lobbyNetworkManager.UpdateLobby(_gameSettings.MapSettings);
+        }
+
+        public void SetMapId(int mapId)
+        {
+            _gameSettings.SetMapId(mapId);
+            _lobbyNetworkManager.UpdateLobby(_gameSettings.MapSettings);
+        }
+
         private void Awake() => _heartbeatTimer.OnTimeStop += HandleLobbyHeartbeat;
         private void Update() => _heartbeatTimer.Tick(Time.deltaTime);
 
         private async void HandleLobbyHeartbeat()
         {
-            if (!IsLobbyHost())
+            if (!IsLobbyHost)
             {
                 _heartbeatTimer.Pause();
                 return;
@@ -95,7 +104,7 @@ namespace FTS.Managers
         
         public async Task Authenticate()
         {
-            int playerName = GameSettings.PlayerSettings.r_playerName;
+            int playerName = _gameSettings.PlayerSettings.r_playerName;
             Dictionary<int, object> playerData = new DataLoader<Dictionary<int, object>, object>(playerName.ToString()).LoadData();
             await Authenticate(playerData[playerName].ToString());
         }
@@ -131,22 +140,17 @@ namespace FTS.Managers
                     IsPrivate = false,
                     Data = new Dictionary<string, DataObject>
                     {
-                        {"Password", new DataObject(DataObject.VisibilityOptions.Public, GameSettings.LobbySettings.r_lobbyPassword)},
-                        {"MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(GameSettings.MapSettings))}
+                        {"Password", new DataObject(DataObject.VisibilityOptions.Public, _gameSettings.LobbySettings.r_lobbyPassword)},
+                        {"MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(_gameSettings.MapSettings))}
                     },
                     Player = GetPlayer()
                 };
-
-                Debug.Log(lobbyOptions.Player.Data["PlayerName"].Value);
                 
-                Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(GameSettings.LobbySettings.r_lobbyName, GameSettings.LobbySettings.r_playerNumber, lobbyOptions);
+                Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(_gameSettings.LobbySettings.r_lobbyName, _gameSettings.LobbySettings.r_playerNumber, lobbyOptions);
                 _joinedLobby = lobby;
                 _heartbeatTimer.Start();
-                _lobbyNetworkManager.StartHost(_joinedLobby.Id);
-                
-                Debug.Log("Created Lobby: " + GameSettings.LobbySettings.r_lobbyName + " with code " + _joinedLobby.LobbyCode);
-                OnJoinedLobby?.Invoke(this, (lobby, true));
-                Debug.Log("Created Lobby " + lobby.Name);
+                Debug.Log("Created Lobby: " + _gameSettings.LobbySettings.r_lobbyName + " with code " + _joinedLobby.LobbyCode);
+                _lobbyNetworkManager.StartHost(_joinedLobby);
             }
             catch (LobbyServiceException e)
             {
@@ -196,7 +200,7 @@ namespace FTS.Managers
             });
 
             _joinedLobby = lobby;
-            OnJoinedLobby?.Invoke(this, (lobby, false));
+            _lobbyNetworkManager.StartClient(_joinedLobby);
         }
 
         public async void JoinLobby(Lobby lobby) {
@@ -209,8 +213,7 @@ namespace FTS.Managers
                     Player = player
                 });
 
-                _lobbyNetworkManager.StartClient(_joinedLobby.Id);
-                OnJoinedLobby?.Invoke(this, (lobby, false));
+                _lobbyNetworkManager.StartClient(_joinedLobby);
             }
             catch (LobbyServiceException e)
             {
@@ -227,7 +230,7 @@ namespace FTS.Managers
         {
             try
             {
-                if (IsLobbyHost())
+                if (IsLobbyHost)
                 {
                     _heartbeatTimer.Pause();
                     //_poolingTimer.Pause();
@@ -248,7 +251,7 @@ namespace FTS.Managers
         
         public async Task KickPlayer(string playerId)
         {
-            if (!IsLobbyHost()) 
+            if (!IsLobbyHost) 
                 return;
             
             try 
@@ -263,25 +266,9 @@ namespace FTS.Managers
         
         #endregion : DELETE_LOBBY
         
-        // UPDATE LOBBY -------------------------------------------------------------------
-        #region UPDATE_LOBBY
-
-        public void UpdateLobbyData()
-        {
-            
-            _lobbyNetworkManager.UpdateLobby(GameSettings.MapSettings);
-        }
-
-        #endregion
-        
         private Player GetPlayer() =>
             new(AuthenticationService.Instance.PlayerId, null, new Dictionary<string, PlayerDataObject> {
                 { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, _playerName) },
             });
-        
-        private bool IsLobbyHost() => _joinedLobby != null && _joinedLobby.HostId == _playerId;
-        
-        //private bool IsPlayerInLobby() =>
-        //    _joinedLobby is { Players: not null } && _joinedLobby.Players.Any(player => player.Id == _playerId);
     }
 }
