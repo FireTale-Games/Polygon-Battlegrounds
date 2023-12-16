@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using FTS.Data;
 using FTS.Tools.Utilities;
@@ -17,22 +16,21 @@ namespace FTS.Managers
     [DisallowMultipleComponent]
     internal sealed class LobbyManager : BaseManager
     {
-        [SerializeField] private GameSettings _gameSettings = new();
+        [SerializeField] private LobbyNetworkManager _lobbyNetworkManager;
+        [SerializeField] private GameSettings _gameSettings;
         public IGameSettings GameSettings => _gameSettings;
+        public ILobbyNetworkUpdate LobbyNetworkUpdate => _lobbyNetworkManager;
 
         private string _playerId;
         private string _playerName;
         private Lobby _joinedLobby;
         
+        public EventHandler<MapSettings> OnUpdate;
+        
         private const float _heartbeatTimerDelay = 25.0f;
-        private const float k_poolingTimer = 1.05f;
-
         private readonly CountdownTimer _heartbeatTimer = new(_heartbeatTimerDelay);
-        private readonly CountdownTimer _poolingTimer = new(k_poolingTimer);
         
         public event EventHandler<(Lobby, bool)> OnJoinedLobby;
-        public event EventHandler<(Lobby, bool)> OnJoinedLobbyUpdate;
-        public event EventHandler<Lobby> OnLeaveLobby;
         public event EventHandler<Lobby[]> OnLobbyListChanged;
 
         public void SetGameType(GameType type) => _gameSettings.SetGameType(type);
@@ -41,18 +39,10 @@ namespace FTS.Managers
         public void SetMapSettings(MapSettings mapSettings) => _gameSettings.SetMapSettings(mapSettings);
         public void SetMapDataSettings(MapData mapData) => _gameSettings.SetMapDataSettings(mapData);
         public void SetMapId(int mapId) => _gameSettings.SetMapId(mapId); 
-
-        private void Awake()
-        {
-            _heartbeatTimer.OnTimeStop += HandleLobbyHeartbeat;
-            _poolingTimer.OnTimeStop += HandleLobbyPolling;
-        }
-
-        private void Update() {
-            _heartbeatTimer.Tick(Time.deltaTime);
-            _poolingTimer.Tick(Time.deltaTime);
-        }
         
+        private void Awake() => _heartbeatTimer.OnTimeStop += HandleLobbyHeartbeat;
+        private void Update() => _heartbeatTimer.Tick(Time.deltaTime);
+
         private async void HandleLobbyHeartbeat()
         {
             if (!IsLobbyHost())
@@ -72,30 +62,33 @@ namespace FTS.Managers
                 _heartbeatTimer.Pause();
             }
         }
+        
+        //private void HandleLobbyPolling()
+        //{
+            //_poolingTimer.Start();
+            //_lobbyNetworkManager.Display(_joinedLobby.Id);
 
-        private async void HandleLobbyPolling()
-        {
-            try
-            {
-                _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
-                if (!IsPlayerInLobby()) {
-                    Debug.Log("Kicked from Lobby!");
-                    OnLeaveLobby?.Invoke(this, _joinedLobby);
-                    _joinedLobby = null;
-                    _poolingTimer.Stop();
-                    return;
-                }
-                
-                OnJoinedLobbyUpdate?.Invoke(this, (_joinedLobby, IsLobbyHost()));
-                _poolingTimer.Start();
-            }
-            catch (LobbyServiceException e)
-            {
-                Debug.Log(e);
-                _poolingTimer.Pause();
-                OnLeaveLobby?.Invoke(this, _joinedLobby);
-            }
-        }
+            //try
+            //{
+            //    _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
+            //    if (!IsPlayerInLobby()) {
+            //        Debug.Log("Kicked from Lobby!");
+            //        OnLeaveLobby?.Invoke(this, _joinedLobby);
+            //        _joinedLobby = null;
+            //        _poolingTimer.Stop();
+            //        return;
+            //    }
+            //    
+            //    OnJoinedLobbyUpdate?.Invoke(this, (_joinedLobby, IsLobbyHost()));
+            //    _poolingTimer.Start();
+            //}
+            //catch (LobbyServiceException e)
+            //{
+            //    Debug.Log(e);
+            //    _poolingTimer.Pause();
+            //    OnLeaveLobby?.Invoke(this, _joinedLobby);
+            //}
+        //}
         
         // AUTHENTICATION ----------------------------------------------------------
         #region AUTHENTICATION
@@ -149,7 +142,7 @@ namespace FTS.Managers
                 Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(GameSettings.LobbySettings.r_lobbyName, GameSettings.LobbySettings.r_playerNumber, lobbyOptions);
                 _joinedLobby = lobby;
                 _heartbeatTimer.Start();
-                _poolingTimer.Start();
+                _lobbyNetworkManager.StartHost(_joinedLobby.Id);
                 
                 Debug.Log("Created Lobby: " + GameSettings.LobbySettings.r_lobbyName + " with code " + _joinedLobby.LobbyCode);
                 OnJoinedLobby?.Invoke(this, (lobby, true));
@@ -216,7 +209,7 @@ namespace FTS.Managers
                     Player = player
                 });
 
-                _poolingTimer.Start();
+                _lobbyNetworkManager.StartClient(_joinedLobby.Id);
                 OnJoinedLobby?.Invoke(this, (lobby, false));
             }
             catch (LobbyServiceException e)
@@ -237,7 +230,7 @@ namespace FTS.Managers
                 if (IsLobbyHost())
                 {
                     _heartbeatTimer.Pause();
-                    _poolingTimer.Pause();
+                    //_poolingTimer.Pause();
                     for (int i = _joinedLobby.Players.Count - 1; i >= 0; i--)
                         await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, _joinedLobby.Players[i].Id);
                     await Lobbies.Instance.DeleteLobbyAsync(_joinedLobby.Id);
@@ -273,22 +266,10 @@ namespace FTS.Managers
         // UPDATE LOBBY -------------------------------------------------------------------
         #region UPDATE_LOBBY
 
-        public async void UpdateLobbyData()
+        public void UpdateLobbyData()
         {
-            try
-            {
-                Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(_joinedLobby.Id, new UpdateLobbyOptions {
-                    Data = new Dictionary<string, DataObject> {
-                        { "MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(_gameSettings.MapSettings)) }
-                    }
-                });
-
-                _joinedLobby = lobby;
-            }
-            catch (LobbyServiceException e)
-            {
-                Debug.Log(e);
-            }
+            
+            _lobbyNetworkManager.UpdateLobby(GameSettings.MapSettings);
         }
 
         #endregion
@@ -300,7 +281,7 @@ namespace FTS.Managers
         
         private bool IsLobbyHost() => _joinedLobby != null && _joinedLobby.HostId == _playerId;
         
-        private bool IsPlayerInLobby() =>
-            _joinedLobby is { Players: not null } && _joinedLobby.Players.Any(player => player.Id == _playerId);
+        //private bool IsPlayerInLobby() =>
+        //    _joinedLobby is { Players: not null } && _joinedLobby.Players.Any(player => player.Id == _playerId);
     }
 }

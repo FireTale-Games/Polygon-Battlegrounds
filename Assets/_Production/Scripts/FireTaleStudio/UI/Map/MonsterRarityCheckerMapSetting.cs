@@ -8,7 +8,6 @@ namespace FTS.UI.Map
 
         public override void SetValue(Sprite sprite)
         {
-            _button.enabled = true;
             _buttonImage.sprite = sprite;
             _display.sprite = sprite;
         }
