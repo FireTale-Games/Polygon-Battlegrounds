@@ -53,7 +53,7 @@ namespace FTS.Managers
         {
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(k_ipAddress, GetPortFromHash(lobby.Id));
             NetworkManager.Singleton.StartHost();
-            LobbyJoin(lobby, true);
+            LobbyJoin(lobby);
         }
 
         public void StartClient(Lobby lobby)
@@ -68,7 +68,7 @@ namespace FTS.Managers
                 if (clientId != NetworkManager.Singleton.LocalClientId) 
                     return;
                 
-                LobbyJoin(lobby, false);
+                LobbyJoin(lobby);
                 NetworkManager.Singleton.OnClientConnectedCallback -= OnServerStarted;
             }
         }
@@ -82,7 +82,7 @@ namespace FTS.Managers
             LobbyUpdateClientRpc(binaryData);
         }
 
-        public void LobbyJoin(Lobby lobby, bool isHost)
+        public void LobbyJoin(Lobby lobby)
         {
             PlayerRef[] playerRefs = new PlayerRef[lobby.Players.Count];
             for (int i = 0; i < playerRefs.Length; i++)
@@ -91,13 +91,7 @@ namespace FTS.Managers
                 playerRefs[i] = new PlayerRef(player.Data["PlayerName"].Value, player.Id);
             }
 
-            LobbyRef lobbyRef = new(playerRefs, isHost, lobby.LobbyCode);
-            if (IsServer || IsHost)
-            {
-                OnLobbyPlayersUpdate?.Invoke(this, lobbyRef);
-                return;
-            }
-            
+            LobbyRef lobbyRef = new(playerRefs, false, lobby.LobbyCode);
             byte[] binaryData = SerializeToBinary(lobbyRef);
             LobbyJoinServerRpc(binaryData);
         }
@@ -123,7 +117,8 @@ namespace FTS.Managers
             OnSettingsUpdate?.Invoke(this, settings);
         }
         
-        public void RemovePlayer(string removePlayerId)
+        [ServerRpc(RequireOwnership = false)]
+        public void RemovePlayerServerRpc(string removePlayerId)
         {
             if (IsServer || IsHost)
                 RemovePlayerClientRpc(removePlayerId);
