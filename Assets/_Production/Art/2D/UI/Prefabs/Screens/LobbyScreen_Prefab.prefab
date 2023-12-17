@@ -143,6 +143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5584734635717756761}
+  - component: {fileID: 5887868879863313868}
   - component: {fileID: 8923424345441139981}
   - component: {fileID: 650615651646900118}
   - component: {fileID: 2062243152754641211}
@@ -170,9 +171,27 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -25, y: 25}
-  m_SizeDelta: {x: 595, y: 559}
-  m_Pivot: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -322.5, y: 304.5}
+  m_SizeDelta: {x: 25, y: 25}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5887868879863313868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279091999419087353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c35c42c426bddc44bcedddbab782b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _openedDimension: {x: 595, y: 559}
+  _joinButton: {fileID: 3731910196534801019}
+  _lobbyPlayerDescriptionUi: {fileID: -3685211013503876609, guid: b1d325c7406df0048831c9ca67cf0484,
+    type: 3}
+  _hostGroup: {fileID: 9064043773762256512}
+  _playersGroup: {fileID: 7446842256821668681}
 --- !u!222 &8923424345441139981
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -194,14 +213,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.8962264, g: 0.59773755, b: 0.13105197, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -2037390631, guid: ab6bf74703af9b44ca5ad083198deda3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -219,9 +238,9 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 279091999419087353}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &351181437133226063
 GameObject:
@@ -1541,6 +1560,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4162372461122614868}
+  - component: {fileID: 5518334687976892790}
   m_Layer: 5
   m_Name: DescriptionGroup
   m_TagString: Untagged
@@ -1568,6 +1588,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &5518334687976892790
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666949263205226481}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2859268155581039852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1795,10 +1827,7 @@ MonoBehaviour:
   _refreshLobby: {fileID: 2132049683853092045}
   _createGameScreen: {fileID: 4230944209560262500}
   _createLobby: {fileID: 6539864706963315085}
-  _lobbyPlayerDescriptionUi: {fileID: -3685211013503876609, guid: b1d325c7406df0048831c9ca67cf0484,
-    type: 3}
-  _hostGroup: {fileID: 9064043773762256512}
-  _playersGroup: {fileID: 7446842256821668681}
+  _joinGameScreen: {fileID: 5887868879863313868}
 --- !u!222 &3130211703446429283
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3273,14 +3302,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.2264151, g: 0.9056604, b: 0.24619421, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -2037390631, guid: ab6bf74703af9b44ca5ad083198deda3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5296,6 +5325,7 @@ GameObject:
   - component: {fileID: 5722443890838580841}
   - component: {fileID: 4589090713792000092}
   - component: {fileID: 3731910196534801019}
+  - component: {fileID: 8681152802321851696}
   m_Layer: 5
   m_Name: JoinButton
   m_TagString: Untagged
@@ -5405,6 +5435,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8681152802321851696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7374203537237321517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 075deaf79c3af554c8262972746059f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _text: {fileID: 2935385578540867805}
+  <Screen>k__BackingField: {fileID: 0}
 --- !u!1 &7572835984862628644
 GameObject:
   m_ObjectHideFlags: 0
