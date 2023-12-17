@@ -20,9 +20,12 @@ namespace FTS.UI.Screens
         [SerializeField] private Sprite[] _lockUnlockSprites;
         [SerializeField] private LobbyGameUi _lobbyGameUi;
         [SerializeField] private RectTransform _lobbyList;
-        [SerializeField] private MenuButtonUi _createLobby;
         [SerializeField] private Button _refreshLobby;
 
+        [Header("Create Lobby"), Space(2)] 
+        [SerializeField] private CreateGameScreen _createGameScreen;
+        [SerializeField] private Button _createLobby;
+        
         [Header("Description Data"), Space(2)]
         [SerializeField] private LobbyPlayerDescriptionUi _lobbyPlayerDescriptionUi;
         [SerializeField] private RectTransform _hostGroup;
@@ -37,6 +40,9 @@ namespace FTS.UI.Screens
             // Refresh
             lobbyManager.OnLobbyListChanged += UpdateLobbyList_EventHandler;
             _refreshLobby.onClick.AddListener(lobbyManager.RefreshLobbyList);
+            
+            // Create New Lobby
+            _createLobby.onClick.AddListener(_createGameScreen.SetVisibility);
             
             // Etc.
             OnLobbyJoin = lobbyManager.JoinLobby;

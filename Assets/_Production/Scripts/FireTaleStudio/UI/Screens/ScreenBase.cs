@@ -13,13 +13,13 @@ namespace FTS.UI.Screens
         public Action OnRequestToClose { get; set; }
         public Action<IScreen> OnRequestToOpen { get; set; }
 
-        private CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
+        protected CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
         private CanvasGroup _canvasGroup;
 
-        private Canvas Canvas => _canvas ??= GetComponent<Canvas>();
+        protected Canvas Canvas => _canvas ??= GetComponent<Canvas>();
         private Canvas _canvas;
 
-        private int SortOrderOnOpen => 4;
+        protected int SortOrderOnOpen => 4;
 
         protected virtual void Awake()
         {
