@@ -6,6 +6,8 @@ using System.Text;
 using FTS.Data;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Authentication;
+using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -44,6 +46,7 @@ namespace FTS.Managers
     {
         public EventHandler<MapSettings> OnSettingsUpdate { get; set; }
         public EventHandler<LobbyRef> OnLobbyPlayersUpdate { get; set; }
+        public EventHandler<bool> OnPlayerLeave { get; set; }
         private const string k_ipAddress = "127.0.0.1";
 
         public void StartHost(Lobby lobby)
@@ -120,6 +123,35 @@ namespace FTS.Managers
             OnSettingsUpdate?.Invoke(this, settings);
         }
         
+        public void RemovePlayer(string removePlayerId)
+        {
+            if (IsServer || IsHost)
+                RemovePlayerClientRpc(removePlayerId);
+        }
+
+        [ClientRpc]
+        private void RemovePlayerClientRpc(string playerId)
+        {
+            if (AuthenticationService.Instance.PlayerId != playerId) 
+                return;
+            
+            NetworkManager.Singleton.Shutdown();
+            OnPlayerLeave?.Invoke(this, false);
+        }
+        
+        public void RemoveAllPlayers()
+        {
+            if (IsServer || IsHost)
+                RemoveAllPlayersClientRpc();
+        }
+        
+        [ClientRpc]
+        private void RemoveAllPlayersClientRpc()
+        {
+            NetworkManager.Singleton.Shutdown();
+            OnPlayerLeave?.Invoke(this, IsHost || IsServer);
+        }
+
         private ushort GetPortFromHash(string lobbyHostId) => (ushort)(1024 + Mathf.Abs(Animator.StringToHash(lobbyHostId)) % (65535 - 1024));
         
         private byte[] SerializeToBinary<T>(T settings)
@@ -142,5 +174,6 @@ namespace FTS.Managers
     {
         public EventHandler<MapSettings> OnSettingsUpdate { get; set; }
         public EventHandler<LobbyRef> OnLobbyPlayersUpdate { get; set; }
+        public EventHandler<bool> OnPlayerLeave { get; set; }
     }
 }

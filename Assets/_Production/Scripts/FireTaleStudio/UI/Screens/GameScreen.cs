@@ -26,8 +26,9 @@ namespace FTS.UI.Screens
         
         protected override void BindToLobbyManager(LobbyManager lobbyManager)
         {
-            lobbyManager.LobbyNetworkUpdate.OnLobbyPlayersUpdate += JoinLobby;
-            lobbyManager.LobbyNetworkUpdate.OnSettingsUpdate += UpdateLobby;
+            lobbyManager.LobbyNetworkUpdate.OnLobbyPlayersUpdate += OnLobbyPlayerUpdate;
+            lobbyManager.LobbyNetworkUpdate.OnSettingsUpdate += OnSettingUpdate;
+            lobbyManager.LobbyNetworkUpdate.OnPlayerLeave += OnPlayerLeave;
 
             _backButton.onClick.AddListener(OnLeaveLobby);
             _onPlayerKick = OnKickFromLobby;
@@ -41,13 +42,20 @@ namespace FTS.UI.Screens
             async void OnKickFromLobby(string id) => await lobbyManager.KickPlayer(id);
         }
 
-        //private void LeaveLobby_Event(object sender, Lobby e)
-        //{
-        //    ClearLobby();
-        //    _backButton.onClick?.Invoke();
-        //}
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            _onPlayerKick = null;
+        }
 
-        private void JoinLobby(object sender, LobbyRef lobbyRef)
+        private void OnPlayerLeave(object sender, bool isHost)
+        {
+            ClearLobby();
+            if (!isHost)
+                _backButton.onClick?.Invoke();
+        }
+
+        private void OnLobbyPlayerUpdate(object sender, LobbyRef lobbyRef)
         {
             ClearLobby();
 
@@ -60,7 +68,7 @@ namespace FTS.UI.Screens
             _lobbyCodeUi.SetDefaultValues(lobbyRef.r_isHost, lobbyRef.r_isHost ? lobbyRef.r_lobbyCode : string.Empty);
         }
         
-        private void UpdateLobby(object sender, MapSettings mapSettings)
+        private void OnSettingUpdate(object sender, MapSettings mapSettings)
         {
             _mapSettingUi.UpdateMap(mapSettings.r_mapData);
             _mapDisplayUi.UpdateMap(mapSettings.r_mapId);

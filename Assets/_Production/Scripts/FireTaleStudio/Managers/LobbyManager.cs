@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FTS.Data;
 using FTS.Tools.Utilities;
 using Newtonsoft.Json;
+using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
@@ -49,9 +50,20 @@ namespace FTS.Managers
             _lobbyNetworkManager.UpdateLobby(_gameSettings.MapSettings);
         }
 
-        private void Awake() => _heartbeatTimer.OnTimeStop += HandleLobbyHeartbeat;
-        private void Update() => _heartbeatTimer.Tick(Time.deltaTime);
+        private void Awake()
+        {
+            _heartbeatTimer.OnTimeStop += HandleLobbyHeartbeat;
+            _lobbyNetworkManager.OnPlayerLeave += (_, _) => _joinedLobby = null;
+        }
 
+        private void OnDestroy()
+        {
+            _heartbeatTimer.OnTimeStop -= HandleLobbyHeartbeat;
+            _lobbyNetworkManager.OnPlayerLeave = null;
+        }
+
+        private void Update() => _heartbeatTimer.Tick(Time.deltaTime);
+        
         private async void HandleLobbyHeartbeat()
         {
             if (!IsLobbyHost)
@@ -82,7 +94,6 @@ namespace FTS.Managers
             //    _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
             //    if (!IsPlayerInLobby()) {
             //        Debug.Log("Kicked from Lobby!");
-            //        OnLeaveLobby?.Invoke(this, _joinedLobby);
             //        _joinedLobby = null;
             //        _poolingTimer.Stop();
             //        return;
@@ -95,7 +106,6 @@ namespace FTS.Managers
             //{
             //    Debug.Log(e);
             //    _poolingTimer.Pause();
-            //    OnLeaveLobby?.Invoke(this, _joinedLobby);
             //}
         //}
         
@@ -140,8 +150,7 @@ namespace FTS.Managers
                     IsPrivate = false,
                     Data = new Dictionary<string, DataObject>
                     {
-                        {"Password", new DataObject(DataObject.VisibilityOptions.Public, _gameSettings.LobbySettings.r_lobbyPassword)},
-                        {"MapData", new DataObject(DataObject.VisibilityOptions.Member, JsonConvert.SerializeObject(_gameSettings.MapSettings))}
+                        {"Password", new DataObject(DataObject.VisibilityOptions.Public, _gameSettings.LobbySettings.r_lobbyPassword)}, 
                     },
                     Player = GetPlayer()
                 };
@@ -228,35 +237,46 @@ namespace FTS.Managers
 
         public async Task LeaveLobby()
         {
+            if (_joinedLobby == null)
+                return;
+            
             try
             {
                 if (IsLobbyHost)
                 {
                     _heartbeatTimer.Pause();
-                    //_poolingTimer.Pause();
+                    _joinedLobby = await Lobbies.Instance.UpdateLobbyAsync(_joinedLobby.Id, new UpdateLobbyOptions());
                     for (int i = _joinedLobby.Players.Count - 1; i >= 0; i--)
                         await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, _joinedLobby.Players[i].Id);
-                    await Lobbies.Instance.DeleteLobbyAsync(_joinedLobby.Id);
+                    
+                    _lobbyNetworkManager.RemoveAllPlayers();
+                    return;
                 }
-                else
-                    await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, _playerId);
+
+                await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, _playerId);
+                _lobbyNetworkManager.RemovePlayer(_playerId);
                 
-                _joinedLobby = null;
+                _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
+                _lobbyNetworkManager.LobbyJoin(_joinedLobby, false);
             }
             catch (LobbyServiceException e)
             {
-                Debug.Log(e);
+                Debug.LogError($"Failed to delete lobby: {e.Message}");
             }
         }
         
         public async Task KickPlayer(string playerId)
         {
-            if (!IsLobbyHost) 
+            if (!IsLobbyHost || _joinedLobby == null) 
                 return;
             
             try 
             {
                 await LobbyService.Instance.RemovePlayerAsync(_joinedLobby.Id, playerId);
+                _lobbyNetworkManager.RemovePlayer(playerId);
+                
+                _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
+                _lobbyNetworkManager.LobbyJoin(_joinedLobby, true);
             } 
             catch (LobbyServiceException e) 
             {
