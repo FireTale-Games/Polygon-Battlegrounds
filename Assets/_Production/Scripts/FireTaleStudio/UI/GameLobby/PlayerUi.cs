@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using TMPro;
-using Unity.Services.Lobbies.Models;
 using UnityEngine.UI;
 
 namespace FTS.UI.GameLobby
@@ -11,15 +10,15 @@ namespace FTS.UI.GameLobby
         [SerializeField] private TextMeshProUGUI _playerNameText;
         [SerializeField] private Button _kickPlayerButton;
 
-        public void UpdatePlayer(Player player, Action<string> onKickPlayer)
+        public void UpdatePlayer(string playerName, string playerId, Action<string> onKickPlayer)
         {
-            _playerNameText.text = player.Data["PlayerName"].Value;
+            _playerNameText.text = playerName;
 
             if (onKickPlayer == null)
                 return;
             
             _kickPlayerButton.gameObject.SetActive(true);
-            _kickPlayerButton.onClick.AddListener(() => onKickPlayer.Invoke(player.Id));
+            _kickPlayerButton.onClick.AddListener(() => onKickPlayer.Invoke(playerId));
         }
         
         private void OnDestroy() => _kickPlayerButton.onClick.RemoveAllListeners();

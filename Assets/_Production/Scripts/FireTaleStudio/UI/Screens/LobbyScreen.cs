@@ -20,53 +20,37 @@ namespace FTS.UI.Screens
         [SerializeField] private Sprite[] _lockUnlockSprites;
         [SerializeField] private LobbyGameUi _lobbyGameUi;
         [SerializeField] private RectTransform _lobbyList;
-        [SerializeField] private MenuButtonUi _createLobby;
         [SerializeField] private Button _refreshLobby;
 
-        [Header("Description Data"), Space(2)]
-        [SerializeField] private LobbyPlayerDescriptionUi _lobbyPlayerDescriptionUi;
-        [SerializeField] private RectTransform _hostGroup;
-        [SerializeField] private RectTransform _playersGroup;
+        [Header("Create Lobby"), Space(2)] 
+        [SerializeField] private CreateGameScreen _createGameScreen;
+        [SerializeField] private Button _createLobby;
+
+        [Header("Description Data"), Space(2)] 
+        [SerializeField] private JoinGameScreen _joinGameScreen;
 
         private Action<Lobby> OnLobbyJoin;
-        private Action<Lobby> OnLobbySelect;
         private Action OnLobbyShow;
 
         protected override void BindToLobbyManager(LobbyManager lobbyManager)
         {
             // Refresh
             lobbyManager.OnLobbyListChanged += UpdateLobbyList_EventHandler;
-            _refreshLobby.onClick.AddListener(lobbyManager.RefreshLobbyList);
+            _refreshLobby.onClick.AddListener(() => { lobbyManager.RefreshLobbyList(); _joinGameScreen.SetVisibility(false); });
+            
+            // Create New Lobby
+            _createLobby.onClick.AddListener(_createGameScreen.SetVisibility);
+            
+            // Join lobby
+            OnLobbyJoin = lobbyManager.JoinLobby;
+            _joinGameScreen.Initialize(lobbyManager.JoinLobby);
             
             // Etc.
-            OnLobbyJoin = lobbyManager.JoinLobby;
-            OnLobbySelect = DisplayLobbyDescription;
             OnLobbyShow = LobbyShow;
             return;
 
             async void LobbyShow() => await lobbyManager.Authenticate();
         }
-
-        #region LOBBY_LOBBY_DISPLAY
-
-        private void DisplayLobbyDescription(Lobby lobby)
-        {
-            RemoveLobbyPlayerDescriptions();
-            
-            List<Player> players = lobby.Players;
-            Instantiate(_lobbyPlayerDescriptionUi, _hostGroup).Initialize(players[0].Data["PlayerName"].Value, "Host");
-            for (int i = 1; i < players.Count; i++)
-                Instantiate(_lobbyPlayerDescriptionUi, _playersGroup).Initialize(players[i].Data["PlayerName"].Value, "Member");
-        }
-        
-        private void RemoveLobbyPlayerDescriptions()
-        {
-            ILobbyPlayerDescriptionUi[] lobbyPlayerDescriptionUi = GetComponentsInChildren<ILobbyPlayerDescriptionUi>();
-            for (int i = lobbyPlayerDescriptionUi.Length - 1; i >= 0; i--)
-                lobbyPlayerDescriptionUi[i].Destroy();
-        }
-        
-        #endregion
         
         #region LOBBY_LIST_UPDATE
 
@@ -81,7 +65,7 @@ namespace FTS.UI.Screens
                 LobbyGameUiData lobbyGameUiData = new(
                     lobby.Data["Password"].Value != string.Empty ? _lockUnlockSprites[0] : _lockUnlockSprites[1],
                     OnLobbyJoin,
-                    OnLobbySelect,
+                    _joinGameScreen.DisplayLobbyDescription,
                     _gameScreen);
                     
                 LobbyGameUi lobbyGameUi = Instantiate(_lobbyGameUi, _lobbyList);
@@ -96,7 +80,6 @@ namespace FTS.UI.Screens
             base.OnDestroy();
             _refreshLobby.onClick.RemoveAllListeners();
             OnLobbyJoin = null;
-            OnLobbySelect = null;
             OnLobbyShow = null;
         }
 
@@ -104,7 +87,7 @@ namespace FTS.UI.Screens
         {
             base.Show(speed);
             OnLobbyShow?.Invoke();
-            RemoveLobbyPlayerDescriptions();
+            _joinGameScreen.SetVisibility(false);
         }
     }
 }

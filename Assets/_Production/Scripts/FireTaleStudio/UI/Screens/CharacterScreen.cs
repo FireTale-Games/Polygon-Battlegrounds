@@ -24,37 +24,29 @@ namespace FTS.UI.Screens
 
         protected override void BindToProfileManager(ProfileManager profileManager)
         {
-            OnGetProfile += GetProfile;
-            _createProfileButton.onClick.AddListener(CreateProfileButtonBind);
-
-            return;
-            void CreateProfileButtonBind()
-            {
-                if (_createProfileText.text.Length <= 3)
-                    return;
+            OnGetProfile = () => profileManager.GetProfile;
+            _createProfileButton.onClick.AddListener(() => CreateProfile(profileManager));
+        }
+        
+        private void CreateProfile(ProfileManager profileManager)
+        {
+            if (_createProfileText.text.Length <= 3)
+                return;
                 
-                profileManager.CreateNewProfile(_createProfileText.text);
-                _createProfileObject.SetActive(false);
-                _characterProfileCanvas.gameObject.SetActive(true);
-                _characterProfileCanvas.ShowCanvasGroup(0.35f);
-                EventSystem.current.SetSelectedGameObject(_characterProfileCanvas.GetComponentInChildren<Button>().gameObject);
+            profileManager.CreateNewProfile(_createProfileText.text);
+            _createProfileObject.SetActive(false);
+            _characterProfileCanvas.gameObject.SetActive(true);
+            _characterProfileCanvas.ShowCanvasGroup(0.35f);
+            EventSystem.current.SetSelectedGameObject(_characterProfileCanvas.GetComponentInChildren<Button>().gameObject);
 
-                int? invoke = OnGetProfile?.Invoke();
-                OnProfileSet?.Invoke(invoke!.Value);
-            }
-
-            int? GetProfile() => 
-                profileManager.GetProfile;
+            int? invoke = profileManager.GetProfile;
+            OnProfileSet?.Invoke(invoke!.Value);
         }
 
-        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager)
+        protected override void BindToLobbyManager(LobbyManager lobbyManager)
         {
-            OnGetGameType = GetGameType;
+            OnGetGameType = () => lobbyManager.GameType;
             OnProfileSet = value => lobbyManager.SetPlayerSettings(new PlayerSettings(value));
-            
-            return;
-            GameType GetGameType() => 
-                lobbyManager.GameSettings.GameType;
         }
         
         protected override void OnCompletePlay(float speed)
