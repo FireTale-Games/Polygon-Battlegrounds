@@ -10,10 +10,13 @@ namespace FTS.Managers
         private Dictionary<int, object> _currentSettings;
         private readonly HashSet<ISetting> _previewDataSettings = new();
 
+        public EventHandler<ISetting> OnSettingApplied;
+        
         private void SettingData(ISetting setting)
         {
             _previewDataSettings.Add(setting);
             setting.ApplyData();
+            OnSettingApplied?.Invoke(this, setting);
         }
         
         public void SettingsApply(bool isApply)

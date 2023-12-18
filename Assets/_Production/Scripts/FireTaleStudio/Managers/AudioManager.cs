@@ -20,8 +20,20 @@ namespace FTS.Managers
         [SerializeField] private float musicVolume;
         [SerializeField] private float soundVolume;
         [SerializeField] private float voiceVolume;
+
+        private void OnEnable() => 
+            GameManager.Instance.OnInitialize += OnInitialize;
+
+        private void OnInitialize(IManager manager)
+        {
+            if (manager is SettingManager settingManager)
+                BindToSettingsManager(settingManager);
+        }
         
-        private void SettingData(ISetting setting)
+        private void BindToSettingsManager(SettingManager settingManager) => 
+            settingManager.OnSettingApplied += SettingData;
+
+        private void SettingData(object sender, ISetting setting)
         {
             if (setting is MasterSettingUi)
             {

@@ -1,5 +1,5 @@
 using System;
-using FTS.Tools.ExtensionMethods;
+using FTS.Tools.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,10 +16,8 @@ namespace FTS.UI.Profiles
         {
             Value = profileValue;
             _text.text = Value != null ? Value.ToString() : _profileButton.name.AddSpaceBetweenCapitalLetters();
-            
             _profileButton.onClick.AddListener(() => onProfileSelected?.Invoke(Name));
         }
-            
         
         public void SetValue(object value)
         {

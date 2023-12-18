@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace FTS.Managers
 {
-    public class BaseManager : MonoBehaviour, IManager
+    internal class BaseManager : MonoBehaviour, IManager
     {
 
     }

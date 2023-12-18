@@ -15,6 +15,9 @@ namespace FTS.UI
         private IButtonHandler<IMenuButtonUi> ButtonHandler => _buttonHandler ??= GetComponentInParent<IButtonHandler<IMenuButtonUi>>();
         private IButtonHandler<IMenuButtonUi> _buttonHandler;
 
+        public void SetBaseScreen(MenuScreenBase _menuScreenBase) =>
+            Screen = _menuScreenBase;
+        
         private void Awake() => 
             GetComponent<Button>().onClick.AddListener(() => ButtonHandler?.Press(this));
         

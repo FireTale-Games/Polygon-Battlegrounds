@@ -1,6 +1,6 @@
 using DG.Tweening;
 using FTS.Managers;
-using FTS.Tools.ExtensionMethods;
+using FTS.Tools.Extensions;
 using UnityEngine;
 
 namespace FTS.UI.Screens
@@ -10,9 +10,9 @@ namespace FTS.UI.Screens
         [SerializeField] protected Vector2 _openedDimension;
         
         private Vector2 _originalPosition;
-        private Vector2 _originalDimension;
-        private RectTransform _rectTransform;
-        private Sequence _mySequence;
+        protected Vector2 _originalDimension;
+        protected RectTransform _rectTransform;
+        protected Sequence _mySequence;
 
         protected override void Awake()
         {
@@ -25,11 +25,25 @@ namespace FTS.UI.Screens
             GameManager.Instance.OnInitialize += OnInitialize;
         }
 
-        private void OnDestroy() => 
+        protected virtual void OnDestroy() => 
             GameManager.Instance.OnInitialize -= OnInitialize;
 
-        protected virtual void OnInitialize(IManager manager) { }
+        private void OnInitialize(IManager manager)
+        {
+            if (manager is SettingManager settingManager)
+                BindToSettingsManager(settingManager);
+            
+            if (manager is ProfileManager profileManager)
+                BindToProfileManager(profileManager);
 
+            if (manager is LobbyManager menuPlayManager)
+                BindToLobbyManager(menuPlayManager);
+        }
+
+        protected virtual void BindToSettingsManager(SettingManager settingManager) { }
+        protected virtual void BindToProfileManager(ProfileManager profileManager) { }
+        protected virtual void BindToLobbyManager(LobbyManager lobbyManager) { }
+        
         public override void Show(float? speed = null)
         {
             float realSpeed = speed ?? _duration;

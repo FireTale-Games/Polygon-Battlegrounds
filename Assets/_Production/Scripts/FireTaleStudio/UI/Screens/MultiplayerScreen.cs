@@ -1,4 +1,5 @@
 using System;
+using FTS.Data;
 using FTS.Managers;
 using FTS.UI.Profiles;
 
@@ -7,12 +8,14 @@ namespace FTS.UI.Screens
     internal sealed class MultiplayerScreen : MenuScreenBase
     {
         private Action OnProfileShow;
+        private Action OnSinglePlayerShow;
         
-        protected override void OnInitialize(IManager manager)
-        {
-            if (manager is not ProfileManager profileManager)
-                return;
 
+        protected override void BindToLobbyManager(Managers.LobbyManager lobbyManager) => 
+            OnSinglePlayerShow = () => lobbyManager.SetGameType(GameType.Multiplayer);
+
+        protected override void BindToProfileManager(ProfileManager profileManager)
+        {
             IProfile[] profiles = GetComponentsInChildren<IProfile>();
             profileManager.SetInitialValues(profiles);
             OnProfileShow = () => profileManager.RefreshValues(profiles);
@@ -22,6 +25,14 @@ namespace FTS.UI.Screens
         {
             base.Show(speed);
             OnProfileShow?.Invoke();
+            OnSinglePlayerShow?.Invoke();
+        }
+        
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            OnProfileShow = null;
+            OnSinglePlayerShow = null;
         }
     }
 }

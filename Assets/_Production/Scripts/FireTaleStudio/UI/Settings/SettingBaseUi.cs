@@ -15,6 +15,6 @@ namespace FTS.UI.Settings
             ApplyData();
         }
 
-        public abstract void ApplyData();
+        public virtual void ApplyData() { }
     }
 }

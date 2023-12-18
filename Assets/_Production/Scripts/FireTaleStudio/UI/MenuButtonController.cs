@@ -1,4 +1,4 @@
-using FTS.Tools.ExtensionMethods;
+using FTS.Tools.Extensions;
 using FTS.UI.Screens;
 using UnityEngine;
 using UnityEngine.EventSystems;

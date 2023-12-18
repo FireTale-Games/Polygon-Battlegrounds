@@ -1,6 +1,7 @@
 using System;
+using FTS.Data;
 using FTS.Managers;
-using FTS.Tools.ExtensionMethods;
+using FTS.Tools.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,48 +11,63 @@ namespace FTS.UI.Screens
 {
     internal sealed class CharacterScreen : MenuScreenBase
     {
-        [SerializeField] private TextMeshProUGUI _createProfileText;
+        [SerializeField] private TMP_InputField _createProfileText;
         [SerializeField] private GameObject _createProfileObject;
         [SerializeField] private CanvasGroup _characterProfileCanvas;
         [SerializeField] private Button _createProfileButton;
+        [SerializeField] private MenuButtonUi _nextButton;
+        [SerializeField] private MenuScreenBase[] _menuScreenBases;
+        
+        private Func<int?> OnGetProfile;
+        private Func<GameType> OnGetGameType;
+        private Action<int> OnProfileSet;
 
-        private Func<bool> OnGetProfile;
-
-        protected override void OnInitialize(IManager manager)
+        protected override void BindToProfileManager(ProfileManager profileManager)
         {
-            if (manager is not ProfileManager profileManager)
+            OnGetProfile = () => profileManager.GetProfile;
+            _createProfileButton.onClick.AddListener(() => CreateProfile(profileManager));
+        }
+        
+        private void CreateProfile(ProfileManager profileManager)
+        {
+            if (_createProfileText.text.Length <= 3)
                 return;
-            
-            OnGetProfile += GetProfile;
-
-            _createProfileButton.onClick.AddListener(CreateProfileButtonBind);
-
-            return;
-            void CreateProfileButtonBind()
-            {
-                if (_createProfileText.text.Length <= 3)
-                    return;
                 
-                profileManager.CreateNewProfile(_createProfileText.text);
-                _createProfileObject.SetActive(false);
-                _characterProfileCanvas.gameObject.SetActive(true);
-                _characterProfileCanvas.ShowCanvasGroup(0.35f);
-                EventSystem.current.SetSelectedGameObject(_characterProfileCanvas.GetComponentInChildren<Button>().gameObject);
-            }
+            profileManager.CreateNewProfile(_createProfileText.text);
+            _createProfileObject.SetActive(false);
+            _characterProfileCanvas.gameObject.SetActive(true);
+            _characterProfileCanvas.ShowCanvasGroup(0.35f);
+            EventSystem.current.SetSelectedGameObject(_characterProfileCanvas.GetComponentInChildren<Button>().gameObject);
 
-            bool GetProfile() => 
-                profileManager.GetProfile.HasValue;
+            int? invoke = profileManager.GetProfile;
+            OnProfileSet?.Invoke(invoke!.Value);
         }
 
+        protected override void BindToLobbyManager(LobbyManager lobbyManager)
+        {
+            OnGetGameType = () => lobbyManager.GameType;
+            OnProfileSet = value => lobbyManager.SetPlayerSettings(new PlayerSettings(value));
+        }
+        
         protected override void OnCompletePlay(float speed)
         {
             base.OnCompletePlay(speed);
-            if (OnGetProfile.Invoke())
+            int? profile = OnGetProfile.Invoke();
+            if (profile.HasValue)
+            {
+                OnProfileSet?.Invoke(profile.Value);
                 return;
+            }
             
             _characterProfileCanvas.gameObject.SetActive(false);
             _createProfileObject.SetActive(true);
             EventSystem.current.SetSelectedGameObject(_createProfileObject.GetComponentInChildren<TMP_InputField>().gameObject);
+        }
+
+        public override void Show(float? speed = null)
+        {
+            base.Show(speed);
+            _nextButton.SetBaseScreen(OnGetGameType?.Invoke() == GameType.Singleplayer ? _menuScreenBases[0] : _menuScreenBases[1]);
         }
     }
 }
