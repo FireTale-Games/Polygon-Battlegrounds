@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FTS.UI
 {
-    public interface IMenuButtonUi
+    internal interface IMenuButtonUi
     {
         public IScreen ButtonScreen { get; }
         public void SetTextColor(Color color);

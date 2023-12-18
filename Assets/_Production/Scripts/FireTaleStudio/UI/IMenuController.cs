@@ -3,7 +3,7 @@ using FTS.UI.Screens;
 
 namespace FTS.UI
 {
-    public interface IMenuController<T>
+    internal interface IMenuController<T>
     {
         public Action<T> OnEnter { get; set; }
         public Action<T> OnExit { get; set; }

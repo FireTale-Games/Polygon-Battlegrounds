@@ -30,14 +30,6 @@ namespace FTS.UI
         
         private void ShowScreen(IScreen screen)
         {
-            _closeRequestAction = () => HideScreen(_currentScreen);
-            _openRequestAction = s =>
-            {
-                HideScreen(screen);
-                ShowScreen(s);
-            };
-            screen.OnRequestToClose += _closeRequestAction;
-            screen.OnRequestToOpen += _openRequestAction;
             screen.Show(_displaySpeed);
             _currentScreen = screen;
             GetComponent<MenuUiController>()?.ScreenChange(_currentScreen);
@@ -45,9 +37,6 @@ namespace FTS.UI
         
         private void HideScreen(IScreen screen)
         {
-            screen.OnRequestToClose -= _closeRequestAction;
-            screen.OnRequestToOpen -= _openRequestAction;
-            _closeRequestAction = null;
             screen.Hide();
             _currentScreen = null;
         }

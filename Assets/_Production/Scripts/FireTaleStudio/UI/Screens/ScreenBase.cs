@@ -1,17 +1,14 @@
-using System;
 using FTS.Tools.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace FTS.UI.Screens
 {
-    public abstract class ScreenBase : MonoBehaviour, IScreen
+    internal abstract class ScreenBase : MonoBehaviour, IScreen
     {
         protected const float _duration = 0.1f;
 
         public GameObject ButtonObject => GetComponentInChildren<Button>().gameObject;
-        public Action OnRequestToClose { get; set; }
-        public Action<IScreen> OnRequestToOpen { get; set; }
 
         protected CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
         private CanvasGroup _canvasGroup;
@@ -35,9 +32,9 @@ namespace FTS.UI.Screens
                 Canvas.sortingOrder = SortOrderOnOpen;
         }
 
-        public virtual void Hide(float? speed = null)
+        public virtual void Hide()
         {
-            CanvasGroup.Null()?.HideCanvasGroup(speed ?? _duration);
+            CanvasGroup.Null()?.HideCanvasGroup(_duration);
             if (Canvas != null)
                 Canvas.sortingOrder = 1;
         }

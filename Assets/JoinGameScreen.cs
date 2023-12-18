@@ -28,7 +28,7 @@ namespace FTS.UI.Screens
             
             _isVisible = value;
             if (_isVisible) Show(0.35f);
-            else Hide(0.35f);
+            else Hide();
         }
 
         public void Initialize(Action<Lobby> OnJoinLobby) => 
@@ -47,10 +47,9 @@ namespace FTS.UI.Screens
             _mySequence.Play().OnComplete(() => OnCompletePlay(realSpeed));
         }
 
-        public override void Hide(float? speed = null)
+        public override void Hide()
         {
-            float realSpeed = speed ?? _duration;
-            CanvasGroup.Null()?.HideCanvasGroup(speed ?? _duration);
+            CanvasGroup.Null()?.HideCanvasGroup(_duration);
             if (Canvas != null)
                 Canvas.sortingOrder = 1;
 
@@ -59,7 +58,7 @@ namespace FTS.UI.Screens
 
             _mySequence?.Kill();
             _mySequence = DOTween.Sequence();
-            _mySequence.Append(_rectTransform.DOSizeDelta(_originalDimension, realSpeed));
+            _mySequence.Append(_rectTransform.DOSizeDelta(_originalDimension, _duration));
             _mySequence.Play();
         }
 

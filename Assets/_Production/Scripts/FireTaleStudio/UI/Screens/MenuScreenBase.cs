@@ -56,17 +56,16 @@ namespace FTS.UI.Screens
             _mySequence.Play().OnComplete(() => OnCompletePlay(realSpeed));
         }
 
-        public override void Hide(float? speed = null)
+        public override void Hide()
         {
-            float realSpeed = speed ?? _duration;
-            base.Hide(realSpeed);
+            base.Hide();
             for (int i = 0; i < transform.childCount; i++)
                 transform.GetChild(i).GetComponent<CanvasGroup>().Null()?.HideCanvasGroup(0);
             
             _mySequence?.Kill();
             _mySequence = DOTween.Sequence();
-            _mySequence.Append(_rectTransform.DOSizeDelta(_originalDimension, realSpeed));
-            _mySequence.Append(_rectTransform.DOMove(_originalPosition, realSpeed));
+            _mySequence.Append(_rectTransform.DOSizeDelta(_originalDimension, _duration));
+            _mySequence.Append(_rectTransform.DOMove(_originalPosition, _duration));
             _mySequence.Play();
         }
 
