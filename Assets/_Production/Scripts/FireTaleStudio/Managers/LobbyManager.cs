@@ -256,7 +256,7 @@ namespace FTS.Managers
                 await Lobbies.Instance.RemovePlayerAsync(_joinedLobby.Id, _playerId);
                 _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
                 _lobbyNetworkManager.LobbyJoin(_joinedLobby);
-                _lobbyNetworkManager.RemovePlayerServerRpc(_playerId);
+                _lobbyNetworkManager.RemovePlayerServerRpc(_playerId, true);
             }
             catch (LobbyServiceException e)
             {
@@ -272,7 +272,7 @@ namespace FTS.Managers
             try 
             {
                 await LobbyService.Instance.RemovePlayerAsync(_joinedLobby.Id, playerId);
-                _lobbyNetworkManager.RemovePlayerServerRpc(playerId);
+                _lobbyNetworkManager.RemovePlayerServerRpc(playerId, false);
                 
                 _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
                 _lobbyNetworkManager.LobbyJoin(_joinedLobby);

@@ -48,10 +48,10 @@ namespace FTS.UI.Screens
             _onPlayerKick = null;
         }
 
-        private void OnPlayerLeave(object sender, bool isHost)
+        private void OnPlayerLeave(object sender, bool isVoluntary)
         {
             ClearLobby();
-            if (!isHost)
+            if (!isVoluntary)
                 _backButton.onClick?.Invoke();
         }
 

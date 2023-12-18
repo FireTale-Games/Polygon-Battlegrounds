@@ -1,16 +1,12 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using FTS.Data;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
-using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace FTS.Managers
 {
@@ -118,20 +114,20 @@ namespace FTS.Managers
         }
         
         [ServerRpc(RequireOwnership = false)]
-        public void RemovePlayerServerRpc(string removePlayerId)
+        public void RemovePlayerServerRpc(string removePlayerId, bool isVoluntary)
         {
             if (IsServer || IsHost)
-                RemovePlayerClientRpc(removePlayerId);
+                RemovePlayerClientRpc(removePlayerId, isVoluntary);
         }
 
         [ClientRpc]
-        private void RemovePlayerClientRpc(string playerId)
+        private void RemovePlayerClientRpc(string playerId, bool isVoluntary)
         {
             if (AuthenticationService.Instance.PlayerId != playerId) 
                 return;
             
             NetworkManager.Singleton.Shutdown();
-            OnPlayerLeave?.Invoke(this, false);
+            OnPlayerLeave?.Invoke(this, isVoluntary);
         }
         
         public void RemoveAllPlayers()
@@ -144,7 +140,7 @@ namespace FTS.Managers
         private void RemoveAllPlayersClientRpc()
         {
             NetworkManager.Singleton.Shutdown();
-            OnPlayerLeave?.Invoke(this, IsHost || IsServer);
+            OnPlayerLeave?.Invoke(this, IsServer || IsHost);
         }
 
         private ushort GetPortFromHash(string lobbyHostId) => (ushort)(1024 + Mathf.Abs(Animator.StringToHash(lobbyHostId)) % (65535 - 1024));
