@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FTS.Data;
 using FTS.Tools.Utilities;
-using Newtonsoft.Json;
-using Unity.Netcode;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
@@ -79,36 +76,11 @@ namespace FTS.Managers
             }
             catch (LobbyServiceException e)
             {
-                Debug.Log(e);
+                Debug.Log(e.Message);
                 _heartbeatTimer.Pause();
             }
         }
-        
-        //private void HandleLobbyPolling()
-        //{
-            //_poolingTimer.Start();
-            //_lobbyNetworkManager.Display(_joinedLobby.Id);
 
-            //try
-            //{
-            //    _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
-            //    if (!IsPlayerInLobby()) {
-            //        Debug.Log("Kicked from Lobby!");
-            //        _joinedLobby = null;
-            //        _poolingTimer.Stop();
-            //        return;
-            //    }
-            //    
-            //    OnJoinedLobbyUpdate?.Invoke(this, (_joinedLobby, IsLobbyHost()));
-            //    _poolingTimer.Start();
-            //}
-            //catch (LobbyServiceException e)
-            //{
-            //    Debug.Log(e);
-            //    _poolingTimer.Pause();
-            //}
-        //}
-        
         // AUTHENTICATION ----------------------------------------------------------
         #region AUTHENTICATION
         
@@ -163,7 +135,7 @@ namespace FTS.Managers
             }
             catch (LobbyServiceException e)
             {
-                Debug.Log("Failed to create lobby: " + e.Message);
+                Debug.Log(e.Message);
             }
         }
         
@@ -192,7 +164,7 @@ namespace FTS.Managers
                 QueryResponse lobbyListQueryResponse = await Lobbies.Instance.QueryLobbiesAsync();
                 OnLobbyListChanged?.Invoke(this, lobbyListQueryResponse.Results.ToArray());
             } catch (LobbyServiceException e) {
-                Debug.Log(e);
+                Debug.Log(e.Message);
             }
         }
         
@@ -226,7 +198,7 @@ namespace FTS.Managers
             }
             catch (LobbyServiceException e)
             {
-                Debug.Log(e);
+                Debug.Log(e.Message);
             }
         }
 
@@ -260,7 +232,7 @@ namespace FTS.Managers
             }
             catch (LobbyServiceException e)
             {
-                Debug.LogError($"Failed to delete lobby: {e.Message}");
+                Debug.LogError(e.Message);
             }
         }
         
@@ -279,7 +251,7 @@ namespace FTS.Managers
             } 
             catch (LobbyServiceException e) 
             {
-                Debug.Log(e);
+                Debug.Log(e.Message);
             }
         }
         
