@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 5058254912454303223}
   - component: {fileID: 6240808380178518305}
   m_Layer: 5
-  m_Name: SinglePlayerGameSelectionScreen_Prefab
+  m_Name: SinglePlayerGameSelection_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1727,7 +1727,7 @@ PrefabInstance:
     - target: {fileID: 4227152356159136737, guid: 720487f1dde6c274389f2500f50ea7d2,
         type: 3}
       propertyPath: m_Name
-      value: GameScreen_Prefab
+      value: LobbyGameScreen_Prefab
       objectReference: {fileID: 0}
     - target: {fileID: 4443556402547982190, guid: 720487f1dde6c274389f2500f50ea7d2,
         type: 3}
@@ -3503,7 +3503,7 @@ PrefabInstance:
     - target: {fileID: 3609930480391791262, guid: f8b674b13ff579c45b938f60bbdb19a0,
         type: 3}
       propertyPath: m_Name
-      value: SinglePlayerGameSelectionScreen_Prefab
+      value: SinglePlayerGameScreen_Prefab
       objectReference: {fileID: 0}
     - target: {fileID: 6689682225080847928, guid: f8b674b13ff579c45b938f60bbdb19a0,
         type: 3}

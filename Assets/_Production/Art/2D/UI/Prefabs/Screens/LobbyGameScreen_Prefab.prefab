@@ -55,9 +55,9 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 827189013012868438}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &963448794266491867
 GameObject:
@@ -280,9 +280,9 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3230600791374472758}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &827449899669592794
 MonoBehaviour:
@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 2947085087477105209}
   - component: {fileID: 3790929455440447785}
   m_Layer: 5
-  m_Name: GameScreen_Prefab
+  m_Name: LobbyGameScreen_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

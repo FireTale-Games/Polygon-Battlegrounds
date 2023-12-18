@@ -21,35 +21,23 @@ namespace FTS.UI.Screens
         [SerializeField] private LobbyGameUi _lobbyGameUi;
         [SerializeField] private RectTransform _lobbyList;
         [SerializeField] private Button _refreshLobby;
-
+        
         [Header("Create Lobby"), Space(2)] 
-        [SerializeField] private CreateGameScreen _createGameScreen;
-        [SerializeField] private Button _createLobby;
-
-        [Header("Description Data"), Space(2)] 
-        [SerializeField] private JoinGameScreen _joinGameScreen;
+        [SerializeField] private CreateGameUi _createGameUi;
 
         private Action<Lobby> OnLobbyJoin;
-        private Action OnLobbyShow;
 
         protected override void BindToLobbyManager(LobbyManager lobbyManager)
         {
             // Refresh
             lobbyManager.OnLobbyListChanged += UpdateLobbyList_EventHandler;
-            _refreshLobby.onClick.AddListener(() => { lobbyManager.RefreshLobbyList(); _joinGameScreen.SetVisibility(false); });
+            _refreshLobby.onClick.AddListener(lobbyManager.RefreshLobbyList);
             
             // Create New Lobby
-            _createLobby.onClick.AddListener(_createGameScreen.SetVisibility);
+            _createGameUi.Initialize(lobbyManager);
             
             // Join lobby
             OnLobbyJoin = lobbyManager.JoinLobby;
-            _joinGameScreen.Initialize(lobbyManager.JoinLobby);
-            
-            // Etc.
-            OnLobbyShow = LobbyShow;
-            return;
-
-            async void LobbyShow() => await lobbyManager.Authenticate();
         }
         
         #region LOBBY_LIST_UPDATE
@@ -65,7 +53,6 @@ namespace FTS.UI.Screens
                 LobbyGameUiData lobbyGameUiData = new(
                     lobby.Data["Password"].Value != string.Empty ? _lockUnlockSprites[0] : _lockUnlockSprites[1],
                     OnLobbyJoin,
-                    _joinGameScreen.DisplayLobbyDescription,
                     _gameScreen);
                     
                 LobbyGameUi lobbyGameUi = Instantiate(_lobbyGameUi, _lobbyList);
@@ -78,16 +65,7 @@ namespace FTS.UI.Screens
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            _refreshLobby.onClick.RemoveAllListeners();
             OnLobbyJoin = null;
-            OnLobbyShow = null;
-        }
-
-        public override void Show(float? speed = null)
-        {
-            base.Show(speed);
-            OnLobbyShow?.Invoke();
-            _joinGameScreen.SetVisibility(false);
         }
     }
 }

@@ -1,4 +1,3 @@
-using DG.Tweening;
 using FTS.Data;
 using FTS.Data.Map;
 using FTS.Managers;
@@ -9,7 +8,7 @@ using UnityEngine.UI;
 
 namespace FTS.UI.Screens
 {
-    internal sealed class CreateGameScreen : MenuScreenBase
+    internal sealed class CreateGameUi : MonoBehaviour
     {
         [SerializeField] private Button _createButton;
         [SerializeField] private TMP_Dropdown _playerDropdown;
@@ -21,15 +20,14 @@ namespace FTS.UI.Screens
         private string _lobbyPassword = string.Empty;
         private string _gameName = "";
 
-        protected override void BindToLobbyManager(LobbyManager lobbyManager)
+        public void Initialize(LobbyManager lobbyManager)
         {
             _playerDropdown.onValueChanged.AddListener(value => _playerNumber = value + 2);
             _gamePasswordField.onValueChanged.AddListener(value => _lobbyPassword = value);
             _gameNameInputField.onValueChanged.AddListener(value => _gameName = value);
             _createButton.onClick.AddListener(() => SetLobbyData(lobbyManager));
             _createButton.onClick.AddListener(OnCreateLobby);
-            _createButton.onClick.AddListener(SetVisibility);
-
+        
             return;
             async void OnCreateLobby() => await lobbyManager.CreateLobby();
         }
@@ -42,41 +40,6 @@ namespace FTS.UI.Screens
             lobbyManager.SetLobbySettings(new LobbySettings(
                 _gameName = _gameName.Length <= 0 ? _gameName.GenerateRandomString(10) : _gameName, _playerNumber, 
                 _lobbyPassword));
-        }
-        
-        public void SetVisibility()
-        {
-            isVisible = !isVisible;
-            if (isVisible) Show(0.35f);
-            else Hide();
-        }
-
-        public override void Show(float? speed = null)
-        {
-            float realSpeed = speed ?? _duration;
-            CanvasGroup.Null()?.ShowCanvasGroup(speed ?? _duration);
-            if (Canvas != null)
-                Canvas.sortingOrder = SortOrderOnOpen;
-            
-            _mySequence?.Kill();
-            _mySequence = DOTween.Sequence();
-            _mySequence.Append(_rectTransform.DOSizeDelta(_openedDimension, realSpeed));
-            _mySequence.Play().OnComplete(() => OnCompletePlay(realSpeed));
-        }
-
-        public override void Hide()
-        {
-            CanvasGroup.Null()?.HideCanvasGroup(_duration);
-            if (Canvas != null)
-                Canvas.sortingOrder = 1;
-            
-            for (int i = 0; i < transform.childCount; i++)
-                transform.GetChild(i).GetComponent<CanvasGroup>().Null()?.HideCanvasGroup(0);
-            
-            _mySequence?.Kill();
-            _mySequence = DOTween.Sequence();
-            _mySequence.Append(_rectTransform.DOSizeDelta(_originalDimension, _duration));
-            _mySequence.Play();
         }
     }
 }
