@@ -23,21 +23,29 @@ namespace FTS.UI.Screens
         [SerializeField] private Button _refreshLobby;
         
         [Header("Create Lobby"), Space(2)] 
+        [SerializeField] private Button _createLobbyButton;
         [SerializeField] private CreateGameUi _createGameUi;
 
         private Action<Lobby> OnLobbyJoin;
+        private Action OnLobbyShow;
 
         protected override void BindToLobbyManager(LobbyManager lobbyManager)
         {
+            // Authenticate
+            OnLobbyShow = LobbyShow;
+            
             // Refresh
             lobbyManager.OnLobbyListChanged += UpdateLobbyList_EventHandler;
             _refreshLobby.onClick.AddListener(lobbyManager.RefreshLobbyList);
             
             // Create New Lobby
+            _createLobbyButton.onClick.AddListener(_createGameUi.Show);
             _createGameUi.Initialize(lobbyManager);
             
             // Join lobby
             OnLobbyJoin = lobbyManager.JoinLobby;
+            return;
+            async void LobbyShow() => await lobbyManager.Authenticate();
         }
         
         #region LOBBY_LIST_UPDATE
@@ -66,6 +74,13 @@ namespace FTS.UI.Screens
         {
             base.OnDestroy();
             OnLobbyJoin = null;
+            OnLobbyShow = null;
+        }
+
+        public override void Show(float? speed = null)
+        {
+            base.Show(speed);
+            OnLobbyShow?.Invoke();
         }
     }
 }
