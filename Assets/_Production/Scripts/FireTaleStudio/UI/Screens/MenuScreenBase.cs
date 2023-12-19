@@ -10,9 +10,9 @@ namespace FTS.UI.Screens
         [SerializeField] protected Vector2 _openedDimension;
         
         private Vector2 _originalPosition;
-        protected Vector2 _originalDimension;
-        protected RectTransform _rectTransform;
-        protected Sequence _mySequence;
+        private Vector2 _originalDimension;
+        private RectTransform _rectTransform;
+        private Sequence _mySequence;
 
         protected override void Awake()
         {
